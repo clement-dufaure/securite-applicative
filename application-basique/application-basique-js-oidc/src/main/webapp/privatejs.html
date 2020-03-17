@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript"
+	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+<script>
+	var keycloak = Keycloak();
+	keycloak.init({
+		onLoad : 'login-required'
+	}).success(function(authenticated) {
+		keycloak.updateToken(30).success(function() {
+			loadData();
+		}).error(function() {
+			alert('Failed to refresh token');
+		});
+		$("#token").text(JSON.stringify(keycloak, null, '\t'));
+		loadData();
+
+	}).error(function() {
+		alert('failed to initialize');
+	});
+	var loadData = function() {
+		$("#username").text(keycloak.tokenParsed.preferred_username);
+		$("#roles").text(
+				JSON.stringify(keycloak.tokenParsed.realm_access.roles, null,
+						'\t'));
+
+		var url = 'https://localhost:8443/ws/ressource';
+		var req = new XMLHttpRequest();
+		req.open('GET', url, true);
+		req.setRequestHeader('Accept', 'application/json');
+		req.setRequestHeader('Authorization', 'Bearer ' + keycloak.token);
+
+		req.onreadystatechange = function() {
+			if (req.readyState == 4) {
+				if (req.status == 200) {
+					$("#userinfo").text(req.responseText);
+				} else if (req.status == 403) {
+					alert('Forbidden');
+				}
+			}
+		}
+		req.send();
+	};
+	var logout = function() {
+		keycloak.logout({
+			redirectUri : 'https://localhost:8443'
+		});
+	}
+</script>
+<title>Pour une poignée de javascript</title>
+</head>
+
+<body>
+
+	<h1>Page demandant authentification</h1>
+
+	<h2>Authentification par OpenIDConnect via Javascript</h2>
+
+
+	<p>
+		Vous êtes bien authentifié en tant que : <span id="username"></span>
+	</p>
+
+	<p>
+		<a href="javascript:logout()">Se déconnecter</a>
+	</p>
+
+	<p>Voici vos habilitations:</p>
+	<pre id="roles"></pre>
+
+	<p>La requête sur /userinfo a renvoyé:</p>
+	<pre id="userinfo"></pre>
+
+	<p>
+		<strong>Keycloak info:</strong>
+	</p>
+	<pre id="token"></pre>
+
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Sécurité applicative</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+	<!--<link rel="stylesheet" href="css/theme/sky.css">-->
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="atom-one-light.css">
+
+	<!-- Style des diapos -->
+	<link rel="stylesheet" href="slides.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+	<script>
+		var injection = function () {
+			body = document.getElementsByTagName("body")[0];
+			myTxt = document.getElementById("scriptEvil0").value;
+			// if (myTxt === "Robert'); DROP TABLE Students;--"){
+			if (myTxt.indexOf("'") > -1) {
+				body.innerHTML = "Oui, pour tester une attaque par injection on tente de mettre une ' dans le champ !";
+			} else {
+				myUl = document.getElementById("myUl0");
+				node = document.createElement("LI");
+				txt = document.createTextNode(myTxt + " a été ajouté en base");
+				node.appendChild(txt);
+				myUl.appendChild(node);
+			}
+		}
+		var fonction = function () {
+			myUl = document.getElementById("myUl");
+			myTxt = document.getElementById("scriptEvil").value;
+			var node = document.createElement("LI");
+			node.innerHTML = myTxt;
+			myUl.appendChild(node);
+		}
+		var testCors = function () {
+			var req = new XMLHttpRequest()
+			req.open('GET', 'https://insee.fr/fr/accueil', false);
+			req.send();
+		}
+		var testCorsOk = function () {
+			var req = new XMLHttpRequest()
+			req.open('GET', 'https://www.webscantest.com/cors/cors_public.php', false);
+			req.send();
+		}
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section class="main-title">
+				<h1>Sécurité applicative</h1>
+				<a
+					href="https://outils-transverses.pages.innovation.insee.eu/formations/formation-securite-applicative">https://outils-transverses.pages.innovation.insee.eu/formations/formation-securite-applicative</a><br />
+				<a
+					href="https://git.stable.innovation.insee.eu/outils-transverses/formations/formation-securite-applicative">https://git.stable.innovation.insee.eu/outils-transverses/formations/formation-securite-applicative</a>
+				<p>
+					<small>Clément Dufaure</small>
+				</p>
+				<table>
+					<tr>
+						<td><img src="images/tomcat.png" style="width: 100px;" /></td>
+						<!--<td><div id="shibboleth"><img src="images/shibboleth.png" style="width: 100px;" /></div></td>-->
+						<td><img src="images/keycloak.png" style="width: 100px;" /></td>
+					</tr>
+				</table>
+			</section>
+
+
+			<!-- Introduction -->
+			<section data-markdown="chapters/introduction.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Failles -->
+			<section data-markdown="chapters/faillesapplicatives.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Https -->
+			<section data-markdown="chapters/https.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Authentification -->
+			<section data-markdown="chapters/authentification.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- OpenIDConnect -->
+			<section data-markdown="chapters/openidconnect.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- OpenIDConnect -->
+			<section data-markdown="chapters/keycloak.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Saml -->
+			<section data-markdown="chapters/saml.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+
+			<section class="main-title">
+				<h2>Documentations - Questions</h2>
+				<ul>
+					<li>Sur Gitlab :
+						<ul>
+							<li>Groupe outils transverses
+								<ul>
+									<li>projets dans authentification/keycloak
+									</li>
+									<li><a
+											href="https://git.stable.innovation.insee.eu/outils-transverses/authentification/keycloack/keycloak-insee-ext/wikis/home">Wiki
+											général sur keycloak</a>
+									</li>
+									<li><a
+											href="https://git.stable.innovation.insee.eu/outils-transverses/authentification/keycloack/de-shibboleth-a-keycloak/wikis/home">Wiki
+											dédié à la migration de Shibboleth à Keycloak</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Sur Rocket-chat : <a
+							href="https://rocket-chat.stable.innovation.insee.eu/channel/keycloak">Channel #keycloak</a>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				// { src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } }
+			]
+		});
+		Reveal.configure({
+			slideNumber: 'c/t',
+			history: true
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+{
+	"realm": "formation-secu-applicative",
+	"resource": "client-test-js",
+	"auth-server-url": "https://auth.insee.test/auth",
+	"use-resource-role-mappings": false,
+	"enable-cors": true,
+	"cors-max-age": 1000,
+	"cors-allowed-methods": "POST, PUT, DELETE, GET",
+	"bearer-only": false,
+	"enable-basic-auth": false,
+	"expose-token": true,
+	"public-client": true
+}

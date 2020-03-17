@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript"
+	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+<script>
+	var keycloak;
+
+	var decouverte = function() {
+		var url = 'https://service-decouverte-generique.insee.fr';
+		var req = new XMLHttpRequest();
+		req.open('GET', url, true);
+		req.setRequestHeader('Accept', 'application/json');
+
+		req.onreadystatechange = function() {
+			if (req.readyState == 4) {
+				if (req.status == 200) {
+					$("#decouverte").text(req.responseText);
+				} else if (req.status == 403) {
+					alert('Forbidden');
+				}
+			}
+		}
+		req.send();
+	}
+
+	var login = function() {
+		keycloak.login();
+	};
+
+	var logout = function() {
+		localStorage.removeItem('keycloak');
+		keycloak.logout();
+	};
+
+	//keycloak = Keycloak();
+	keycloak = Keycloak();
+	if (localStorage.getItem('keycloak')) {
+		keycloak.init().success(
+				function() {
+					var keycloakCache = JSON.parse(localStorage
+							.getItem('keycloak'));
+					keycloak.refreshToken = keycloakCache.refreshToken;
+					keycloak.token = keycloakCache.token;
+					keycloak.tokenParsed = keycloakCache.tokenParsed;
+					$("#login").hide();
+					$("#username")
+							.text(keycloak.tokenParsed.preferred_username);
+					$("#roles").text(
+							JSON.stringify(
+									keycloak.tokenParsed.realm_access.roles,
+									null, '\t'));
+					$("#token").text(JSON.stringify(keycloak, null, '\t'));
+					//On peut de la même façon ajouter les attributs souhaités dans l'objet keycloak
+					// Pour regénérer le jeton, seul la réécriture du refresh token est nécessaire
+					// Avec le refresh token remis dans l'objet keycloak, il reste à lancer la fonction keycloak.updateToken() pour regénérer l'objet keycloak
+
+				})
+
+	} else {
+		keycloak.onAuthSuccess = function() {
+			localStorage.setItem('keycloak', JSON.stringify(keycloak));
+		};
+
+		keycloak.init().success(function(authenticated) {
+			keycloak.updateToken(30).success(function() {
+				$("#login").hide();
+				$("#token").text(JSON.stringify(keycloak, null, '\t'));
+				loadData();
+			}).error(function() {
+				$("#username").text("Vous n'êtes pas authentifié");
+				$("#logout").hide();
+			});
+		}).error(function() {
+			alert('failed to initialize');
+		});
+	}
+</script>
+<title>Et pour quelques fonctions de plus...</title>
+</head>
+
+<body>
+	<h1>Et pour quelques fonctions de plus...</h1>
+
+	<h2>Authentification par OpenIDConnect et JavaScript</h2>
+
+	<a id="login" href="javascript:login()">S'authentifier</a>
+
+	<a id="logout" href="javascript:logout()">Se déconnecter</a>
+
+
+	<p>
+		Vous êtes <span id="username"></span>
+	</p>
+	<p>
+		Vos rôles : <span id="roles"></span>
+	</p>
+
+
+	<br />
+	<hr />
+	<br /> Pour que le client manipule directement les credentials de
+	l'utilisateur :
+	<form
+		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token"
+		method="POST" target="newtab">
+		<input type="hidden" name="grant_type" value="password" /> <input
+			type="hidden" name="client_id" value="client-test-web" /> <input
+			type="hidden" name="redirect_uri" value="https://localhost:8443" /><input
+			type="hidden" name="client_secret"
+			value="1a5b0b89-c23a-4d3b-9653-72faf8754a61" /> <input type="text"
+			name="username" /> <input type="password" name="password" /> <input
+			type="submit" value="Resource Owner Password Credentials Grant" />
+
+	</form>
+
+	<br />
+	<hr />
+	<br /> Pour s'authentifier en tant que client :
+
+	<form
+		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token"
+		method="POST" target="newtab">
+		<input type="hidden" name="grant_type" value="client_credentials" />
+		<input type="hidden" name="client_id" value="client-test-web" /> <input
+			type="hidden" name="client_secret"
+			value="1a5b0b89-c23a-4d3b-9653-72faf8754a61" /> <input type="hidden"
+			name="redirect_uri" value="https://localhost:8443" /> <input
+			type="submit" value="Client Credentials Grant" />
+
+	</form>
+
+
+	<br />
+	<hr />
+	<br /> Obtenir manuellement un code d'accès puis un jeton :
+	<br /> 1 :
+	<a
+		href="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/auth?client_id=client-test-web&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&scope=openid"
+		target="newtab">Récupération code d'accès </a>
+
+
+
+
+	<br />
+	<form method="POST" target="newtab"
+		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token">
+		<input type="hidden" name="grant_type" value="authorization_code">
+		<input type="hidden" name="scope" value="offline_access"> <input
+			type="hidden" name="redirect_uri" value="urn:ietf:wg:oauth:2.0:oob">
+		<input type="hidden" name="client_id" value="client-test-web">
+		<input type="hidden" name="client_secret"
+			value="1a5b0b89-c23a-4d3b-9653-72faf8754a61"> 2 :<input
+			type="text" name="code" placeholder="Coller le code ici"> <input
+			type="submit" value="Obtenir jeton"> <br />
+	</form>
+
+
+	<br />
+	<hr />
+	<br />
+
+	<p>
+		<a
+			href="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/auth?client_id=client-test-web&redirect_uri=urn:ietf:wg:oauth:2.0:oob:auto&response_type=code&scope=openid"
+			target="newtab">Récupération code d'accès implicite</a>
+	</p>
+
+	<br />
+	<hr />
+	<br />
+
+
+	<p>
+		<a href="javascript:decouverte()">Appel au service de découverte
+			générique</a>
+	<pre id="decouverte"></pre>
+	</p>
+
+
+</body>
+</html>

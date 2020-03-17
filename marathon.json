@@ -1,0 +1,42 @@
+{
+  "id": "/formation/securite-applicative",
+  "instances": 1,
+  "cpus": 0.05,
+  "mem": 256,
+  "disk": 0,
+  "gpus": 0,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "docker-registry.beta.innovation.insee.eu/formation/securite-applicative",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 0,
+          "protocol": "tcp",
+          "name": "default"
+        }
+      ],
+      "privileged": false,
+      "forcePullImage": true
+    }
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 120,
+      "intervalSeconds": 30,
+      "timeoutSeconds": 5,
+      "maxConsecutiveFailures": 3,
+      "portIndex": 0,
+      "path": "/",
+      "protocol": "HTTP",
+      "ignoreHttp1xx": false
+    }
+  ],
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_0_VHOST": "formation-securite-applicative.stable.innovation.insee.eu"
+  },
+  "requirePorts": true
+}

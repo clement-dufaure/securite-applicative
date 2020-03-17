@@ -1,0 +1,61 @@
+<keycloak-saml-adapter xmlns="urn:keycloak:saml:adapter"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:keycloak:saml:adapter https://www.keycloak.org/schema/keycloak_saml_adapter_1_9.xsd">
+	<SP entityID="https://localhost:8443" sslPolicy="EXTERNAL"
+		nameIDPolicyFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+		logoutPage="/accueil" forceAuthentication="false" isPassive="false"
+		turnOffChangeSessionIdOnLogin="false" autodetectBearerOnly="false">
+		<Keys>
+			<Key signing="true">
+				<KeyStore resource="/WEB-INF/keystore"
+					password="1rg1d6j4amu4jesvf0tmqs1a5bedndil9n7t42a5034ab6t3huf0">
+					<PrivateKey alias="saml"
+						password="1rg1d6j4amu4jesvf0tmqs1a5bedndil9n7t42a5034ab6t3huf0" />
+					<Certificate alias="saml" />
+				</KeyStore>
+			</Key>
+		</Keys>
+		<!-- Nous souhaitons que le nom du principal soit l'uid, de son petit nom 
+			urn:oid:0.9.2342.19200300.100.1.1 -->
+		<PrincipalNameMapping policy="FROM_ATTRIBUTE"
+			attribute="urn:oid:0.9.2342.19200300.100.1.1" />
+		<RoleIdentifiers>
+			<Attribute name="urn:oid:insee:roles" />
+		</RoleIdentifiers>
+		<!-- Transcription du metadata -->
+		<IDP entityID="https://dvidpintlht01.ad.insee.intra/idp/shibboleth"
+			signaturesRequired="true">
+			<SingleSignOnService requestBinding="POST"
+				bindingUrl="https://dvidpintlht01.ad.insee.intra/idp/profile/SAML2/POST/SSO" />
+
+			<SingleLogoutService requestBinding="POST"
+				responseBinding="POST"
+				postBindingUrl="https://dvidpintlht01.ad.insee.intra/idp/profile/SAML2/POST/SLO"
+				redirectBindingUrl="https://dvidpintlht01.ad.insee.intra/idp/profile/SAML2/Redirect/SLO" />
+			<Keys>
+				<Key signing="true">
+					<CertificatePem>
+						MIIDRDCCAiygAwIBAgIVAL+whIEQoJGCWUv6u7aSiolj0WP8MA0GCSqGSIb3DQEB
+						BQUAMCExHzAdBgNVBAMTFmlkcC1pbnRlcm5lLmluc2VlLnRlc3QwHhcNMTMwODA1
+						MTI1MjU5WhcNMzMwODA1MTI1MjU5WjAhMR8wHQYDVQQDExZpZHAtaW50ZXJuZS5p
+						bnNlZS50ZXN0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtSzt5cDF
+						f1v1XmClB7s2uF0bI0pgZkaXWbeTcEZwhXOf9qI6/RKgHE9HboyIY7vazQhkjWV4
+						KRdHxrtfx6P0ZRf7Urx1js54vkiaEqtLQlF+g4ko61XS+d9mv6EwGGjlrI1gzDd2
+						MVVa/D+8mQ3GJ/Jpfk+3S+SOzNegHAogxyvNtxfs19dpFdi4N64R8lrCp1w19yZT
+						x4j8wUO8537XVovmUp93kEIrE7nGp0hKMUbiHj2lUG7TbTNXnyqLYWNZm+L0P6HQ
+						Jperb6W6vjkeeJsgjGPCaVdr8HB6BzBFm9hkcJoUNspdHRzN63EyZZnS2w2r7Etr
+						rqrWDa4jqQ5iXwIDAQABo3MwcTBQBgNVHREESTBHghZpZHAtaW50ZXJuZS5pbnNl
+						ZS50ZXN0hi1odHRwczovL2lkcC1pbnRlcm5lLmluc2VlLnRlc3QvaWRwL3NoaWJi
+						b2xldGgwHQYDVR0OBBYEFKHz5eMD5D4aEqL4P1jACwarrYwtMA0GCSqGSIb3DQEB
+						BQUAA4IBAQB8Hr2Ns1SPZBOmUVgEO+DYpcmnFt4QAJZORMymzMzBKBpTLGBl7vRo
+						/iAojmN3zQvQA72th/qPKsDDAnHgZP8nkFx7aIoPV00rZD0NVs2BnT8X1PI6Buk+
+						YFBJFczopuq+22J2l7JEIUSSCyr/mdwHGz6d+FwDwfhrj5PwSy/Yvwd0/t6tUnTk
+						085FuTLFQyaN0OS7lT4ZyIWQfw2LonNWhgEw71wXbXffkK84rR8rZn5CFkKwood4
+						AiKbwIGsX2tv1nFzlrlha8ufI+5IhHoP8PeUrJrjKsqVaQiDeykzfUAQeKDdbip5
+						TubSSv2RAdAnTpJ6egSuNLATIlOCfgIy
+					</CertificatePem>
+				</Key>
+			</Keys>
+		</IDP>
+	</SP>
+</keycloak-saml-adapter>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript"
+	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+<script>
+	var keycloak = null;
+
+	$("#username").text("anonyme");
+	$("#roles").text("");
+	$("#token").text(JSON.stringify(keycloak, null, '\t')); // permet d'afficher proprement le contenu de l'objet keycloak
+
+	// Initialiser ici l'objet keycloak
+	// Accès aux insformations une fois que l'objet keycloak est correctement instancié :
+	// keycloak.token pour le jeton brut
+	// keycloak.tokenParsed pour récupérer les attributs :
+	// keycloak.tokenParsed.preferred_username 
+	// keycloak.tokenParsed.realm_access.roles
+
+	var loadData = function() {
+
+		var url = 'https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/userinfo';
+		var req = new XMLHttpRequest();
+		req.open('GET', url, true);
+		req.setRequestHeader('Accept', 'application/json');
+		// TODO : ajouter l'entete Authorization
+
+		req.onreadystatechange = function() {
+			if (req.readyState == 4) {
+				if (req.status == 200) {
+					$("#userinfo").text(req.responseText);
+				} else if (req.status == 403) {
+					alert('Forbidden');
+				}
+			}
+		}
+		req.send();
+	};
+
+	var logout = function() {
+		alert("not implemented")
+	}
+</script>
+<title>JS et OIDC</title>
+</head>
+
+<body>
+
+	<h1>Page demandant authentification</h1>
+
+	<h2>Authentification par OpenIDConnect via Javascript</h2>
+
+
+	<p>
+		Vous êtes bien authentifié en tant que : <span id="username"></span>
+	</p>
+
+	<p>
+		<a href="javascript:logout()">Se déconnecter</a>
+	</p>
+
+	<p>Voici vos habilitations:</p>
+	<pre id="roles"></pre>
+
+	<p>La requête sur /userinfo a renvoyé:</p>
+	<pre id="userinfo"></pre>
+
+	<p>
+		<strong>Keycloak info:</strong>
+	</p>
+	<pre id="token"></pre>
+
+	<br />
+	<br />
+	<hr />
+	<a
+		href="https://auth.insee.test/auth/realms/formation-secu-applicative/account">Cliquez
+		ici pour gérer votre compte sur keycloak</a>
+
+</body>
+
+</html>

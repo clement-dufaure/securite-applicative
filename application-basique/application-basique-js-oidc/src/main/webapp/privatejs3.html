@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript"
+	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+<script>
+	var keycloak;
+
+	var login = function() {
+		keycloak.login();
+	};
+
+	var logout = function() {
+		localStorage.removeItem('keycloak');
+		keycloak.logout();
+	};
+
+	//keycloak = Keycloak();
+	keycloak = Keycloak();
+
+	keycloak
+			.init({
+				onLoad : 'check-sso'
+			})
+			.success(
+					function(authenticated) {
+						keycloak
+								.updateToken(30)
+								.success(
+										function() {
+											$("#login").hide();
+											$("#username")
+													.text(
+															keycloak.tokenParsed.preferred_username);
+											$("#roles")
+													.text(
+															JSON
+																	.stringify(
+																			keycloak.tokenParsed.realm_access.roles,
+																			null,
+																			'\t'));
+											$("#token").text(
+													JSON.stringify(keycloak,
+															null, '\t'));
+											$("#token").text(
+													JSON.stringify(keycloak,
+															null, '\t'));
+										})
+								.error(
+										function() {
+											$("#username")
+													.text(
+															"pas authentifié");
+											$("#logout").hide();
+										});
+					}).error(function() {
+				alert('failed to initialize');
+			});
+</script>
+<title>Login explicite</title>
+</head>
+
+<body>
+	<h1>Login explicite</h1>
+
+	<h2>Authentification par OpenIDConnect et JavaScript</h2>
+
+	<a id="login" href="javascript:login()">S'authentifier</a>
+
+	<a id="logout" href="javascript:logout()">Se déconnecter</a>
+
+
+	<p>
+		Vous êtes <span id="username"></span>
+	</p>
+	<p>
+		Vos rôles : <span id="roles"></span>
+	</p>
+
+
+</body>
+</html>
