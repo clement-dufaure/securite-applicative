@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,11 @@ public class Controlleur {
 
   @RequestMapping(value = { "/accueil", "/" })
   public String accueil(Model model) {
-    System.out.println("TOTO");
     return "accueil";
   }
 
   @RequestMapping(value = { "/private", "/admin" })
-  public String espacePrivate(HttpServletRequest request, Model model) {
+  public String espacePrivate(HttpServletRequest request, Model model, @AuthenticationPrincipal OidcUser principal) {
 
     model.addAttribute("secure", request.isSecure());
 
@@ -36,23 +37,14 @@ public class Controlleur {
     if (request.getUserPrincipal() == null) {
       modeAuthentification = "Authentifié par ... pas d'authentification en fait";
     } else {
-      modeAuthentification = "Vous êtes bien authentifié";
+      modeAuthentification = "OpenIDConnect";
     }
 
     model.addAttribute("typeAuthentification", modeAuthentification);
 
-    /*
-     * Pour récupérer des informations sur l'utilisateur avec un adapter keycloak :
-     * 
-     * KeycloakSecurityContext sc = (KeycloakSecurityContext)
-     * request.getAttribute(KeycloakSecurityContext.class.getName());
-     * 
-     * 
-     */
-
-    model.addAttribute("nom", "anonyme");
-    model.addAttribute("mail", "");
-    model.addAttribute("roles", "");
+    model.addAttribute("nom", principal.getName());
+    model.addAttribute("mail", principal.getEmail());
+    model.addAttribute("roles", principal.getAuthorities());
     model.addAttribute("urlAccount", "https://auth.insee.test/auth/realms/formation-secu-applicative/account"
         + "?referrer=client-test-web&referrer_uri=https://localhost:8443/private");
 

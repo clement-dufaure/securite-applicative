@@ -1,0 +1,28 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+#logging:
+#  level:
+#    [nom de la classe]: trace
+
+keycloak:
+  auth-server-url: https://auth.insee.test/auth
+  realm: formation-secu-applicative
+  resource: client-test-web
+  credentials:
+    secret: 1a5b0b89-c23a-4d3b-9653-72faf8754a61
+  #always-refresh-token: true
+  
+# server:
+#   ssl:
+#    enabled: true
+#    key-store-type: PKCS12
+#    key-store: D:\apache-tomcat-9.0.20\conf\ssl\server.p12
+#    # key-store: classpath:keystore/server.p12
+#    key-store-password: changeit
+#    #key-alias: mykey
+#   port: 8443
+

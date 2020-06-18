@@ -66,7 +66,7 @@ public class KeycloakConfigurationAdapter extends KeycloakWebSecurityConfigurerA
 				.logout().addLogoutHandler(keycloakLogoutHandler()).logoutUrl("/logout").logoutSuccessUrl("/").and()
 				// regles de securites
 				// tout en https
-				.requiresChannel().anyRequest().requiresSecure().and()
+				//.requiresChannel().anyRequest().requiresSecure().and()
 				// espace public
 				.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
 				.antMatchers("error", "/logout", "/", "/accueil", "/css/**").permitAll()
