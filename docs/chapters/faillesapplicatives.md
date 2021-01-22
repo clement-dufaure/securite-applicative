@@ -188,7 +188,7 @@ Exemples
 <!-- .slide: class="slide" -->
 ### L'injection de code : Injection SQL ou LDAP
 Sécurité :
-- Échapper les caractère spéciaux 
+- Échapper les caractères spéciaux 
 - => Utiliser des PreparatedStatement
 - => Utiliser des Frameworks qui font le boulot (hibernate, ...)
 
@@ -441,6 +441,19 @@ Un développeur web peut se contenter de surveiller ces entrées mais en réalit
 
 
 
+<!-- .slide: class="slide" -->
+### Démo CSRF
+https://www.root-me.org/fr/Challenges/Web-Client/CSRF-0-protection
+
+Un admin regarde vraiment ses messages de temps en temps !
+
+
+
+
+
+
+
+
 
 <!-- .slide: class="slide" -->
 ### Protections
@@ -505,6 +518,21 @@ http.csrf().disable(); // l'ignorer complètement
 
 
 <!-- .slide: class="slide" -->
+### CSRF et applis "modernes"
+Frontend JS + Backend Java
+- Pas de formulaire côté serveur
+- Des requêtes isolée, pas de cookie mais authentification par jeton
+- Si je sers "presque" le même service javascript, si l'admin se connecte à mon service, je peux lui faire réaliser toutes les requêtes que je souhaite
+- Protection = vérifier l'url où l'admin a récupéré le script
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
 ### La protection CORS
 Cross Over Resource Sharing
 
@@ -524,10 +552,19 @@ Scénario d'attaque :
 
 <!-- .slide: class="slide" -->
 ### La protection CORS
-- Pour les requêtes GET et POST "simple" (application/x-www-form-urlencoded,multipart/form-data,text/plain) : la requête est directement envoyé mais le résultat ne s'affiche qu'en cas de validation de CORS
+- Pour les requêtes GET et POST "simple" (application/x-www-form-urlencoded,multipart/form-data,text/plain) : la requête est directement envoyée mais le résultat ne s'affiche qu'en cas de validation de CORS
+- !!! Les navigateurs vont maintenant plus loin et font la même vérification OPTION pour ces requêtes
 - Pour les autres requêtes, le navigateur envoie préalablement une requête OPTION, vérifie CORS, et n'exécute la requête qu'en cas de validation
-- Le serveur peut également faire la vérification de CORS selon l'entête Origin, qui est généré par le navigateur uniquement
+- Le serveur peut également faire la vérification de CORS selon l'entête Origin, qui est généré par le navigateur uniquement (à moins d'utiliser Netscape 8 ou IE 6)
 
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### La protection CORS
 Domaine au sens CORS :
 - Un domaine signifie dans ce contexte un triplet (protocole, nom de domaine, port).
 - http://localhost:8080 n'est pas le même domaine que https://localhost:8443 et le domaine https://localhost (sous entendu port 443) est encore différent
@@ -604,9 +641,9 @@ Test :
 - L'idéal est de controler côté serveur l'entete "Origin" et de personnaliser l'entete "Access-Control-Allow-Origin" si on accepte
 - Le détails complet de CORS ici : https://developer.mozilla.org/fr/docs/Web/HTTP/CORS
 
-Keycloak
+<!--Keycloak
 - Si l'application cliente est publique, la configuration Keycloak possède des "Origin" autorisées
-- Ces "Origin" sont inscrites dans le token, on peut ensuite configurer le backend pour qu'il renvoit les entetes CORS selon la correspondance entre "Origin" et le contenu de jeton
+- Ces "Origin" sont inscrites dans le token, on peut ensuite configurer le backend pour qu'il renvoit les entetes CORS selon la correspondance entre "Origin" et le contenu de jeton-->
 
 
 
@@ -659,6 +696,8 @@ Par ailleurs le [CERT-FR](https://www.cert.ssi.gouv.fr/) est un sytème de notif
 
 
 
+
 <!-- .slide: class="slide" -->
-### S'initier aux failles applicatives
-Vous pouvez lancer des serveurs WebGoat et Juice Store directement dans votre labo sur [onyxia](https://onyxia.beta.innovation.insee.eu)
+### Surveiller les dépendances obsolètes
+- Dependabot (vérification existance d'une nouvelle version)
+- Pour vérifier vulnérabilités connues : https://owasp.org/www-project-dependency-check/

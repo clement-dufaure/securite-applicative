@@ -78,7 +78,7 @@
 
 <!-- .slide: class="slide" -->
 ### Confidentialité
-- Le TLS (nouveau nom de SSL) consiste à générer et partager une clé symétrique
+- Le TLS ("nouveau" nom de SSL) consiste à générer et partager une clé symétrique
 - Un système clé privée/clé publique permet en plus de s'assurer de l'identité du serveur que l'on contacte
 - Un certificat regroupe une clé publique, une identité physique et une validation par une autorité de confiance (signature)
 - En option le client peut utiliser lui aussi un couple clé privée/ clé publique pour s'authentifier

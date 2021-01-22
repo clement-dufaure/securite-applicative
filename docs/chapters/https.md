@@ -88,8 +88,8 @@ HTTPS intervient dans :
  <!-- .slide: class="slide" -->
 ### La poignée de main, ou handshaking
 - Le client fait une demande de transaction sécurisée au serveur
-- Le serveur renvoie son certicat, contenant la clé publique
-- Le client valide le certicat
+- Le serveur renvoie son certificat, contenant la clé publique
+- Le client valide le certificat
 - Le client génère une clé secrète qu'il chiffre avec la clé publique. La clé secrète est envoyée au serveur
 - Le serveur déchiffre la clé secrète
 - Cette clé est utilisée pour chiffrer les prochains échanges entre le client et le serveur
@@ -115,7 +115,6 @@ HTTPS intervient dans :
 ### Comment faire en local ?
 - Il n'est pas nécessaire d'avoir un certificat signé par une autorité de confiance
 - Un certificat autosigné suffit : c'est un certificat "localhost" signé par "localhost"
-- Il est intégré à l'atelier de dev mais il très simple de le regénérer en cas de besoin (quand il expire,...)
 
 
 

@@ -23,7 +23,6 @@ public class Controlleur {
 
   @RequestMapping(value = { "/accueil", "/" })
   public String accueil(Model model) {
-    System.out.println("TOTO");
     return "accueil";
   }
 

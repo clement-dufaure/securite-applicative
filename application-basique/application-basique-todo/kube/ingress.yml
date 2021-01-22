@@ -1,0 +1,19 @@
+apiVersion: "extensions/v1beta1"
+kind: "Ingress"
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  labels: {}
+  name: cd-formation-secu
+spec:
+  tls:
+    - hosts:
+        - cd-formation-secu.dev.insee.io
+  rules:
+    - host: cd-formation-secu.dev.insee.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: cd-formation-secu
+              servicePort: https

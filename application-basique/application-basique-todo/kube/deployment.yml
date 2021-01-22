@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cd-formation-secu
+spec:
+  selector:
+    matchLabels:
+      app: cd-formation-secu
+  template:
+    metadata:
+      labels:
+        app: cd-formation-secu
+    spec:
+      containers:
+      - name: cd-formation-secu
+        image: tomcat:latest
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
