@@ -1,5 +1,5 @@
 FROM maven:3.6.3-jdk-11 AS build
-COPY . /build
+COPY ./application-basique/application-basique-todo /build
 WORKDIR /build
 RUN mvn clean package
 
