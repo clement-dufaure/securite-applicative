@@ -183,15 +183,3 @@ Les points importants :
 ```
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### L'IDP : Shibboleth, les limites
-- Une installation de shbboleth ne permet pas de différencier des profils d'utilisateurs (ainsi un répondant à une enquête internet et un agent insee se connectant à une appli de gestion ne serait pas différenciés)
-- Prévu pour peu de spécificité d'une application à l'autre
-
-
-

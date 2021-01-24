@@ -4,7 +4,7 @@
 
 	<groupId>fr.insee.formation</groupId>
 	<artifactId>application-basique-ws-oauth</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>dev</version>
 	<packaging>war</packaging>
 
 	<name>application-basique-ws-oauth</name>
@@ -13,8 +13,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.5.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>2.4.2</version>
+		<relativePath />
 	</parent>
 
 	<properties>

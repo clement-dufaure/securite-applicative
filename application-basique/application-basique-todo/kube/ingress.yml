@@ -16,4 +16,4 @@ spec:
           - path: /
             backend:
               serviceName: cd-formation-secu
-              servicePort: https
+              servicePort: http

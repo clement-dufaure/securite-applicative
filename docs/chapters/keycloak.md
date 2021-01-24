@@ -9,11 +9,8 @@
 
 
 <!-- .slide: class="slide" -->
-### Keycloak VS Shibboleth
-- Shibboleth ne gère qu'un domaine : "tout le monde", problèmes d'unicité sur tous les domaines de l'Insee, problème de thèmes communs
+### Keycloak
 - Keycloak : gestion de royaumes distincts : chacun ayant ses utilisateurs, son thème
-
->1 Keycloak = plusieurs Shibboleth
 
 
 
@@ -83,9 +80,8 @@ Pour tester sans risques certaines manipulation, il est aisé de lancer un keycl
 
 <!-- .slide: class="slide" -->
 ### Gérer un realm
-[Documentation sur le wiki](https://git.stable.innovation.insee.eu/outils-transverses/authentification/keycloack/keycloak-insee-ext/wikis/Administrateurs/Administration-des-Realms#gestion-dun-realm)
-
 [Documentation officielle](https://www.keycloak.org/docs/latest/server_admin/index.html)
+
 
 
 
@@ -115,9 +111,9 @@ Personnalisation possible pour :
 ### Tester le thème
 - Ajouter des thèmes dans /pathKeycloak/themes et le parmétrer dans la conf realm
 - Vous pouvez vous inspirez du thème keycloak présent de base
-- Ou partir d'un thème insee du projet [git@git.stable.innovation.insee.eu:22222]:outils-transverses/authentification/keycloack/keycloak-insee-ext.git
+- Ou partir d'un thème insee du projet keycloak thèmes
 - Actuellement thèmes Insee proposés :
-  - "insee-genric" : proche de l'actuel thème de la fédération d'identité
+  - "insee-generic" : proche de l'actuel thème de la fédération d'identité
   - "insee-minimal" : thème Insee avec le moins de changement possible par rapport au thème keycloak
 
 

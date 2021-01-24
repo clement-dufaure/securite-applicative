@@ -88,10 +88,9 @@ Modes d'autorisation
 ### Les grands principes : OAuth2
 Modes d'autorisation
 - Authorization Code : cas général
-- Implicite : compréhensible dans des applis javascript (mais authorization code marche très bien)
+- Implicite : compréhensible dans des applis javascript (mais authorization code marche très bien) : deprécié
 - Resource Owner Password Credentials : en dernier recours dans le cas de client lourd
-- Client Credentials Grant : pour des batchs qui doivent se connecter à un web service sécurisé par Keycloak sans avoir à dédoubler 
-l'authentification
+- Client Credentials Grant : pour des batchs qui doivent se connecter à un web service sécurisé par Keycloak sans avoir à dédoubler l'authentification
 
 
 
@@ -132,7 +131,7 @@ Payload
 ```json
 {
  "exp": 1528739605,"iat": 1528739305,
- "iss": "https://auth.insee.test/auth/realms/formation-secu-applicative",
+ "iss": "https://mon.serveur.keycloak/auth/realms/formation",
  "aud": "client-test-web",
  "typ": "Bearer",
  "azp": "client-test-web",
@@ -143,14 +142,14 @@ Payload
    "*"
  ],
  "realm_access": {
-   "roles": ["Utilisateurs_FormationFede"]
+   "roles": ["Adminstrateur_monAppli"]
  },
  "resource_access": {"account": {"roles": ["manage-account","manage-account-links","view-profile"]}},
- "name": "Clément Dufaure",
- "preferred_username": "frz6ir",
- "given_name": "Clément",
- "family_name": "Dufaure",
- "email": "clement.dufaure@insee.fr"
+ "name": "Alphonse Robichu",
+ "preferred_username": "idep",
+ "given_name": "Alphonse",
+ "family_name": "Robichu",
+ "email": "alphonse.robichu@my.org"
 }
 ```
 
@@ -169,8 +168,7 @@ Payload
 - Données au format JSON, en trois parties : header, payload et signature
 - JWT = base64(header).base64(payload).base64(signature)
 
-Exemple :
-- https://outils-transverses.pages.innovation.insee.eu/documentation/
+- Plus de détails : https://jwt.io
 
 
 
@@ -193,7 +191,7 @@ Exemple :
 ### Les grands principes
 - Application WEB frontend : on s'attend à des utilisateurs non identifiés, à identifier, gestion de session
 - Application WEB backend (bearer-only) : on ne s'attend qu'à des requêtes authentifiées
-- Dans le cas du backendles tentatives d'authentification implicites sont bloquées
+- Dans le cas du backend les tentatives d'authentification implicites sont bloquées
 
 
 
@@ -316,16 +314,17 @@ Authorization: Bearer  eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJiMWs3Z
 - Le serveur doit connaitre la clé publique du serveur d'authorisation (Keycloak) pour valider les access-token (c'est l'unique vérification faite dans le cas d'un bearer-only)
 
 ```
-GET /auth/realms/formation-secu-applicative/ HTTP/1.1
+GET /auth/realms/formation/.well-known/openid-configuration HTTP/1.1
 ```
 
 ```json
 {
-  "realm": "formation-secu-applicative",
-  "public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAybcHUqc0emm8dAea1fHLCDR+2qq/ZGrWjd2nnRvcuK2Bpj/WVrEJVNkFRaXzHo8JGGeE3QFiceF0ZrtQ/NR9ZVNeSU80Q87MEiJHO8v0n/8gKzJK4z8BcWqhjx0SxYt2LwS+gTSQ6VaNGXL4PhAJKRI97ZXzOk4+OKheSJh7X8HKf6g7glJnnxBERbSm53tos2y2b5/+lTr9RkWiZWbK5zkELTCdsXasBTfkMtHTy1ONYQouO538hULxyoDriRF/Mbt9SibCjjP28iRBnoLPnBrhzsWOq7ErAxvzK0MJ78p82suBbDLdtdcCJFOt+UvY5mG+VOOqfz6KrUQ48fp7qQIDAQAB",
-  "token-service": "https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect",
-  "account-service": "https://auth.insee.test/auth/realms/formation-secu-applicative/account",
-  "tokens-not-before": 0
+  "issuer": "https://mon.serveur.keycloak/auth/realms/formation",
+  "authorization_endpoint": "https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/auth",
+  "token_endpoint": "https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/token",
+  "end_session_endpoint": "https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/logout",
+  "jwks_uri": "https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/certs",
+  ...
 }
 ```
 
@@ -341,7 +340,7 @@ GET /auth/realms/formation-secu-applicative/ HTTP/1.1
 - Récupération d'un jeton :
 
 ```
-POST auth/realms/formation-secu-applicative/protocol/openid-connect/token
+POST auth/realms/formation/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET 
@@ -407,7 +406,7 @@ https://www.keycloak.org/docs/latest/securing_apps/#_java_adapter_config
 {
   "realm" : "formation-secu-applicative",
   "resource" : "client-test-web",
-  "auth-server-url" : "https://auth.insee.test/auth",
+  "auth-server-url" : "https://mon.serveur.keycloak/auth",
   "bearer-only" : false,
   "public-client" : false,
    "credentials" : {
@@ -640,7 +639,7 @@ attributHabilitation.contains("monHabilitation");
 Obtenir le jeton pour se connecter à un Web Service
 - `getTokenString();` permet de récupérer le jeton brut afin d'être retransmis à un autre service
 - Il faut ensuite ajouter l'entête "Authorization: Bearer tokenString" pour accéder au WS
-- Un test peut être fait sur le WS embarqué de keycloak : https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/userinfo
+- Un test peut être fait sur le WS embarqué de keycloak : https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/userinfo
 
 
 
@@ -652,7 +651,7 @@ Obtenir le jeton pour se connecter à un Web Service
 <!-- .slide: class="slide" -->
 ### Logout
 - Déconnexion locale : `request.getSession().invalidate();`
-- Déconnexion Keycloak : un appel sur https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/logout?redirect_uri=https://localhost:8443/ logout l'utilisateur sur Keycloak et redirige vers "redirect_uri"
+- Déconnexion Keycloak : un appel sur https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/logout?redirect_uri=https://localhost:8443/ logout l'utilisateur sur Keycloak et redirige vers "redirect_uri"
 
 
 
@@ -681,19 +680,18 @@ Obtenir le jeton pour se connecter à un Web Service
 - Le json peut être paramétré pour s'adapter à des propriétés systèmes (avec valeurs par défaut sur localhost par exemple)
 ```json
 {
-  "realm": "${fr.insee.keycloak.realm:agents-insee-interne}",
-  "auth-server-url": "${fr.insee.keycloak.server:https://auth.insee.test/auth}",
+  "realm": "${fr.insee.keycloak.realm:formation}",
+  "auth-server-url": "${fr.insee.keycloak.server:https://mon.serveur.keycloak/auth}",
   "ssl-required": "none",
   "resource": "${fr.insee.keycloak.resource:localhost-web}",
   "credentials": {
-    "secret": "${fr.insee.keycloak.credentials.secret:b1837f8f-e7a2-4bbc-b4bf-06a3ad5679c3}"
+    "secret": "${fr.insee.keycloak.credentials.secret:abcd_1234_abcd}"
   },
   "confidential-port": 0,
   "principal-attribute": "preferred_username"
 }
 ```
 - Il faut demander au CEI de rajouter ces variables au démarrage de la jvm
-- [Doc sur le wiki](https://git.stable.innovation.insee.eu/outils-transverses/authentification/keycloack/keycloak-insee-ext/wikis/D%C3%A9veloppeurs/G%C3%A9rer-diff%C3%A9rentes-configurations-sur-les-environnements)
 
 
 
@@ -851,8 +849,8 @@ public class KeycloakConfigurationAdapter extends KeycloakWebSecurityConfigurerA
 Configuration via SpringBoot
 
 ```
-keycloak.auth-server-url=https://auth.insee.test/auth
-keycloak.realm=formation-secu-applicative
+keycloak.auth-server-url=https://mon.serveur.keycloak/auth
+keycloak.realm=formation
 keycloak.resource=client-test-web
 keycloak.credentials.secret=1a5b0b89-c23a-4d3b-9653-72faf8754a61
 
@@ -997,7 +995,7 @@ Deux fonctionnements
 
 <!-- .slide: class="slide" -->
 ### Keycloak et javascript
-- Une possibilité simple : utiliser l'adapter keycloak directement disponible sur le serveur Keycloak en https://auth.insee.test/auth/js/keycloak.js
+- Une possibilité simple : utiliser l'adapter keycloak directement disponible sur le serveur Keycloak en https://mon.serveur.keycloak/auth/js/keycloak.js
 - Met à disposition un objet Keycloak, documentation sur https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter
 ```javascript
 var keycloak = Keycloak(); // recherche un keycloak.json dans le dossier courant
@@ -1020,15 +1018,15 @@ keycloak.logout();
 {
 	"realm": "formation-secu-applicative",
 	"resource": "client-test-js",
-	"auth-server-url": "https://auth.insee.test/auth"
+	"auth-server-url": "https://mon.serveur.keycloak/auth"
 }
 ```
 - ou Keycloak('chemin vers fichier json')
 - Configuration sans fichier annexe
 ```javascript
 var keycloak = Keycloak({
-	url : 'https://auth.insee.test/auth',
-	realm : 'formation-secu-applicative',
+	url : 'https://mon.serveur.keycloak/auth',
+	realm : 'formation',
 	clientId : 'client-test-js'
 });
 ```
@@ -1173,8 +1171,8 @@ import Keycloak from 'keycloak-js';
 
 var keycloak = Keycloak(
        {
-         url: 'https://auth.insee.test/auth',
-         realm: 'agents-insee-interne',
+         url: 'https://mon.serveur.keycloak/auth',
+         realm: 'formation',
          clientId: 'localhost-frontend'
        });
 ```
@@ -1267,8 +1265,7 @@ axios.interceptors.request.use(
 ### France Connect
 - Le dispositif France Connect utilise OpenIdConnect
 - L'inscription à France Connect n'est pas une opération anodine
-- Il est pour le moment prévu de réaliser une unique inscription à France Connect pour L'Insee via Keycloak
-- France connect sera proposé comme Fournisseur d'identité pour Keycloak
+- France connect est proposé comme fournisseur d'identité pour Keycloak
 
 
 

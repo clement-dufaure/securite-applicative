@@ -323,7 +323,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 <!-- .slide: class="slide" -->
 ### Le truststore
-- Par défaut le trustore chargé est celui de la jvm éxécutant l'application (....\\jdk-1.8.0_40\\jre\\lib\\security\\cacerts)
+- Par défaut le trustore chargé est celui de la jvm éxécutant l'application (....\\mon-jdk\\lib\\security\\cacerts)
 - Le mot de passe par défaut est changeit
 - On peut vouloir un "Insee flavored cacert" : le cacerts disponible dans la distribution java plus la chaine de certification Insee (AC Racine + AC Subordonnée)
 - Au cas où : [certificats AC Insee](http://crl.insee.fr/)
@@ -355,9 +355,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 keytool  -import -trustcacerts -file server.crt -alias localhost -keystore cacertsperso
 ```
 
-Si keytool inconnu :
+Si keytool inconnu : (à ajouter au path pour plus de simplicité)
 ```
-"....\jdk-1.8.0_40\bin\keytool.exe"
+"path/to/mon-jdk/bin/keytool.exe"
 "$JAVA_HOME/bin/keytool.exe"
 ```
 

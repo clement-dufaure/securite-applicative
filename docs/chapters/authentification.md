@@ -104,9 +104,8 @@ En arrivant sur une page où je suis censé être authentifié
 <!-- .slide: class="slide" -->
 ### Ressource authentifié
 Si un ou plusieurs autre modes de connexion sont disponibles, les fonctionnements sont variés :
-- 401 + WWW-Authenticate header
-- 200 + traitements divers
-- 30X : redirection vers page de login ou vers un fournisseur d'identité
+- 401 + WWW-Authenticate header : le navigateur doit savoir réagir
+- 200 + traitements divers ou 30X : redirection vers page de login ou vers un fournisseur d'identité
 
 
 
@@ -428,13 +427,27 @@ Filter
 
 
 
+<!-- .slide: class="slide" -->
+### Implémentation de l'authentification
+Filter
+En Spring, on peut simplement définir un filtre
+```java
+@Filter
+@Order(n)
+public class MyFilter implements Filter{
+}
+```
+
+
+
+
 
 
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification
 - Les implémentations d'authentification sont censées placer certaines informations dans l'objet de requete.
 - Quelques méthodes de l'interface HTTPServletRequest :
-   - getremoteuser, getuserprincipal pour vérifier que l'utilisateur est authentifié (non null si authentifié)
+   - getRemoteUser, getUserPrincipal pour vérifier que l'utilisateur est authentifié (non null si authentifié)
    - isUserInRole pour vérifier que l'utilisateur a un droit donné
    - isSecure pour vérifier que la connexion réseau est sécurisée
 
@@ -450,8 +463,8 @@ Filter
 Basé sur le container : cas de Tomcat
 - Interface Authenticator : valve qui récupère des informations d'authentification
 - Interface realm : validation des credentials et affectation des rôles
-- Se définissent dans un war META-INF/context.xml ou directement sur Tomcat dans /conf/service-name/host-name/appli-name.xml
-- En pratique dans META-INF/context.xml en local, dans /conf/service-name/host-name/appli-name.xml sur une plateforme CEI
+- Se définissent dans un war META-INF/context.xml
+- Sont surchargé dans /conf/Catalina/localhost/appli-name.xml (c'est le cas sur une plateforme CEI)
 
 
 
@@ -468,10 +481,8 @@ Basé sur le container : cas de Tomcat
 - Il faut également définir un realm qui permet de définir la base de données des utilisateurs (devant implémenter l'interface Realm)
 ```xml
 <Context>
-	<Valve className="package.to.tomcat.saml.sp.SPAuthenticator"
-		oiosamlHome="src/test/resources/config" /> <!-- Classe d'appel implémentant (via classes abstraites) Valve et sa méthode invoke et paramètres -->
-	<Realm className="package.to..tomcat.saml.sp.SAMLRealm"
-		roleAttribute="roles" usernameAttribute="uid" /> <!--  Classe implémentant le realm est ses attributs -->
+	<Valve className="package.to.Authenticator"/> <!-- Classe d'appel implémentant (via classes abstraites) Valve et sa méthode invoke -->
+	<Realm className="package.to.Realm"/> <!--  Classe implémentant le realm -->
 </Context>
 ```
 
@@ -630,12 +641,12 @@ Spring security
 <dependency>
     <groupId>org.springframework.security</groupId>
     <artifactId>spring-security-config</artifactId>
-    <version>5.0.7.RELEASE</version>
-    <dependency>
+    <version>--last--</version>
+</dependency>
+<dependency>
     <groupId>org.springframework.security</groupId>
     <artifactId>spring-security-web</artifactId>
-    <version>5.0.7.RELEASE</version>
-</dependency>
+    <version>--last--</version>
 </dependency>
 ```
 
@@ -698,7 +709,7 @@ L'objet HttpSecurity permet de configurer les comportements de sécurité
 - Vérifier les droits : ```authorizeRequests().antMatchers(/public/**).permitAll().antMatchers(/private/**).authenticated().antMatchers("/admin/**").hasRole("admin")```
   - permitAll() = accès public
   - authenticated() = utilisateurs authentifié sans controle de role
-  - hasRole("admin") = utilisateurs authentifiés avec le rôle "admin"
+  - hasRole("admin") ou hasAuthority("admin") = utilisateurs authentifiés avec le rôle "admin"
 
 
 
@@ -709,10 +720,10 @@ L'objet HttpSecurity permet de configurer les comportements de sécurité
 
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification
-- Attention dans Spring security, tous les rôles doivent s'appeler ROLE_monroleapplicatif
-- Les rôles ne commençant pas par ROLE_ ne seront pas pris en compte
-- Dans ce cas lors d'un "hasRole()", il faut recherche uniquement "monroleapplicatif" et non pas "ROLE_monroleapplicatif"
-- En revanche les Authorities acceptent tout et on appelle les rôles directement
+- Principe Authority/Role
+- En spring security, on ajoute des authority
+- Si l'authority commence pas "ROLE_", elle est considérée comme rôle par Spring
+- Dans ce cas lors d'un "hasRole()", il faut rechercher uniquement "monroleapplicatif" et non pas "ROLE_monroleapplicatif"
 - Intérêt de role ? 
   - Spring Security n'ajoutera que les ROLE_* dans les role de l'objet HttpRequest
   - Donc les méthodes l'utilisant (isUserInRole par exemple) ne marcheront que dans ces conditions
@@ -725,14 +736,13 @@ L'objet HttpSecurity permet de configurer les comportements de sécurité
 
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification
-- Exemple : Ajout dans Spring Security des rôles "ROLE_utilisateur" et "user"
-- L'utilisateur A possède le rôle "ROLE_utilisateur" et l'utilisateur B le rôle "user"
+- Exemple : Ajout dans Spring Security des authorities "ROLE_utilisateur" et "user"
+- L'utilisateur A possède "ROLE_utilisateur" et l'utilisateur B "user"
 - `.antMatchers("/private/**").hasAuthority("utilisateur")` autorisera l'accès à aucun de ces utilisateurs
 - `.antMatchers("/private/**").hasAuthority("ROLE_utilisateur")` autorisera l'accès à l'utilisateur A
 - `.antMatchers("/private/**").hasAuthority("user")` autorisera l'accès à l'utilisateur B
 - `.antMatchers("/private/**").hasRole("utilisateur")` autorisera l'accès à l'utilisateur A
 - `.antMatchers("/private/**").hasRole("user")` autorisera l'accès à aucun de ces utilisateurs
-- L'adapter Keycloak Spring Security propose un bricolage autour de cette gestion des rôles
 
 
 
@@ -800,9 +810,9 @@ Se limite à l'interface de principal :
 ### Tests avec Spring Security
 ```java
 	@Test
-	@WithMockUser(username = "Alfred Robichu", roles = { "utilisateur_oidc" })
+	@WithMockUser(username = "Alfred Robichu", roles = { "administrateur" })
 	public void recupererPageAdminEnEtantAdmin() throws Exception {
 		mvc.perform(get("/admin").secure(true)).andExpect(status().isOk())
-				.andExpect(model().attribute("nom", "Alfred Robichu")).andReturn();
+      .andReturn();
 	}
 ```
