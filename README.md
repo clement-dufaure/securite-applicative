@@ -7,21 +7,11 @@
 
 ### 0.1. Cloner le dépot git
 
-> Terminal
-
 ```bash
 git clone https://github.com/clement-dufaure/securite-applicative.git
 ```
 
-### 0.2. Importer le projet dans Eclipse
-
-> Eclipse
-
-* File
-* Import…
-* Existing Maven Project
-* Root directory : \path\to\workspace\formation-securite-applicative\application-basique
-* Finish
+### 0.2. Présentation du contenu
 
 Les exercices s'effectuent sur application-basique-todo, application-basique-js-todo et application-basique-react-todo.
 
@@ -32,6 +22,12 @@ Le module "application-basique-js-todo" contient un modèle basique de page html
 Le module "application-basique-react-todo" contient une base React/Redux à compléter.
 
 Les autres projets sont des démo de chaque type d'authentification selon plusieurs implémentations. (correction des exercices)
+
+### 0.3. Autres prérequis
+
+Une distribution tomcat : https://tomcat.apache.org/download-90.cgi
+
+> Pour Windows, télécharger la version zip et non le msi
 
 ## 1. Mise en place de HTTPS
 
