@@ -1,3 +1,13 @@
+<!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
+## 3.1
+### Authentification avec Java
+
+
+
+
+
+
+
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification en Java
 - Consiste à mettre un objet dans le "user principal" de la request

@@ -1,3 +1,14 @@
+<!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
+## 3.2
+### Authentification avec Tomcat
+
+
+
+
+
+
+
+
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification
 Basé sur le container : cas de Tomcat

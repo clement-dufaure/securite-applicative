@@ -11,42 +11,37 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Order(2)
 public class GestionDesDroitsFilter implements Filter {
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    // do nothing
-  }
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		// do nothing
+	}
 
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    HttpServletResponse httpResponse = (HttpServletResponse) response;
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    // Attention: l'URI contient le chemin de contexte
-    String uri = httpRequest.getRequestURI();
-    String contextPath = httpRequest.getContextPath();
+		// Attention: l'URI contient le chemin de contexte
+		String uri = httpRequest.getRequestURI();
+		String contextPath = httpRequest.getContextPath();
 
-    if (uri.startsWith(contextPath + "/admin")) {
-      // Verifier droits
-      // Par exemple autoriser uniquement les utilisateur_oidc
-      // httpResponse.sendError(403, "C'est interdit !");
-    }
+		if (uri.startsWith(contextPath + "/admin")) {
+			if (!httpRequest.isUserInRole("admin")) {
+				httpResponse.sendError(403, "C'est interdit !");
+			}
+		}
 
-    chain.doFilter(httpRequest, httpResponse);
+		chain.doFilter(httpRequest, httpResponse);
 
-  }
+	}
 
-  @Override
-  public void destroy() {
-    // do nothing
-  }
+	@Override
+	public void destroy() {
+		// do nothing
+	}
 
 }

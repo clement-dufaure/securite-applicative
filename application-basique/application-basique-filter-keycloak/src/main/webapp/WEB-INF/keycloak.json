@@ -1,9 +1,8 @@
 {
-    "realm" : "test",
-  "resource" : "localhost-web",
-  "auth-server-url" : "https://localhost:8180/auth",
-   "credentials" : {
-      "secret" : "486d1b0e-cc50-4f0a-b3c9-3d9ba2d7ec02"
-   }
-
+  "realm": "formation",
+  "auth-server-url": "http://localhost:8180/auth/",
+  "resource": "localhost",
+  "credentials": {
+    "secret": "b4fd3db5-01b2-4d3e-bece-7df7379e805e"
+  }
 }
