@@ -6,7 +6,7 @@
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script type="text/javascript"
-	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+	src="http://localhost:8180/auth/js/keycloak.js"></script>
 <script>
 	var keycloak;
 
@@ -106,14 +106,12 @@
 	<br /> Pour que le client manipule directement les credentials de
 	l'utilisateur :
 	<form
-		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token"
+		action="http://localhost:8180/auth/realms/formation/protocol/openid-connect/token"
 		method="POST" target="newtab">
 		<input type="hidden" name="grant_type" value="password" /> <input
-			type="hidden" name="client_id" value="client-test-web" /> <input
-			type="hidden" name="redirect_uri" value="https://localhost:8443" /><input
-			type="hidden" name="client_secret"
-			value="1a5b0b89-c23a-4d3b-9653-72faf8754a61" /> <input type="text"
-			name="username" /> <input type="password" name="password" /> <input
+			type="hidden" name="client_id" value="localhost-frontend" /> <input
+			type="hidden" name="redirect_uri" value="http://localhost:8080" />
+			<input type="text" name="username" /> <input type="password" name="password" /> <input
 			type="submit" value="Resource Owner Password Credentials Grant" />
 
 	</form>
@@ -123,12 +121,12 @@
 	<br /> Pour s'authentifier en tant que client :
 
 	<form
-		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token"
+		action="http://localhost:8180/auth/realms/formation/protocol/openid-connect/token"
 		method="POST" target="newtab">
 		<input type="hidden" name="grant_type" value="client_credentials" />
 		<input type="hidden" name="client_id" value="client-test-web" /> <input
 			type="hidden" name="client_secret"
-			value="1a5b0b89-c23a-4d3b-9653-72faf8754a61" /> <input type="hidden"
+			value="abcd-1234-decd" /> <input type="hidden"
 			name="redirect_uri" value="https://localhost:8443" /> <input
 			type="submit" value="Client Credentials Grant" />
 
@@ -140,7 +138,7 @@
 	<br /> Obtenir manuellement un code d'accès puis un jeton :
 	<br /> 1 :
 	<a
-		href="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/auth?client_id=client-test-web&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&scope=openid"
+		href="http://localhost:8180/auth/realms/formation/protocol/openid-connect/auth?client_id=localhost&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&scope=openid"
 		target="newtab">Récupération code d'accès </a>
 
 
@@ -148,7 +146,7 @@
 
 	<br />
 	<form method="POST" target="newtab"
-		action="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/token">
+		action="http://localhost:8180/auth/realms/formation/protocol/openid-connect/token">
 		<input type="hidden" name="grant_type" value="authorization_code">
 		<input type="hidden" name="scope" value="offline_access"> <input
 			type="hidden" name="redirect_uri" value="urn:ietf:wg:oauth:2.0:oob">
@@ -166,7 +164,7 @@
 
 	<p>
 		<a
-			href="https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/auth?client_id=client-test-web&redirect_uri=urn:ietf:wg:oauth:2.0:oob:auto&response_type=code&scope=openid"
+			href="https://localhost:8180/auth/realms/formation/protocol/openid-connect/auth?client_id=client-test-web&redirect_uri=urn:ietf:wg:oauth:2.0:oob:auto&response_type=code&scope=openid"
 			target="newtab">Récupération code d'accès implicite</a>
 	</p>
 

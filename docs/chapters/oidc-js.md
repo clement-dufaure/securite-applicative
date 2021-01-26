@@ -314,3 +314,12 @@ axios.interceptors.request.use(
 ```
 
 
+
+
+
+
+<!-- .slide: class="slide" -->
+### Réduire la dépendance à Keycloak
+- En utilisant des librairies plus standard oidc
+https://github.com/AxaGuilDEv/react-oidc
+

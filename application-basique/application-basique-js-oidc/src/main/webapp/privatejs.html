@@ -6,7 +6,7 @@
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script type="text/javascript"
-	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+	src="http://localhost:8180/auth/js/keycloak.js"></script>
 <script>
 	var keycloak = Keycloak();
 	keycloak.init({
@@ -29,7 +29,7 @@
 				JSON.stringify(keycloak.tokenParsed.realm_access.roles, null,
 						'\t'));
 
-		var url = 'https://localhost:8443/ws/ressource';
+		var url = 'http://localhost:8443/ws/ressource';
 		var req = new XMLHttpRequest();
 		req.open('GET', url, true);
 		req.setRequestHeader('Accept', 'application/json');

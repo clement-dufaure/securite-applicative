@@ -6,7 +6,7 @@
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script type="text/javascript"
-	src="https://auth.insee.test/auth/js/keycloak.js"></script>
+	src="http://localhost:8180/auth/js/keycloak.js"></script>
 <script>
 	var keycloak = null;
 
@@ -23,7 +23,7 @@
 
 	var loadData = function() {
 
-		var url = 'https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/userinfo';
+		var url = 'http://localhost:8180/auth/realms/formation/protocol/openid-connect/userinfo';
 		var req = new XMLHttpRequest();
 		req.open('GET', url, true);
 		req.setRequestHeader('Accept', 'application/json');
@@ -78,7 +78,7 @@
 	<br />
 	<hr />
 	<a
-		href="https://auth.insee.test/auth/realms/formation-secu-applicative/account">Cliquez
+		href="https://localhost:8180/auth/realms/formation/account">Cliquez
 		ici pour gérer votre compte sur keycloak</a>
 
 </body>
