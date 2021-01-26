@@ -133,3 +133,148 @@ Possibilités "manuelles"
 
 Existe mais peu compatible avec notre archtecture
 - Roles spécifiques à un client, (par défaut propre au realm).
+
+
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas particuliers
+
+
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### France Connect
+- Le dispositif France Connect utilise OpenIdConnect
+- L'inscription à France Connect n'est pas une opération anodine
+- France connect est proposé comme fournisseur d'identité pour Keycloak
+
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Besoin de plusieurs realms
+2 cas :
+- Le deuxième realm est un realm secondaire :
+*une application ouverte sur internet dédié aux agents Insee doit être accessible par formulaire depuis Internet mais par Kerberos en interne : le realm agents-insee-interne et une alternative à insee-ssp*
+- Les différents realms sont indépendant :
+*une application transverse sur laquelle peuvent se connecter divers acteurs issus d'application différentes*
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas d'un realm secondaire
+- Similaire à une situation s'authentifier avec Google, Facebook,...
+- Un fournisseur d'identité est créé côté Keycloak : *auth.insee.fr/.../agents-insee-interne devient fourniseur d'identité pour auth.insee.net/.../insee-ssp*
+- Côté application, seul le realm principal doit être déclaré
+- Remarque : la déclaration de fournisseur d'identité est en OpenIDConnect si les deux realms sont sur le même serveur, en SAML s'ils sont sur interne et DMZ, une question de flux.
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas d'un realm secondaire
+il est possible de forcer keycloak à utiliser un fournisseur de service secondaire, par exemple si un discovery service est utilisé pour savoir où se situe l'utilisateur :
+
+Applis web :
+```
+GET /myapplication.com?kc_idp_hint=sso-insee
+```
+
+Applis JS :
+```js
+var keycloak = new Keycloak('keycloak.json');
+keycloak.login({
+	idpHint: 'sso-insee'
+});
+```
+
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas de plusieurs realms indépendants
+- Le filtre Keycloak propose une interface pour founir dynamiquement une configuration keycloak
+- https://www.keycloak.org/docs/latest/securing_apps/index.html#_multi_tenancy
+- Déclaration d'une classe resolver de conf
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas de plusieurs realms indépendants
+```java
+public class MyKeycloakConfigResolver implements KeycloakConfigResolver {
+  @Override
+  public KeycloakDeployment resolve(Request facade) {
+    if (facade.getCookie("realm") != null) {
+      String realmDemande = facade.getCookie("realm").getValue();
+      InputStream is;
+      if (realmDemande.equals("keycloak1")) {
+        is = getClass().getClassLoader().getResourceAsStream("keycloak1.json");
+      } else {
+        is = getClass().getClassLoader().getResourceAsStream("keycloak2.json");
+      }
+      return KeycloakDeploymentBuilder.build(is);
+    } else {
+      return null;
+    }
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### Cas de plusieurs realms indépendants
+```xml
+	<filter>
+		<filter-name>Keycloak Filter</filter-name>
+		<filter-class>org.keycloak.adapters.servlet.KeycloakOIDCFilter</filter-class>
+		<init-param>
+			<param-name>keycloak.config.resolver</param-name>
+			<param-value>fr.insee.demo.multi.tenant.MyKeycloakConfigResolver</param-value>
+		</init-param>
+	</filter>
+  ```
+

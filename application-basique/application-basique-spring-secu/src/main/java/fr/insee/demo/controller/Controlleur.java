@@ -9,17 +9,11 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class Controlleur {
 
-  @Value("${spring.security.oauth2.client.provider.test.issuer-uri}")
+  @Value("${spring.security.oauth2.client.provider.kc-formation.issuer-uri}")
   private String keycloakUrl;
-
-  @Autowired
-  OAuth2AuthorizedClientService clientService;
 
   Logger log = LoggerFactory.getLogger(Controlleur.class);
 
@@ -41,7 +32,7 @@ public class Controlleur {
   }
 
   @RequestMapping(value = { "/private", "/admin" })
-  public String espacePrivate(HttpServletRequest request, Model model, @AuthenticationPrincipal OidcUser principal) {
+  public String espacePrivate(HttpServletRequest request, Model model) {
 
     model.addAttribute("secure", request.isSecure());
 
@@ -54,9 +45,14 @@ public class Controlleur {
 
     model.addAttribute("typeAuthentification", modeAuthentification);
 
-    model.addAttribute("nom", principal.getFullName());
-    model.addAttribute("mail", principal.getEmail());
-    model.addAttribute("roles", principal.getClaim("groups"));
+    KeycloakSecurityContext sc = (KeycloakSecurityContext) request
+        .getAttribute(KeycloakSecurityContext.class.getName());
+
+    AccessToken accessToken = sc.getToken();
+
+    model.addAttribute("nom", accessToken.getPreferredUsername());
+    model.addAttribute("mail", accessToken.getEmail());
+    model.addAttribute("roles", accessToken.getRealmAccess().getRoles());
     model.addAttribute("urlAccount",
         keycloakUrl + "/account" + "?referrer=localhost-web&referrer_uri=" + request.getRequestURL());
 
@@ -65,18 +61,11 @@ public class Controlleur {
     HttpURLConnection connection = null;
     try {
 
-      // Get access token
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-      String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();
-      OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId, oauthToken.getName());
-      String accessToken = client.getAccessToken().getTokenValue();
-
       // Create connection
-      URL url = new URL("http://localhost:8180/auth/realms/test/protocol/openid-connect/userinfo");
+      URL url = new URL(keycloakUrl + "/protocol/openid-connect/userinfo");
       connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-      connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+      connection.setRequestProperty("Authorization", "Bearer " + sc.getTokenString());
 
       // Get Response
       InputStream is = null;

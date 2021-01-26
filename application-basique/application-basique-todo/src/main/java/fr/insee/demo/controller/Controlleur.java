@@ -52,7 +52,7 @@ public class Controlleur {
     model.addAttribute("nom", "anonyme");
     model.addAttribute("mail", "");
     model.addAttribute("roles", "");
-    model.addAttribute("urlAccount", "https://auth.insee.test/auth/realms/formation-secu-applicative/account"
+    model.addAttribute("urlAccount", "https://mon.serveur.keycloak/auth/realms/formation/account"
         + "?referrer=client-test-web&referrer_uri=https://localhost:8443/private");
 
     /* Envoi d'une requête au ws */
@@ -61,7 +61,7 @@ public class Controlleur {
     try {
       // Create connection
       URL url = new URL(
-          "https://auth.insee.test/auth/realms/formation-secu-applicative/protocol/openid-connect/userinfo");
+          "https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/userinfo");
       connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
 

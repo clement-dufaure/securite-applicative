@@ -16,33 +16,29 @@
 
 
     <h2>
-        Authentification par
-        <c:out value="${typeAuthentification}" />
+        <span th:text="${typeAuthentification}">?</span>
     </h2>
 
     <a href="logout">Se déconnecter</a>
 
     <p>
-        Vous êtes
-        <c:out value="${nom}" />
+        Vous êtes <span th:text="${nom}">?</span>
     </p>
     <p>
-        mail :
-        <c:out value="${mail}" />
+        mail : <span th:text="${mail}">?</span>
     </p>
     <p>
-        Vos rôles :
-        <c:out value="${roles}" />
+        Vos rôles : <span th:text="${roles}">?</span>
     </p>
 
     <p>
         La reponse du WS est :
-        <c:out value="${reponseWS}"></c:out>
+        <span th:text="${reponseWS}">?</span>
     </p>
 
     <br />
     <hr />
-    <a href="${urlAccount}">Cliquez
+    <a th:href="@{${urlAccount}}">Cliquez
         ici pour gérer votre compte sur keycloak</a>
 
 </body>

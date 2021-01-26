@@ -8,10 +8,10 @@
 		<relativePath />
 	</parent>
 	<groupId>fr.insee</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>demo-kc-servlet</artifactId>
 	<version>dev</version>
 	<packaging>war</packaging>
-	<name>demo</name>
+	<name>demo-kc-servlet</name>
 	<description>Demo project for oidc with adapter Keycloak servlet</description>
 
 	<properties>
