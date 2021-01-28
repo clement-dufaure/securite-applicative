@@ -157,7 +157,7 @@ openssl pkcs12 -export -in server.crt -inkey server.key -out server.p12 -passout
 
  <!-- .slide: class="slide" -->
 ### HTTPS en pratique
-- L'application ne gère pas le HTTPS, c'est le conteneur ou un équipement réseau supérieur qui en a la charge
+- L'application ne gère pas le HTTPS, c'est le serveur applicatif (tomcat) ou un équipement réseau supérieur qui en a la charge
 - L'application peut imposer l'utilisation du HTTPS
 
 
@@ -168,9 +168,9 @@ openssl pkcs12 -export -in server.crt -inkey server.key -out server.p12 -passout
 
 <!-- .slide: class="slide" -->
 ### HTTPS en pratique
-- Dans tous les cas c'est le conteneur qui a la charge de déterminer si la connexion entrante est sécurisée
-- Cas direct : c'est le conteneur qui gère lui même la connexion ssl
-- Cas indirect : le conteneur ne gère pas de connexion HTTPS mais il sait que la connexion initiale est en HTTPS (cas d'un reverse proxy)
+- Dans tous les cas c'est le serveur applicatif (tomcat) qui a la charge de déterminer si la connexion entrante est sécurisée
+- Cas direct : c'est tomcat qui gère lui même la connexion ssl
+- Cas indirect : tomcat ne gère pas de connexion HTTPS mais il sait que la connexion initiale est en HTTPS (cas d'un reverse proxy)
 - Si le connecteur gère la connexion ssl ou qu'il est dédié à recevoir des connexions sécurisées, on peut directement le spécifier sécurisé.
 - Sinon, il va falloir définir un profil de requêtes sécurisées
 

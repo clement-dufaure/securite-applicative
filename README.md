@@ -47,6 +47,12 @@ Rester dans le cas de Tomcat pour le moment : manipuler le web.xml *de l'applica
 Il faut récupérer le trustore par défaut (dans l'installation java de l'atelier de dev) et ajouter le certificat localhost.
 Pour l'intégrer dans l'application, on pourra ici simplement le déclarer dans les arguments de démarrage de tomcat.
 
+## 2. Monter localement un serveur Keycloak
+
+- Télécharger la dernière version de keycloak
+- Keycloak démarre simplement via `/bin/standalone.bat` ou `/bin/standalone.sh`
+- Par défaut il démarre sur le port 8080, ce qui peut être génant selon vos habitudes de développement, pour le changer et le faire démarre par exemple sur 8180 : `bin/standalone.bat -Djboss.socket.binding.port-offset=100`
+
 ## 3. Savoir gérer une authentification avec un fournisseur d'identité
 
 ### 3.1 S'authentifier avec le filtre Keycloak OIDC

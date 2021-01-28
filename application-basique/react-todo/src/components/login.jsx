@@ -1,48 +1,30 @@
 import Button from '@material-ui/core/Button';
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { init } from "../redux/actions.js";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-class Login extends Component {
+const Login = () => {
+  var keycloak = useSelector(state => state.keycloak);
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-  }
-
-  render() {
-    if (this.props.keycloak) {
-      if (this.props.keycloak.authenticated) {
-        return (<Button variant="contained" color="primary"
-          onClick="">Se déconnecter</Button>
-        );
-      } else {
-        return (
-          <div>
-            <Button variant="contained" color="primary"
-              onClick=""
-            >Se connecter</Button>
-          </div>
-        );
-      }
-    } else {
-      return (
-        <div>...</div>
-      );
-    }
+  if (keycloak && keycloak.authenticated) {
+    return (<Button variant="contained" color="primary"
+      onClick={
+        () =>
+          console.log("click !")}>Se déconnecter</Button>
+    );
+  } else {
+    return (
+      <>
+        <Button variant="contained" color="primary"
+          onClick={
+            () =>
+              console.log("click !")}
+        >Se connecter</Button>
+      </>
+    );
   }
 }
 
-const mapStateToProps = state => ({
-  keycloak: state.keycloak
-});
-const mapDispatchToProps = { init };
 
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+
+export default Login;

@@ -1,71 +1,50 @@
 import Button from '@material-ui/core/Button';
 import Keycloak from 'keycloak-js';
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { init } from "../redux/actions.js";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { init } from '../redux/actions';
 
-class Login extends Component {
+const Login = () => {
+  var keycloak = useSelector(state => state.keycloak);
 
-  constructor(props) {
-    super(props);
-    this.state = {};
+  const dispatch = useDispatch();
+
+  if (!keycloak) {
+    keycloak = Keycloak({
+      url: 'http://localhost:8180/auth',
+      realm: 'formation',
+      clientId: 'localhost-frontend'
+    });
+    keycloak.init().then((authenticated) => {
+      console.log(keycloak)
+      console.log(authenticated)
+      if (authenticated) {
+        console.log(keycloak)
+        dispatch(init(keycloak));
+      }
+    }).catch((err) => console.log(err));
   }
 
-  componentDidMount() {
-    if (!this.state.keycloakInitiated) {
-      var keycloak = Keycloak(
-        {
-          url: 'https://auth.insee.test/auth',
-          realm: 'agents-insee-interne',
-          clientId: 'localhost-frontend'
-        });
-
-      //Pour un login automatique
-      // keycloak.init({onLoad: 'login-required'}).success(() => {this.props.init(keycloak); });
-      keycloak.init().success(() => {
-        this.props.init(keycloak);
-      }
-      );
-    }
-
-  }
-
-  render() {
-    if (this.props.keycloak) {
-      if (this.props.keycloak.authenticated) {
-        return (<Button variant="contained" color="primary"
-          onClick={() =>
-            this.props.keycloak.logout({ redirectUri: window.location.protocol + "//" + window.location.host + process.env.PUBLIC_URL })
-          }>Se déconnecter</Button>
-        );
-      } else {
-        return (
-          <div>
-            <Button variant="contained" color="primary"
-              onClick={() => {
-                sessionStorage.setItem("realm", "agent");
-                //this.props.keycloakAgent.login({ redirectUri: window.location.protocol + "//" + window.location.host + process.env.PUBLIC_URL });
-                this.props.keycloak.login({ redirectUri: window.location.protocol + "//" + window.location.host + process.env.PUBLIC_URL });
-              }}
-            >Se connecter</Button>
-          </div>
-        );
-      }
-    } else {
-      return (
-        <div>...</div>
-      );
-    }
+  if (keycloak && keycloak.authenticated) {
+    return (<Button variant="contained" color="primary"
+      onClick={
+        () => keycloak.logout()
+      }>Se déconnecter</Button>
+    );
+  } else {
+    return (
+      <>
+        <Button variant="contained" color="primary"
+          onClick={
+            () =>
+              keycloak.login()}
+        >Se connecter</Button>
+      </>
+    );
   }
 }
 
-const mapStateToProps = state => ({
-  keycloak: state.keycloak
-});
-const mapDispatchToProps = { init };
 
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+
+export default Login;

@@ -1,73 +1,32 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import axiosToken from '../utils/axiosToken';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import axios from '../utils/axiosToken';
 
-const styles = theme => ({
-    root: {
-        width: '100%',
-        maxWidth: 500,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
-    dense: {
-        marginTop: 16,
-    },
-    menu: {
-        width: 200,
-    },
-});
+const UserInfo = () => {
+    const [userInfo, setUserInfo] = useState('');
+    const keycloak = useSelector(state => state.keycloak);
+    axios.get('http://localhost:8180/auth/realms/formation/protocol/openid-connect/userinfo').then(
+        (response) => {
+            setUserInfo(JSON.stringify(response.data))
+        }).catch((error) => console.log(error))
 
-class UserInfo extends Component {
-    state = {
-        userInfo: ''
-    }
-
-    componentDidMount() {
-        var composant = this;
-        axiosToken.get('https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/userinfo').then(
-            (response) => {
-                composant.setState({
-                    userInfo: JSON.stringify(response.data),
-                })
-            }).catch((error) => console.log(error))
-    }
-
-    render() {
-        //  const { classes } = this.props;
-
-        if (this.props.keycloak && this.props.keycloak.authenticated && this.props.keycloak.tokenParsed.realm_access.roles.includes("offline_access")) {
-            return (
-                <div>
-                    <Typography variant="h4" gutterBottom>
-                        User info
+    if (keycloak && keycloak.authenticated && keycloak.tokenParsed.realm_access.roles.includes("offline_access")) {
+        return (
+            <>
+                <Typography variant="h4" gutterBottom>
+                    User info
                     </Typography>
-                    <Typography variant="body1">
-                        {this.state.userInfo}
-                    </Typography>
-                </div>)
-        } else {
-            return (
-                <p>Accès refusé</p>
-            );
-        }
-
+                <Typography variant="body1">
+                    {userInfo}
+                </Typography>
+            </>)
+    } else {
+        return (
+            <p>Accès refusé</p>
+        );
     }
 
 }
 
-const mapStateToProps = state => ({
-    keycloak: state.keycloak,
-    mettreAJourTokenEtLancer: state.mettreAJourTokenEtLancer
-});
-
-export default connect(
-    mapStateToProps,
-)(withStyles(styles)(UserInfo));
+export default UserInfo;
