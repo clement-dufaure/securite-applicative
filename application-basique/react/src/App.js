@@ -1,7 +1,7 @@
 import React from 'react';
-import Barre from './components/barre.jsx';
-import ContenuJeton from './components/contenuJeton.jsx';
-import UserInfo from './components/userinfo.jsx';
+import Barre from './components/barre.tsx';
+import ContenuJeton from './components/contenuJeton.tsx';
+import UserInfo from './components/userinfo.tsx';
 
 const App = () => {
   return (

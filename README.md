@@ -9,6 +9,7 @@
 
 ```bash
 git clone https://github.com/clement-dufaure/securite-applicative.git
+cd securite-applicative/application-basique
 ```
 
 ### 0.2. Présentation du contenu
@@ -77,15 +78,5 @@ Récupérer des informations du jeton et effectuer une connexion sur /userinfo
 Compléter le composant Login afin de gérerl'authentification et placement dans le store.
 
 Vérifier l'authentification pour accéder au composant Token, afficher certaines info du jeton, et se connecter au webService /userinfo en utilisant axios (configuration spéciale définie dans AxiosToken.js)
-
-## 4 Compléments
-
-### 4.1 Gérer son realm sur Keycloak 
-Se connecter à l'interface d'administration du realm formation-secu-applicative.
-
-### 4.2 Développer un thème pour son realm
-Lancer un server keycloak standalone (à récupérer sur https://www.keycloak.org/downloads.html)
-
-Récuperer le projet de theme et l'appliquer sur le serveur standalone
 
 
