@@ -80,7 +80,7 @@ Au delà d'environ 300 habilitations c'est l'annuaire qui finit par planter...
 <!-- .slide: class="slide" -->
 ### Une erreur de programmation ?
 - Le top 10 des erreurs de programmation : OWASP
-- https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf
+- https://owasp.org/www-project-top-ten/
 
 
 
