@@ -34,6 +34,7 @@ public class MySecurityConfigurationAdapter extends WebSecurityConfigurerAdapter
   JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter());
+    jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
     return jwtAuthenticationConverter;
   }
 
