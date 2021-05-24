@@ -681,12 +681,12 @@ Deux grands types de protection
 
 <!-- .slide: class="slide" -->
 ### S'initier aux failles applicatives
-- Codebashing
 - [OWASP](https://www.owasp.org)
   - Documentation et notamment le OWASP top 10
   - WebGoat (découverte de failles sous forme de cours)
   - Juice Store (challenges)
 - [Natas](https://overthewire.org/wargames/natas/)
+- [Root Me](https://www.root-me.org/)
 
 Par ailleurs le [CERT-FR](https://www.cert.ssi.gouv.fr/) est un sytème de notification des failles applicatives. Il publie aussi régulièrement des articles de cybersécurité.
 
