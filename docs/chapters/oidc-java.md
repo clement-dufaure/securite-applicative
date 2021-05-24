@@ -1,5 +1,5 @@
 <!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
-## 6.1
+## 4.1
 ### OpenID Connect et Java
 
 
