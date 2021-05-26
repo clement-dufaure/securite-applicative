@@ -189,7 +189,7 @@ Exemples
 ### L'injection de code : Injection SQL ou LDAP
 Sécurité :
 - Échapper les caractères spéciaux 
-- => Utiliser des PreparatedStatement
+- => Utiliser des PreparedStatement
 - => Utiliser des Frameworks qui font le boulot (hibernate, ...)
 
 
