@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Sécurité applicative</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+	<!-- my sripts -->
+	<script>
+		var injection = function () {
+			var body = document.getElementsByTagName("body")[0];
+			var myTxt = document.getElementById("scriptEvil0").value;
+			var displayText;
+			// if (myTxt === "Robert'); DROP TABLE Students;--"){
+			if (myTxt.indexOf("'") > -1) {
+				displayText = "Oui, pour tester une attaque par injection on tente de mettre une ' dans le champ !";
+			} else {
+				displayText = myTxt + " a été ajouté en base";
+			}
+			myUl = document.getElementById("myUl0");
+			node = document.createElement("LI");
+			txt = document.createTextNode(displayText);
+			node.appendChild(txt);
+			myUl.appendChild(node);
+		}
+		var fonction = function () {
+			myUl = document.getElementById("myUl");
+			myTxt = document.getElementById("scriptEvil").value;
+			var node = document.createElement("LI");
+			node.innerHTML = myTxt;
+			myUl.appendChild(node);
+		}
+		var testCors = function () {
+			var req = new XMLHttpRequest()
+			req.open('GET', 'https://insee.fr/fr/accueil', false);
+			req.send();
+		}
+	</script>
+	<!-- end my sripts -->
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<!-- My prez -->
+			<section class="main-title">
+				<h1>Sécurité applicative</h1>
+				<a
+					href="https://formation.dufau.re/securite-applicative">https://formation.dufau.re/securite-applicative</a><br />
+				<a
+					href="https://github.com/clement-dufaure/securite-applicative">https://github.com/clement-dufaure/securite-applicative</a><br />
+
+				<p>
+					<small>Clément Dufaure</small>
+				</p>
+				<table>
+					<tr>
+						<td><img src="images/tomcat.png" style="width: 100px;" /></td>
+						<!--<td><div id="shibboleth"><img src="images/shibboleth.png" style="width: 100px;" /></div></td>-->
+						<td><img src="images/keycloak.png" style="width: 100px;" /></td>
+					</tr>
+				</table>
+			</section>
+
+			<!-- Introduction -->
+			<section data-markdown="chapters/introduction.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Failles -->
+			<section data-markdown="chapters/faillesapplicatives.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Https -->
+			<section data-markdown="chapters/https.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Authentification -->
+			<section data-markdown="chapters/authentification.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Authentification - Java -->
+			<section data-markdown="chapters/authentification-java.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Authentification - Tomcat -->
+			<section data-markdown="chapters/authentification-tomcat.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Authentification - JS -->
+			<section data-markdown="chapters/authentification-js.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- OpenIDConnect -->
+			<section data-markdown="chapters/oidc.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- OpenIDConnect -->
+			<section data-markdown="chapters/oidc-java.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- OpenIDConnect -->
+			<section data-markdown="chapters/oidc-js.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Serveur Keycloak -->
+			<section data-markdown="chapters/keycloak.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+			<!-- Saml -->
+			<section data-markdown="chapters/saml.md" data-separator-vertical="^(\r?\n){4,}$">
+			</section>
+
+
+			<section class="main-title">
+				<h2>Questions ?</h2>
+				<img src="images/chiffrer.gif">
+			</section>
+
+			<!-- end my prez -->
+
+
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>

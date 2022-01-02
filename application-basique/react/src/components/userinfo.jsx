@@ -6,7 +6,7 @@ import axios from '../utils/axiosToken';
 const UserInfo = () => {
     const [userInfo, setUserInfo] = useState('');
     const keycloak = useSelector(state => state.keycloak);
-    axios.get('http://localhost:8180/auth/realms/formation/protocol/openid-connect/userinfo').then(
+    axios.get('http://localhost:8180/auth/realms/test/protocol/openid-connect/userinfo').then(
         (response) => {
             setUserInfo(JSON.stringify(response.data))
         }).catch((error) => console.log(error))

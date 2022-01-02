@@ -12,8 +12,8 @@ const Login = () => {
   if (!keycloak) {
     keycloak = Keycloak({
       url: 'http://localhost:8180/auth',
-      realm: 'formation',
-      clientId: 'localhost-frontend'
+      realm: 'test',
+      clientId: 'application-test'
     });
     keycloak.init().then((authenticated) => {
       console.log(keycloak)
