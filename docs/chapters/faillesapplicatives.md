@@ -696,7 +696,7 @@ Access-Control-Allow-Origin: *
 <!-- .slide: class="slide" -->
 ### Scénario CORS
 - Le navigateur lit la réponse du serveur
-- Si elle est vide (le serveur a refusé de répondre) ou si elle est rempli mais ne contient pas d'entête Access-Control-Allow-Origin ou qu'aucun entête Access-Control-Allow-Origin ne correspond au domaine source, le navigateur ne retourne rien au script
+- Si elle ne contient pas d'entête Access-Control-Allow-Origin ou qu'aucun entête Access-Control-Allow-Origin ne correspond au domaine source, le navigateur ne retourne rien au script. *Le script ne fait pas la difference entre un echec de connexion et une erreur cors*
 
 Gestion des erreurs :
 - Pour debugger, la console du navigateur vous prévient que la réponse a été bloquée
@@ -787,4 +787,7 @@ Par ailleurs le [CERT-FR](https://www.cert.ssi.gouv.fr/) est un sytème de notif
 <!-- .slide: class="slide" -->
 ### "Le code des autres"
 
-- Log4Shell (https://fr.wikipedia.org/wiki/Log4Shell https://canarytokens.org/generate)
+- Log4Shell *Decembre 2021*
+- https://fr.wikipedia.org/wiki/Log4Shell
+- Voir projet exploit
+- Exploiter avec https://canarytokens.org/generate
