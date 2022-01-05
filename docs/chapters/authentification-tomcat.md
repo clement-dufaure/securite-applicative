@@ -30,6 +30,7 @@ Basé sur le container : cas de Tomcat
 - Cela permet d'utiliser les security-constraints pour donner des droits à des types d'utilisateurs
 - La valve se définit dans le context.xml (/META-INF/context.xml). Dans notre cas c'est un Authenticator : il possède une méthode authenticate appelée par invoke.
 - Il faut également définir un realm qui permet de définir la base de données des utilisateurs (devant implémenter l'interface Realm)
+
 ```xml
 <Context>
 	<Valve className="package.to.Authenticator"/> <!-- Classe d'appel implémentant (via classes abstraites) Valve et sa méthode invoke -->
@@ -132,6 +133,7 @@ Définition des droits avec security-constraints
 <!-- .slide: class="slide" -->
 ### Implémentation de l'authentification
 - Les authentifications les plus simples peuvent être définies dans le web.xml (Tomcat va affecter automatiquement la valve (Authenticator) qui va bien)
+
 ```xml
 <login-config>
   <auth-method>FORM</auth-method>

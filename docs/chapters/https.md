@@ -187,8 +187,17 @@ openssl pkcs12 -export -in server.crt -inkey server.key -out server.p12 -passout
 - Le F5 déchiffre et transmet une requête HTTP (en clair) à un apache, qui lui même la transmet à un tomcat portant l'application
 - En dev/qf, c'est l'apache qui gère HTTPS
 
-Transfert de l'inforamtion HTTPS
+
+
+
+
+
+
+<!-- .slide: class="slide" -->
+### HTTPS indirect en pratique : en production
+Transfert de l'information HTTPS
 - Pour savoir que la requête initiale est en HTTPS, le F5 ajoute un entête "X-Forwarded-Proto: HTTPS", et on configure Tomcat pour que la lecture de cet entête signifie sécurisé
+
 ```xml
 <Valve className="org.apache.catalina.connector.RemoteIpValve" protocolHeader="X-Forwarded-Proto" />
 ```
@@ -208,6 +217,7 @@ Une valve Tomcat est une classe exécutée (invoke()) à l'arrivée de chaque re
 Dans server.xml :
 
 - Ajout d'un connecteur SSL
+
 ```xml
 <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
 			maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
@@ -226,6 +236,7 @@ Dans server.xml :
 Dans server.xml
 
 - Définition du port de redirection dans le cas d'un connecteur non sécurisé
+
 ```xml
 <Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
 ```

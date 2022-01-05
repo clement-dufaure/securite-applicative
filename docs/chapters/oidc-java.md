@@ -216,6 +216,7 @@ Obtenir le jeton pour se connecter à un Web Service
 <!-- .slide: class="slide" -->
 ### Environnement de production
 - Le json peut être paramétré pour s'adapter à des propriétés systèmes (avec valeurs par défaut sur localhost par exemple)
+
 ```json
 {
   "realm": "${fr.insee.keycloak.realm:formation}",
@@ -229,6 +230,7 @@ Obtenir le jeton pour se connecter à un Web Service
   "principal-attribute": "preferred_username"
 }
 ```
+
 - Il faut demander au CEI de rajouter ces variables au démarrage de la jvm
 
 
@@ -383,9 +385,11 @@ keycloak.credentials.secret=1a5b0b89-c23a-4d3b-9653-72faf8754a61
 <!-- .slide: class="slide" -->
 ### Logout
 - Avec l'adapter Keycloak Spring security, on peut déléguer le logout à Spring security, qui ne fonctionne que en post :
- ```java
+
+```java
 http.logout().addLogoutHandler(keycloakLogoutHandler()).logoutUrl("/logout").logoutSuccessUrl("/")
- ```
+```
+
 - Par défaut Spring security active une protection contre csrf, il faut par conséquent adapter le POST :
 
 ```html

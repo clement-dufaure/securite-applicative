@@ -41,6 +41,7 @@
 Filter
 - Se définit dans web.xml
 - Se lance avant chaque requête correspondant au filter-mapping
+
 ```xml
 <filter>
   <filter-name>Keycloak Filter</filter-name><!-- Identifiant du filtre-->
@@ -52,6 +53,7 @@ Filter
   <url-pattern>/private/*</url-pattern>
 </filter-mapping>
 ```
+
 - Le traitement de l'authentification pour les droits d'accès peut se faire dans un autre filtre (ou dans le code)
 
 
@@ -104,6 +106,7 @@ Spring security
 ### Implémentation de l'authentification
 Spring security
 - Dépendances SANS Spring Boot
+
 ```xml
 <dependency>
     <groupId>org.springframework.security</groupId>
@@ -126,6 +129,7 @@ Spring security
 ### Implémentation de l'authentification
 Spring security
 - Dépendances AVEC Spring Boot
+
 ```xml
 <dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -147,6 +151,7 @@ Spring security
 ### Implémentation de l'authentification
 Spring security
 - Configuration dans une classe dédiée
+
 ```java
 @Configuration
 @EnableWebSecurity
@@ -171,9 +176,24 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 L'objet HttpSecurity permet de configurer les comportements de sécurité
 - Fontionne avec des méthode "and()" pour faire suivre les instructions
 - Ajout des filtres d'authentification via les méthodes addFilterBefore addFilterAfter
-- Définition page erreur 403 : ```.exceptionHandling().accessDeniedPage("/accessDenied")```
-- Vérifier le HTTPS : ```.requiresChannel().antMatchers("/**").requiresSecure()```
-- Vérifier les droits : ```authorizeRequests().antMatchers(/public/**).permitAll().antMatchers(/private/**).authenticated().antMatchers("/admin/**").hasRole("admin")```
+- Définition page erreur 403 : 
+
+```java
+.exceptionHandling().accessDeniedPage("/accessDenied")
+```
+
+- Vérifier le HTTPS : 
+
+```java
+.requiresChannel().antMatchers("/**").requiresSecure()
+```
+
+- Vérifier les droits : 
+
+```java
+authorizeRequests().antMatchers("/public/**").permitAll().antMatchers("/private/**").authenticated().antMatchers("/admin/**").hasRole("admin")
+```
+
   - permitAll() = accès public
   - authenticated() = utilisateurs authentifié sans controle de role
   - hasRole("admin") ou hasAuthority("admin") = utilisateurs authentifiés avec le rôle "admin"

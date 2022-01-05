@@ -40,10 +40,13 @@
 <!-- .slide: class="slide" -->
 ### La session HTTP
 - Si le serveur ne me connait pas encore (si je ne lui fournit pas de cookie), il m'en propose un :
+
 ```
 Set-Cookie: JSESSIONID=ABCDEF123456; Secure; HttpOnly
 ```
+
 - Pour "maintenir ma session", je dois rajouter ce cookie à chaque requête :
+
 ```
 Cookie: JSESSIONID=ABCDEF123456
 ```
@@ -91,6 +94,7 @@ Si j'arrive à récupérer le cookie de session de l'utilisateur je peux utilise
 <!-- .slide: class="slide" -->
 ## Le robots.txt
 - Situation où tout le site ne doit pas être indexable (c'est le cas de keycloak par exemple)
+
 ```
 User-agent: *
 Disallow: /

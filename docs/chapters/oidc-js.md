@@ -67,6 +67,7 @@ Deux fonctionnements
 ### Keycloak et javascript
 - Une possibilité simple : utiliser l'adapter keycloak directement disponible sur le serveur Keycloak en https://mon.serveur.keycloak/auth/js/keycloak.js
 - Met à disposition un objet Keycloak, documentation sur https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter
+
 ```javascript
 var keycloak = Keycloak(); // recherche un keycloak.json dans le dossier courant
 keycloak.init(); // prépare l'objet
@@ -84,6 +85,7 @@ keycloak.logout();
 <!-- .slide: class="slide" -->
 ### Keycloak et javascript
 - Configuration via keycloak.json, par défaut détecter dans le même dossier que la page
+
 ```json
 {
 	"realm": "formation-secu-applicative",
@@ -93,6 +95,7 @@ keycloak.logout();
 ```
 - ou Keycloak('chemin vers fichier json')
 - Configuration sans fichier annexe
+
 ```javascript
 var keycloak = Keycloak({
 	url : 'https://mon.serveur.keycloak/auth',
@@ -110,6 +113,7 @@ var keycloak = Keycloak({
 <!-- .slide: class="slide" -->
 ### Keycloak et javascript
 - Pour rendre le login automatique sur une page
+
 ```javascript
 keycloak.init({
 		onLoad : 'login-required'
@@ -117,6 +121,7 @@ keycloak.init({
 ```
 
 - Pour vérifier si l'utilisateur est connecté sans l'authentifier
+
 ```javascript
   keycloak.init({
   		onLoad : 'check-sso'
@@ -133,6 +138,7 @@ keycloak.init({
 <!-- .slide: class="slide" -->
 ### Keycloak et javascript
 - Effectuer des opération après authentification
+
 ```javascript
 keycloak.init({
 		onLoad : 'login-required'
@@ -157,10 +163,12 @@ Code d'un bouton "Se connecter"
 <!-- .slide: class="slide" -->
 ### Keycloak et javascript
 - Rafraichir le jeton
+
 ```javascript
 keycloak.updateToken();
 ```
 - Rafraichir le jeton si nécessaire, c'est à dire uniquement s'il expire dans les X secondes
+
 ```javascript
 keycloak.updateToken(X);
 ```
@@ -173,6 +181,7 @@ keycloak.updateToken(X);
 ### Keycloak et javascript
 - Appel au backend/ à un web service
 - On rafraichit le jeton s'il expire "bientôt" pour ne pas avoir de surprises si le traitement dure un peu
+
 ```javascript
 keycloak.updateToken(30).success(function() {
   var url = 'https://localhost:8443/ws/ressource';
@@ -206,6 +215,7 @@ req.send();
 ### Keycloak et javascript
 - Logout avec la fonction keycloak.logout()
 - Peut prendre en argument le lien de redirection après logout côté keycloak
+
 ```javascript
 keycloak.logout({
 			redirectUri : 'https://localhost:8443'
@@ -298,6 +308,7 @@ Avec this.props.init une action qui ajoute l'objet keycloak dans le store
 ### Interaction entre composant React et Keycloak
 Gestion de l'expiration du token
 - Ajout d'un interceptor dans axios
+
 ```js
 axios.interceptors.request.use(
     async (config) => {
