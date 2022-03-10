@@ -299,7 +299,7 @@ document.getElementsByTagName("body")[0].innerHTML("
 <!-- .slide: class="slide" -->
 ### L'injection de code : XSS (Cross-Site Scripting)
 Pourquoi ?
-- Vol de données, en particulier des cookies de session ([explications](/digressions.html#/la-session-http))
+- Vol de données, en particulier des cookies de session ([explications](/securite-applicative/digressions.html#/la-session-http))
 - Redirection malveillante
 
 
@@ -360,7 +360,7 @@ Compléments pour la protection des cookies
 ### Avant de continuer...
 Découvrons une série challenge disponible sur internet
 - [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
-- Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
+- Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
 
 
 
