@@ -357,7 +357,7 @@ Compléments pour la protection des cookies
 
 
 <!-- .slide: class="slide" -->
-### Avant de continuer... 
+### Avant de continuer...
 Découvrons une série challenge disponible sur internet
 - [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
 - Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
