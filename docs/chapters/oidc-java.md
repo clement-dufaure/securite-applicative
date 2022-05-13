@@ -12,6 +12,9 @@
 ### Adapter Keycloak
 - Les adapters Java
 
+Une sélection : https://oauth.net/code/java/
+
+A ne plus utilisé car déprécié par la communauté :
 https://www.keycloak.org/docs/latest/securing_apps/#java-adapters
 
 - Adapters liés à une plateforme fortement déconseillés, car ils créent des dépendances "Hors Maven"
