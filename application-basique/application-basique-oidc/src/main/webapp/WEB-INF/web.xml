@@ -1,0 +1,91 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<filter>
+		<filter-name>callbackFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.CallbackFilter</filter-class>
+		<init-param>
+			<param-name>defaultUrl</param-name>
+			<param-value>/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>renewSession</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>callbackFilter</filter-name>
+		<url-pattern>/callback</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
+	<!-- Logout configuration -->
+	<filter>
+		<filter-name>addParameterForLogoutFilter</filter-name>
+		<filter-class>fr.insee.demo.utils.AddParameterForLogoutFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>addParameterForLogoutFilter</filter-name>
+		<url-pattern>/logout</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>logoutFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.LogoutFilter</filter-class>
+		<init-param>
+			<param-name>centralLogout</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>logoutUrlPattern</param-name>
+			<param-value>.*</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>logoutFilter</filter-name>
+		<url-pattern>/logout</url-pattern>
+	</filter-mapping>
+
+
+
+	<filter>
+		<filter-name>oidcFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.SecurityFilter</filter-class>
+		<init-param>
+			<param-name>configFactory</param-name>
+			<param-value>fr.insee.demo.security.DemoConfigFactory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>authorizers</param-name>
+			<param-value>mustBeAuthent</param-value>
+		</init-param>
+		<init-param>
+			<param-name>matchers</param-name>
+			<param-value>excludedPath</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>oidcFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>oidcAdminFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.SecurityFilter</filter-class>
+		<init-param>
+			<param-name>configFactory</param-name>
+			<param-value>fr.insee.demo.security.DemoConfigFactory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>authorizers</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>oidcAdminFilter</filter-name>
+		<url-pattern>/admin</url-pattern>
+	</filter-mapping>
+
+
+</web-app>
