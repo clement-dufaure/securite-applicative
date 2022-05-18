@@ -32,6 +32,15 @@
     </p>
 
     <p>
+        <form th:action="@{/private}" method="POST">
+        <input type="text">Un truc à faire: </input>
+        <br/>
+        <input type="hidden" th:value="${_csrf_token}" th:name="${_csrf_token_name}"/>
+        <input type="submit" value="C'est parti !!" />
+        </form>
+    </p>
+
+    <p>
         La reponse du WS est :
         <span th:text="${reponseWS}">?</span>
     </p>

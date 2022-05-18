@@ -1,33 +1,22 @@
 package fr.insee.demo.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import fr.insee.demo.utils.RequestUtils;
-import net.minidev.json.JSONArray;
 import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.context.session.JEESessionStore;
+import org.pac4j.core.matching.matcher.csrf.DefaultCsrfTokenGenerator;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.core.profile.UserProfile;
+import org.pac4j.core.util.Pac4jConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.RedirectView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class Controlleur {
@@ -72,6 +61,11 @@ public class Controlleur {
     model.addAttribute("roles", h.get("roles"));
     model.addAttribute("urlAccount", "https://mon.serveur.keycloak/auth/realms/formation/account"
         + "?referrer=client-test-web&referrer_uri=https://localhost:8443/private");
+
+    var gen= new DefaultCsrfTokenGenerator();
+    var csrfToken = gen.get(context,JEESessionStore.INSTANCE);
+    model.addAttribute("_csrf_token_name", Pac4jConstants.CSRF_TOKEN );
+    model.addAttribute("_csrf_token", csrfToken);
 
     /* Envoi d'une requête au ws */
 

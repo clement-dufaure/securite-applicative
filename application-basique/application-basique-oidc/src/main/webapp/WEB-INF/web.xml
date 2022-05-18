@@ -22,14 +22,14 @@
 	</filter-mapping>
 
 	<!-- Logout configuration -->
-	<filter>
-		<filter-name>addParameterForLogoutFilter</filter-name>
-		<filter-class>fr.insee.demo.utils.AddParameterForLogoutFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>addParameterForLogoutFilter</filter-name>
-		<url-pattern>/logout</url-pattern>
-	</filter-mapping>
+<!--	<filter>-->
+<!--		<filter-name>addParameterForLogoutFilter</filter-name>-->
+<!--		<filter-class>fr.insee.demo.utils.AddParameterForLogoutFilter</filter-class>-->
+<!--	</filter>-->
+<!--	<filter-mapping>-->
+<!--		<filter-name>addParameterForLogoutFilter</filter-name>-->
+<!--		<url-pattern>/logout</url-pattern>-->
+<!--	</filter-mapping>-->
 	<filter>
 		<filter-name>logoutFilter</filter-name>
 		<filter-class>org.pac4j.jee.filter.LogoutFilter</filter-class>
@@ -40,6 +40,10 @@
 		<init-param>
 			<param-name>logoutUrlPattern</param-name>
 			<param-value>.*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>defaultUrl</param-name>
+			<param-value>/</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -58,7 +62,7 @@
 		</init-param>
 		<init-param>
 			<param-name>authorizers</param-name>
-			<param-value>mustBeAuthent</param-value>
+			<param-value>mustBeAuthent,csrfToken</param-value>
 		</init-param>
 		<init-param>
 			<param-name>matchers</param-name>
