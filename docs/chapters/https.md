@@ -2,9 +2,7 @@
 ## 2
 ### Mise en place de HTTPS
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Les grands principes
@@ -13,12 +11,7 @@ HTTPS intervient dans :
 - Confidentialité
 - Authentification
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Les grands principes
@@ -27,19 +20,14 @@ HTTPS intervient dans :
 - Des protocoles purement fonctionnels (HTTP,FTP,SMTP,...) peuvent se sécuriser simplement en s'échangeant dans un tunnel SSL
 - HTTPS = HTTP + SSL
 
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Proposer HTTPS
 - Avoir un listener dédié au HTTPS (sur le port 443 dans une configuration standard) : le HTTPS est "implicite"
 - Avoir une configuration HTTPS minimale, soit un couple clé privée/clé publique
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Echange sécurisé
@@ -48,12 +36,7 @@ HTTPS intervient dans :
 - A quoi sert la clé asymétrique alors ?
 - Problème du "Man in the middle" <!-- .element: class="fragment"-->
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Confidentialité
@@ -65,9 +48,7 @@ HTTPS intervient dans :
   - sa clé publique
   - la signature de ces informations par une autorité de confiance
 
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### Autorité de confiance ?
@@ -79,11 +60,7 @@ HTTPS intervient dans :
  - L'insee est une AC reconnue en interne uniquement
  - Les applis Internet sont signées par une AC externe reconnue dans le monde entier (intégrée sur les navigateurs connus)
 
-
-
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### La poignée de main, ou handshaking
@@ -94,32 +71,20 @@ HTTPS intervient dans :
 - Le serveur déchiffre la clé secrète
 - Cette clé est utilisée pour chiffrer les prochains échanges entre le client et le serveur
 
-
-
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### La poignée de main, ou handshaking
 <img src="./images/handshake.gif" />
 
-
-
-
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### Comment faire en local ?
 - Il n'est pas nécessaire d'avoir un certificat signé par une autorité de confiance
 - Un certificat autosigné suffit : c'est un certificat "localhost" signé par "localhost"
 
-
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### Génération d'un certificat autosigné
@@ -149,22 +114,14 @@ openssl x509 -req -days 365 -in server.csr  -signkey server.key  -out server.crt
 openssl pkcs12 -export -in server.crt -inkey server.key -out server.p12 -passout pass:changeit
  ```
 
-
-
-
-
-
+-----
 
  <!-- .slide: class="slide" -->
 ### HTTPS en pratique
 - L'application ne gère pas le HTTPS, c'est le serveur applicatif (tomcat) ou un équipement réseau supérieur qui en a la charge
 - L'application peut imposer l'utilisation du HTTPS
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### HTTPS en pratique
@@ -174,29 +131,19 @@ openssl pkcs12 -export -in server.crt -inkey server.key -out server.p12 -passout
 - Si le connecteur gère la connexion ssl ou qu'il est dédié à recevoir des connexions sécurisées, on peut directement le spécifier sécurisé.
 - Sinon, il va falloir définir un profil de requêtes sécurisées
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### HTTPS indirect en pratique : en production
-- C'est le cas des applications au CEI
-- Architecture Load Balancer (F5) qui porte les certificats (et donc gère la connexion HTTPS)
-- Le F5 déchiffre et transmet une requête HTTP (en clair) à un apache, qui lui même la transmet à un tomcat portant l'application
-- En dev/qf, c'est l'apache qui gère HTTPS
+- Architecture Load Balancer qui porte les certificats (et donc gère la connexion HTTPS)
+- Le load balancer déchiffre et transmet une requête HTTP (en clair) au serveur applicatif portant l'application
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### HTTPS indirect en pratique : en production
 Transfert de l'information HTTPS
-- Pour savoir que la requête initiale est en HTTPS, le F5 ajoute un entête "X-Forwarded-Proto: HTTPS", et on configure Tomcat pour que la lecture de cet entête signifie sécurisé
+- Pour savoir que la requête initiale est en HTTPS, le load balancer ajoute un entête "X-Forwarded-Proto: HTTPS", et on configure Tomcat pour que la lecture de cet entête signifie sécurisé
 
 ```xml
 <Valve className="org.apache.catalina.connector.RemoteIpValve" protocolHeader="X-Forwarded-Proto" />
@@ -204,11 +151,7 @@ Transfert de l'information HTTPS
 
 Une valve Tomcat est une classe exécutée (invoke()) à l'arrivée de chaque requête.
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### HTTPS direct en pratique : sur localhost
@@ -225,9 +168,7 @@ Dans server.xml :
 			keystorePass="changeit" />
 ```
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### HTTPS direct en pratique
@@ -241,9 +182,7 @@ Dans server.xml
 <Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
 ```
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Sur l'appli, pour indiquer qu'on impose du https
@@ -261,11 +200,7 @@ Dans server.xml
 </security-constraint>
 ```
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Sur l'appli, pour indiquer qu'on impose du https
@@ -282,12 +217,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### TP
@@ -295,12 +225,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 - Mettre en place https sur un serveur local
 - Forcer le https sur l'application
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -311,11 +236,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 - Si le certificat n'est pas valide (expiré, non associé au domaine, non signé par une autorité de confiance), le navigateur me le signale et je choisit de prendre le risque ou non de me connecter au site.
 - Dans l'appli, Java refusera systématiquement la connexion
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -324,13 +245,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 - (Il existe la possibilité de créer une classe faisant que Java ne fait plus aucun contrôle sur le certificat mais c'est mal)
 - Il faut créer un truststore contenant l'ensemble des certificats à valider (= ce que l'on considère AC)
 
-
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -339,10 +254,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 - On peut vouloir un "Insee flavored cacert" : le cacerts disponible dans la distribution java plus la chaine de certification Insee (AC Racine + AC Subordonnée)
 - Au cas où : [certificats AC Insee](http://crl.insee.fr/)
 
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -352,11 +264,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
   - javax.net.ssl.trustStoreType (par défaut jks)
 - On crée un nouveau truststore, en pratique on ajoute nos certificats au truststore par défaut
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -374,11 +282,7 @@ Si keytool inconnu : (à ajouter au path pour plus de simplicité)
 
 Crée le truststore si cacertsperso n'existe pas encore, ajoute le certificat aux existants s'il existe déjà
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Le truststore
@@ -397,21 +301,14 @@ System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 System.setProperty("javax.net.ssl.trustStoreType", "JKS");
 ```
 
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### TP
 - Créer un truststore incluant le cacert Insee et le certificat généré précédemment
 - Le faire prendre en compte dans l'application
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Https sur les application javascript
@@ -419,11 +316,7 @@ System.setProperty("javax.net.ssl.trustStoreType", "JKS");
 - L'application s'éxécute chez le client, pour forcer le https, il faut donc raisonner côté client
 - Si l'application JS veut s'assurer de passer en HTTPS, elle doit vérifier le window.location du client et éventuellement le rediriger.
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Https sur les application javascript
@@ -440,11 +333,7 @@ if (
  }
 ```
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Https sur les application javascript : développement
@@ -452,11 +341,7 @@ if (
 - Au lieu de `npm start`
 - Lancer `set HTTPS=true&&npm start`
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Https sur les application javascript : cas du back-end mal signé

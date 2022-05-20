@@ -30,7 +30,7 @@
 
 Est ce que cela fait partie du **fonctionnement normal** ?
 
-------
+-----
 
 <!-- .slide: class="slide" -->
 ### Une erreur de conception ?
@@ -48,7 +48,7 @@ Au delà d'environ 300 habilitations c'est l'annuaire qui finit par planter...
 - Bibliothèques à jour mais avec une configuration permettant de faire n'importe quoi
 - ...
 
-------
+-----
 
 <!-- .slide: class="slide" -->
 ### Une erreur de programmation ?
@@ -590,7 +590,12 @@ Origin: https://localhost:8443
 <!-- .slide: class="slide" -->
 ### Scénario CORS
 - Le serveur recoit la requete et peut contrôler la présence de Origin s'il s'attend à de telles requêtes via script
-- Le serveur possède un certain nombre de domaine autorisé à le contacter par script et potentiellement tous (\*)
+- Le serveur possède un certain nombre de domaine autorisés à le contacter par script et potentiellement tous (\*)
+
+-----
+
+<!-- .slide: class="slide" -->
+### Scénario CORS
 - Le serveur peut bloquer la requête si elle ne correspond pas à ses domaines autorisés
 - Si le serveur choisit de répondre et qu'il est configuré pour, il ajoute un ou plusieurs entêtes Access-Control-Allow-Origin :
 
@@ -611,6 +616,10 @@ Access-Control-Allow-Origin: *
 ### Scénario CORS
 - Le navigateur lit la réponse du serveur
 - Si elle ne contient pas d'entête Access-Control-Allow-Origin ou qu'aucun entête Access-Control-Allow-Origin ne correspond au domaine source, le navigateur ne retourne rien au script. *Le script ne fait pas la difference entre un echec de connexion et une erreur cors*
+
+-----
+
+<!-- .slide: class="slide" -->
 
 Gestion des erreurs :
 - Pour debugger, la console du navigateur vous prévient que la réponse a été bloquée
