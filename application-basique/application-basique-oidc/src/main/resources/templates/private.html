@@ -33,7 +33,7 @@
 
     <p>
         <form th:action="@{/private}" method="POST">
-        <input type="text">Un truc à faire: </input>
+        Un truc à faire: <input type="text"/>
         <br/>
         <input type="hidden" th:value="${_csrf_token}" th:name="${_csrf_token_name}"/>
         <input type="submit" value="C'est parti !!" />

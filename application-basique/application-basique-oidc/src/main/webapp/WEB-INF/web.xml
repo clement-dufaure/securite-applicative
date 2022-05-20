@@ -6,14 +6,6 @@
 	<filter>
 		<filter-name>callbackFilter</filter-name>
 		<filter-class>org.pac4j.jee.filter.CallbackFilter</filter-class>
-		<init-param>
-			<param-name>defaultUrl</param-name>
-			<param-value>/</param-value>
-		</init-param>
-		<init-param>
-			<param-name>renewSession</param-name>
-			<param-value>true</param-value>
-		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>callbackFilter</filter-name>
@@ -22,14 +14,6 @@
 	</filter-mapping>
 
 	<!-- Logout configuration -->
-<!--	<filter>-->
-<!--		<filter-name>addParameterForLogoutFilter</filter-name>-->
-<!--		<filter-class>fr.insee.demo.utils.AddParameterForLogoutFilter</filter-class>-->
-<!--	</filter>-->
-<!--	<filter-mapping>-->
-<!--		<filter-name>addParameterForLogoutFilter</filter-name>-->
-<!--		<url-pattern>/logout</url-pattern>-->
-<!--	</filter-mapping>-->
 	<filter>
 		<filter-name>logoutFilter</filter-name>
 		<filter-class>org.pac4j.jee.filter.LogoutFilter</filter-class>
