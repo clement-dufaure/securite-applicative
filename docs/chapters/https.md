@@ -228,6 +228,16 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 -----
 
 <!-- .slide: class="slide" -->
+### Vraiment forcer le HTTPS
+- Niveau applicatif pour controle éventuellement
+- Niveau Frontal (Load Balancer) : écouter en http sur le port 80 mais uniquement pour rediriger vers https
+- **Déclaratif** Indiquer au navigateur de ne plsu utiliser que HTTPS : en-tête HSTS
+```
+Strict-Transport-Security "max-age=31536000"
+```
+
+-----
+<!-- .slide: class="slide" -->
 ### Le truststore
 - Mon application doit se connecter à une autre application (web-service)
 - Je souhaite que cet appel soit en https (au fond justifié que si la connexion entre les deux serveurs passent par Internet)
