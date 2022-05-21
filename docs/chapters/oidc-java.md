@@ -52,6 +52,7 @@ Dépendances modules jee + oidc:
 <!-- .slide: class="slide" -->
 ### Pac4j
 - Une classe de configuration
+
 ```java
 public class DemoConfigFactory implements ConfigFactory {
 
@@ -114,6 +115,7 @@ Config config = new Config(oidcClient);
 
 <!-- .slide: class="slide" -->
 - Définition de règles et conditions
+
 ```java
 config.addAuthorizer("admin", new RequireAnyRoleAuthorizer("ROLE_ADMIN"));
 config.addAuthorizer("mustBeAuthent",new IsAuthenticatedAuthorizer());
@@ -149,18 +151,21 @@ config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^\\/(accueil)?
 	</filter-mapping>
 ```
 
+-----
 
 <!-- .slide: class="slide" -->
 ### Adapter Keycloak : filter Keycloak
 Obtenir le jeton
+
 ```java
-    WebContext context = new JEEContext(request, response);
-    ProfileManager manager = new ProfileManager(context,JEESessionStore.INSTANCE);
-    Optional<UserProfile> profile = manager.getProfile();
-	OidcProfile oidcProfile = (OidcProfile) profile.get();
-    Map h = oidcProfile.getAttributes();
+WebContext context = new JEEContext(request, response);
+ProfileManager manager = new ProfileManager(context,JEESessionStore.INSTANCE);
+Optional<UserProfile> profile = manager.getProfile();
+OidcProfile oidcProfile = (OidcProfile) profile.get();
+Map h = oidcProfile.getAttributes();
 ```
 - Il faut connaitre le nom des claims souhaités :
+
 ```java
 h.get("email")
 ```
@@ -170,14 +175,14 @@ h.get("email")
 ### Gestion des droits
 Pour mapper des roles, il faut implémenter selon le besoin un générateur de roles à partir du profile (accessToken notemment)
 ```java
-		oidcClient.addAuthorizationGenerator(new AuthorizationGenerator() {
-			@Override
-			public Optional<UserProfile> generate(WebContext context,
-															  SessionStore sessionStore,
-															  UserProfile profile) {
-				return Optional.empty();
-			}
-		});
+oidcClient.addAuthorizationGenerator(new AuthorizationGenerator() {
+	@Override
+	public Optional<UserProfile> generate(WebContext context,
+													  SessionStore sessionStore,
+													  UserProfile profile) {
+		return Optional.empty();
+	}
+});
 ```
 -----
 
@@ -368,7 +373,8 @@ http.authorizeRequests(
 
 -----
 <!-- .slide: class="slide" -->
-- Fonction de droits
+Fonction de droits
+
 ```java
 authz -> 
 	authz.antMatchers(HttpMethod.GET, "/private")  // CONDITION
@@ -413,40 +419,40 @@ http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> {
 -----
 <!-- .slide: class="slide" -->
 ```java
-	JwtAuthenticationConverter jwtAuthenticationConverter() {
-		JwtAuthenticationConverter jwtAuthenticationConverter =
-				  new JwtAuthenticationConverter();
-		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
-				  jwtGrantedAuthoritiesConverter());
-		jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
-		return jwtAuthenticationConverter;
-	}
+JwtAuthenticationConverter jwtAuthenticationConverter() {
+	JwtAuthenticationConverter jwtAuthenticationConverter =
+			  new JwtAuthenticationConverter();
+	jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+			  jwtGrantedAuthoritiesConverter());
+	jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
+	return jwtAuthenticationConverter;
+}
 ```
 
 -----
 <!-- .slide: class="slide" -->
 ```java
-	Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
-		return new Converter<Jwt, Collection<GrantedAuthority>>() {
-			@Override
-			@SuppressWarnings({"unchecked", "serial"})
-			public Collection<GrantedAuthority> convert(Jwt source) {
-				return ((Map<String, List<String>>) source.getClaim(
-						  "realm_access")).get("roles").stream()
-						  .map(s -> new GrantedAuthority() {
-							  @Override
-							  public String getAuthority() {
-								  return "ROLE_" + s;
-							  }
-							  
-							  @Override
-							  public String toString() {
-								  return getAuthority();
-							  }
-						  }).collect(Collectors.toList());
-			}
-		};
-	}
+Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
+	return new Converter<Jwt, Collection<GrantedAuthority>>() {
+		@Override
+		@SuppressWarnings({"unchecked", "serial"})
+		public Collection<GrantedAuthority> convert(Jwt source) {
+			return ((Map<String, List<String>>) source.getClaim(
+					  "realm_access")).get("roles").stream()
+					  .map(s -> new GrantedAuthority() {
+						  @Override
+						  public String getAuthority() {
+							  return "ROLE_" + s;
+						  }
+						  
+						  @Override
+						  public String toString() {
+							  return getAuthority();
+						  }
+					  }).collect(Collectors.toList());
+		}
+	};
+}
 ```
 
 
