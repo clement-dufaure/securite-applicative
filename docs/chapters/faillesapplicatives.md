@@ -210,6 +210,18 @@ Sécurité :
 </iframe>
 
 -----
+<!-- .slide: class="slide" -->
+# Vous avez Gagné
+<button>Cliquez la</button>
+<iframe id="t"
+    title="t"
+    width="1500"
+    height="1000"
+    style="opacity: 0.3; position: relative;top: -5em; left: -10em;"
+    src="http://localhost:8180/auth/admin/master/console/#/realms/test/clients">
+</iframe>
+
+-----
 
 <!-- .slide: class="slide" -->
 # Le clickjacking
