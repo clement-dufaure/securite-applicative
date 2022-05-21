@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    <h1>Page privÃ©e</h1>
+    <h1>Page privée</h1>
 
-    <h2 th:if="${secure}">Connexion sÃ©curisÃ© par HTTPS</h2>
+    <h2 th:if="${secure}">Connexion sécurisé par HTTPS</h2>
     <h2 th:unless="${secure}">Connexion en clair</h2>
 
 
@@ -19,16 +19,24 @@
         <span th:text="${typeAuthentification}">?</span>
     </h2>
 
-    <a href="logout">Se dÃ©connecter</a>
+    <a th:href="@{/logout}">Se déconnecter</a>
 
     <p>
-        Vous Ãªtes <span th:text="${nom}">?</span>
+        Vous êtes <span th:text="${nom}">?</span>
     </p>
     <p>
         mail : <span th:text="${mail}">?</span>
     </p>
     <p>
-        Vos rÃ´les : <span th:text="${roles}">?</span>
+        Vos rôles : <span th:text="${roles}">?</span>
+    </p>
+
+    <p>
+        <form th:action="@{/private}" method="POST">
+        Un truc à faire: <input type="text"/>
+        <br/>
+        <input type="submit" value="C'est parti !!" />
+        </form>
     </p>
 
     <p>
@@ -39,7 +47,7 @@
     <br />
     <hr />
     <a th:href="@{${urlAccount}}">Cliquez
-        ici pour gÃ©rer votre compte sur keycloak</a>
+        ici pour gérer votre compte sur keycloak</a>
 
 </body>
 

@@ -2,11 +2,7 @@
 ## 4.1
 ### OpenID Connect et Java
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Adapter Keycloak
@@ -14,194 +10,283 @@
 
 Une sélection : https://oauth.net/code/java/
 
-A ne plus utilisé car déprécié par la communauté :
+A ne plus utiliser car déprécié par la communauté :
 https://www.keycloak.org/docs/latest/securing_apps/#java-adapters
 
 - Adapters liés à une plateforme fortement déconseillés, car ils créent des dépendances "Hors Maven"
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Mise en place de OpenIDConnect dans une application Java
-- Avec le filter keycloak
-- Avec l'adapter Keycloak Spring security
+- Avec pac4j https://www.pac4j.org/ 
+	- Situation application quelconque JavaEE, application de type ihm en java
+- Avec Spring security
+	- Situation application Spring Boot, application de type Web Service
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### OIDC et filtre Jakarta EE
+### OIDC et Pac4j
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Filtre Keycloak
-Dépendances :
+### Pac4j
+Dépendances modules jee + oidc:
 ```xml
-<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-servlet-filter-adapter</artifactId>
-			<version>12.0.2</version>
-</dependency>
+		<dependency>
+			<groupId>org.pac4j</groupId>
+			<artifactId>jee-pac4j</artifactId>
+			<version>6.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.pac4j</groupId>
+			<artifactId>pac4j-oidc</artifactId>
+			<version>5.4.3</version>
+		</dependency>
+```
+-----
+
+<!-- .slide: class="slide" -->
+### Pac4j
+- Une classe de configuration
+```java
+public class DemoConfigFactory implements ConfigFactory {
+
+    @Override
+    public Config build(final Object... parameters) {
+
+    }
+
+}
+```
+
+-----
+
+<!-- .slide: class="slide" -->
+- Définition des protocoles d'authentification
+```java
+  OidcConfiguration oidcConfig = new OidcConfiguration();
+        oidcConfig.setClientId(clientId);
+        oidcConfig.setSecret(clientSecret);
+        oidcConfig.setDiscoveryURI(configurationEndpoint);
+        OidcClient oidcClient = new OidcClient(oidcConfig);
+```
+
+-----
+
+<!-- .slide: class="slide" -->
+- Définition de l'url de callback (= ou est ce que l'on revient après authentification sur le serveur central)
+```java
+oidcClient.setCallbackUrl("/callback");
+```
+
+-----
+
+<!-- .slide: class="slide" -->
+- Ce endpoint doit être intercepté
+```xml
+	<filter>
+		<filter-name>callbackFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.CallbackFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>callbackFilter</filter-name>
+		<url-pattern>/callback</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 ```
 
 
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Filtre Keycloak
-Ajout du filtre dans web.xml
-```xml
-<filter>
-	<filter-name>Keycloak Filter</filter-name>
-	<filter-class>org.keycloak.adapters.servlet.KeycloakOIDCFilter</filter-class>
-	<init-param>
-		<param-name>keycloak.config.skipPattern</param-name>
-		<param-value>^/healthcheck</param-value>
-	</init-param>
-</filter>
-<filter-mapping>
-	<filter-name>Keycloak Filter</filter-name>
-	<url-pattern>/private/*</url-pattern>
-	<url-pattern>/admin/*</url-pattern>
-</filter-mapping>
+### Pac4j
+Définition de la liste de client (plusieurs mode d'authentification possible potentiellement : oidc + basic par exemple)
+```java
+Config config = new Config(oidcClient);
 ```
 
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Filtre Keycloak
-- Configuration par keycloak.json, dans le dossier WEB-INF
-- Ou peut être placé ailleurs et défini dans un paramètre du filtre 
+- Définition de règles et conditions
+```java
+config.addAuthorizer("admin", new RequireAnyRoleAuthorizer("ROLE_ADMIN"));
+config.addAuthorizer("mustBeAuthent",new IsAuthenticatedAuthorizer());
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Filtre Keycloak
-Déclaration des urls concernés par l'authentification
-```xml
-<filter-mapping>
-        <filter-name>Keycloak Filter</filter-name>
-        <url-pattern>/private/*</url-pattern>
-</filter-mapping>
-```
-Avec exclusion :
-```xml
-<init-param>
-    <param-name>keycloak.config.skipPattern</param-name>
-    <param-value>^/(path1|path2|path3).*</param-value>
-</init-param>
+config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^\\/(accueil)?$"));
 ```
 
 
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Filtre Keycloak
-- Sur les urls correspondantes, l'authentification est assurée
-- Si le filtre laisse passer la requête, l'utilisateur est authentifié sur le realm demandé en configuration
-- Pour gérer les droits, il faut le gérer dans le code en lisant le jeton fourni par le filtre Keycloak
-- Un filtre supplémentaire est nécessaire pour une gestion des droits globale
-
-
-
-
-
-
+- Activables selon les endpoints
+```xml
+	<filter>
+		<filter-name>oidcFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.SecurityFilter</filter-class>
+		<init-param>
+			<param-name>configFactory</param-name>
+			<param-value>fr.insee.demo.security.DemoConfigFactory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>authorizers</param-name>
+			<param-value>mustBeAuthent,csrfToken</param-value>
+		</init-param>
+		<init-param>
+			<param-name>matchers</param-name>
+			<param-value>excludedPath</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>oidcFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+```
 
 
 <!-- .slide: class="slide" -->
 ### Adapter Keycloak : filter Keycloak
 Obtenir le jeton
 ```java
-KeycloakSecurityContext sc = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
+    WebContext context = new JEEContext(request, response);
+    ProfileManager manager = new ProfileManager(context,JEESessionStore.INSTANCE);
+    Optional<UserProfile> profile = manager.getProfile();
+	OidcProfile oidcProfile = (OidcProfile) profile.get();
+    Map h = oidcProfile.getAttributes();
 ```
-<!-- hors code car fait planter les chevrons font planter a priori highlight.js -->
-Raccourci pour :
-KeycloakPrincipal&lt;RefreshableKeycloakSecurityContext&gt; token = (KeycloakPrincipal&lt;RefreshableKeycloakSecurityContext&gt;) request.getUserPrincipal();
-
-Puis :
+- Il faut connaitre le nom des claims souhaités :
 ```java
-AccessToken accessToken = sc.getToken();
+h.get("email")
 ```
 
+-----
+<!-- .slide: class="slide" -->
+### Gestion des droits
+Pour mapper des roles, il faut implémenter selon le besoin un générateur de roles à partir du profile (accessToken notemment)
+```java
+		oidcClient.addAuthorizationGenerator(new AuthorizationGenerator() {
+			@Override
+			public Optional<UserProfile> generate(WebContext context,
+															  SessionStore sessionStore,
+															  UserProfile profile) {
+				return Optional.empty();
+			}
+		});
+```
+-----
 
+<!-- .slide: class="slide" -->
+### Gestion des droits
 
+Peut s'utiliser dans le code directement
+```java
+oidcProfile.getRoles();
+request.isUserInRole("admin");
+```
+ou géré par règles dans la config
+```java
+config.addAuthorizer("admin", new RequireAnyRoleAuthorizer("admin"));
+```
 
-
+-----
 
 
 <!-- .slide: class="slide" -->
 ### Gestion des droits
-Par filtre
-- Les groupes applicatifs sont directement ajoutés aux roles Keycloak, ainsi on peut utiliser request.isuserinRole("groupe") pour vérifier
-- Dans tous les cas on peut directement lire le jeton si l'autorisation dépend d'un attribut atypique.
-
+Possiblité de l'implémentation keycloak incluse
 ```java
-// Cas classique de groupes
-sc.getToken().getRealmAccess().getRoles().contains("monGroupeApplicatif");
-// Cas particulier, attributHabilitation contient une liste d'habilitation
-List<String> attributHabilitation = (List<String>) sc.getToken().getOtherClaims().get("attributHabilitation");
-attributHabilitation.contains("monHabilitation");
+var profileCreator = new OidcProfileCreator(oidcConfig, oidcClient);
+profileCreator.setProfileDefinition(
+		new OidcProfileDefinition(x -> new KeycloakOidcProfile()));
+oidcClient.setProfileCreator(profileCreator);
+oidcClient.addAuthorizationGenerator(
+		new KeycloakRolesAuthorizationGenerator());
 ```
 
 
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Connexion à un web service, authentifié par un jeton
 Obtenir le jeton pour se connecter à un Web Service
-- `getTokenString();` permet de récupérer le jeton brut afin d'être retransmis à un autre service
+```java
+oidcProfile.getAccessToken().value()
+```
 - Il faut ensuite ajouter l'entête "Authorization: Bearer tokenString" pour accéder au WS
+```java
+oidcProfile.getAccessToken().toAuthorizationHeader()
+```
 - Un test peut être fait sur le WS embarqué de keycloak : https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/userinfo
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### Logout
+Concrètement, il s'agit d'une :
 - Déconnexion locale : `request.getSession().invalidate();`
 - Déconnexion Keycloak : un appel sur https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/logout?redirect_uri=https://localhost:8443/ logout l'utilisateur sur Keycloak et redirige vers "redirect_uri"
 
+-----
 
+<!-- .slide: class="slide" -->
+```xml
+	<!-- Logout configuration -->
+	<filter>
+		<filter-name>logoutFilter</filter-name>
+		<filter-class>org.pac4j.jee.filter.LogoutFilter</filter-class>
+		<init-param>
+			<param-name>centralLogout</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>logoutUrlPattern</param-name>
+			<param-value>.*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>defaultUrl</param-name>
+			<param-value>http://localhost:8080/</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>logoutFilter</filter-name>
+		<url-pattern>/logout</url-pattern>
+	</filter-mapping>
+```
 
+-----
 
+<!-- .slide: class="slide" -->
+## Bonus : CSRF
+Config :
+```java
+config.addAuthorizer("csrfToken", new CsrfAuthorizer());
+```
+Controller :
+```java
+var gen = new DefaultCsrfTokenGenerator();
+var csrfToken = gen.get(context, JEESessionStore.INSTANCE);
+model.addAttribute("_csrf_token_name", Pac4jConstants.CSRF_TOKEN);
+model.addAttribute("_csrf_token", csrfToken);
+```
 
+-----
 
+<!-- .slide: class="slide" -->
+Ecran :
+```html
+<form th:action="@{/private}" method="POST">
+    <input type="hidden" th:value="${_csrf_token}" th:name="${_csrf_token_name}"/>
+    <input type="submit" value="C'est parti !!" />
+</form>
+```
 
-
-
+-----
 <!-- .slide: class="slide" -->
 ### Environnement de production
 - Il faut être capable d'adapter facilement l'application au différents environnements : local, dv/qf, prod
@@ -209,15 +294,9 @@ Obtenir le jeton pour se connecter à un Web Service
 - Une demande doit être faite pour les environnement de dv/qf : une seule configuration pour tous les environnements dv/qf
 - Une demande doit être faite pour la prod : en cas de confidential, seule la prod aura accès au secret
 
-
-
-
-
-
-
-
+-----
 <!-- .slide: class="slide" -->
-### Environnement de production
+### Environnement de production -- Cas du filtre Keycloak
 - Le json peut être paramétré pour s'adapter à des propriétés systèmes (avec valeurs par défaut sur localhost par exemple)
 
 ```json
@@ -236,218 +315,156 @@ Obtenir le jeton pour se connecter à un Web Service
 
 - Il faut demander au CEI de rajouter ces variables au démarrage de la jvm
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
 ### OIDC et Spring security
 
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Adapter Keycloak Spring security
+### Adapter Spring security module oAuth2
 Dépendances :
 ```xml
-</dependencies>
-<!-- Adapter Keycloak pour OpenIDConnect -->
 <dependency>
-  <groupId>org.keycloak</groupId>
-  <artifactId>keycloak-spring-boot-starter</artifactId>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
 </dependency>
-</dependencies>
-
-<dependencyManagement>
-  <dependencies><dependency>
-    <groupId>org.keycloak.bom</groupId>
-    <artifactId>keycloak-adapter-bom</artifactId>
-    <version>12.0.2</version>
-    <type>pom</type>
-    <scope>import</scope>
-  </dependency></dependencies>
-</dependencyManagement>
-```
-
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Adapter Keycloak Spring security
-Dépendance de spring security obligatoire :
-```xml
 <dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-security</artifactId>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 </dependency>
 ```
 
-
-
-
-
-
-
+-----
 
 <!-- .slide: class="slide" -->
-### Adapter Keycloak Spring security
+### Adapter Spring security module oAuth2
 Configuration particulière de spring security
 ```java
-@KeycloakConfiguration
-public class KeycloakConfigurationAdapter extends KeycloakWebSecurityConfigurerAdapter {
-    /**
-  	 * Defines the session authentication strategy.
-  	 */
-  	@Bean
-  	@Override
-  	protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-      // applis frontend
-  		return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
-      //applis bearer-only (ws)
-		  return new NullAuthenticatedSessionStrategy();
-  	}
-
-  	/**
-  	 * Registers the KeycloakAuthenticationProvider with the authentication manager.
-  	 */
-  	@Autowired
-  	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-  		KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
-  		// simple Authority Mapper to avoid ROLE_ (on peut aussi simplement utiliser les authorities)
-  		keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
-  		auth.authenticationProvider(keycloakAuthenticationProvider);
-  	}
-    ...
+public class MySecurityConfigurationAdapter
+		  extends WebSecurityConfigurerAdapter {
+		
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+	}
   }
 ```
 
-
-
-
-
-
+-----
 <!-- .slide: class="slide" -->
-### Adapter Keycloak Spring security
+### Adapter Spring security module oAuth2
 ```java
-...
-  	/**
-  	 * Required to handle spring boot configurations
-  	 */
-  	@Bean
-  	public KeycloakConfigResolver KeycloakConfigResolver() {
-  		return new KeycloakSpringBootConfigResolver();
-  	}
+// web service = pas de gestion de session
+http.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+// pas de formulaire => pas de csrf
+http.csrf().disable();
+// gestion des accès
+http.authorizeRequests(
+			authz -> /* Fonction des droits */)
+				  .oauth2ResourceServer();
+```
 
-  	@Override
-  	protected void configure(HttpSecurity http) throws Exception {
-  		// Configuration générales Keycloak
-  		super.configure(http);
+-----
+<!-- .slide: class="slide" -->
+- Fonction de droits
+```java
+authz -> 
+	authz.antMatchers(HttpMethod.GET, "/private")  // CONDITION
+			.authenticated(). // UTILISATEUR AUTHENTIFIE SANS CONTROLE
 
-      // On peut rajouter des configurations générales Spring security sur http
-  	}
-}
+		antMatchers(HttpMethod.GET,"/admin") // CONDITION
+			.hasRole("admin") // CONTROLE DU ROLE
+
+		.antMatchers(HttpMethod.OPTIONS).permitAll() // pour les requetes CORS
+		.antMatchers("error", "/","/accueil").permitAll() // Chemins publics
+		.anyRequest().denyAll()  // Dans le doute le reste est interdit
 ```
 
 
-
-
-
-
-
+-----
 <!-- .slide: class="slide" -->
 ### Adapter Keycloak Spring security
 Configuration via SpringBoot
+- Seul l'emplacement des certificat est nécessaire.
+La conf se retrouve ici : http://localhost:8180/auth/realms/test/.well-known/openid-configuration
+
 
 ```
-keycloak.auth-server-url=https://mon.serveur.keycloak/auth
-keycloak.realm=formation
-keycloak.resource=client-test-web
-keycloak.credentials.secret=1a5b0b89-c23a-4d3b-9653-72faf8754a61
-
-#keycloak.bearer-only=true
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8180/auth/realms/test/protocol/openid-connect/certs
 ```
 
 
-
-
-
-
-
-
+-----
 
 
 <!-- .slide: class="slide" -->
-### Logout
-- Avec l'adapter Keycloak Spring security, on peut déléguer le logout à Spring security, qui ne fonctionne que en post :
+### Recherche des roles
+- Comme souvent, se réimplémente !
 
 ```java
-http.logout().addLogoutHandler(keycloakLogoutHandler()).logoutUrl("/logout").logoutSuccessUrl("/")
+http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> {
+					  jwtConfigurer.jwtAuthenticationConverter(
+								 jwtAuthenticationConverter());
+				  }));
 ```
 
-- Par défaut Spring security active une protection contre csrf, il faut par conséquent adapter le POST :
+-----
+<!-- .slide: class="slide" -->
+```java
+	JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter jwtAuthenticationConverter =
+				  new JwtAuthenticationConverter();
+		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+				  jwtGrantedAuthoritiesConverter());
+		jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
+		return jwtAuthenticationConverter;
+	}
+```
 
-```html
-    <form action="#" th:action="@{/logout}" method="post">
-        <input type="submit" value="Se déconnecter" />
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    </form>
+-----
+<!-- .slide: class="slide" -->
+```java
+	Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
+		return new Converter<Jwt, Collection<GrantedAuthority>>() {
+			@Override
+			@SuppressWarnings({"unchecked", "serial"})
+			public Collection<GrantedAuthority> convert(Jwt source) {
+				return ((Map<String, List<String>>) source.getClaim(
+						  "realm_access")).get("roles").stream()
+						  .map(s -> new GrantedAuthority() {
+							  @Override
+							  public String getAuthority() {
+								  return "ROLE_" + s;
+							  }
+							  
+							  @Override
+							  public String toString() {
+								  return getAuthority();
+							  }
+						  }).collect(Collectors.toList());
+			}
+		};
+	}
 ```
 
 
-
-
-
-
-
-
+-----
 <!-- .slide: class="slide" -->
 ### Adapter Keycloak spring security
-Obtenir le jeton
+Obtenir le jeton (appel à web service)
 ```java
-KeycloakSecurityContext sc = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-```
-
-Raccourci pour :
-```java
-KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) request.getUserPrincipal();
-SimpleKeycloakAccount details = (SimpleKeycloakAccount) token.getDetails();
-KeycloakSecurityContext sc = details.getKeycloakSecurityContext();
-```
-
-puis :
-```java
-AccessToken accessToken = sc.getToken();
+JwtAuthenticationToken token =
+				  (JwtAuthenticationToken) request.getUserPrincipal();
+maRequete.header("Authorization",
+							 "Bearer " + token.getToken());
 ```
 
 
-
-
-
-
-
+-----
 <!-- .slide: class="slide" -->
-### Environnement de production
-- La gestion se fait par properties
-
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Moins dépendre de Keycloak
-- Spring security intégre un support générique à OAuth et OIDC
-- Plus complexe à coder (les adapters Keycloak font énormément de raccourcis sur la constitution du jeton, ...)
-- Assez compliqué en mode Front Web, plus abouti en mode Ressource Server
-- Cf projet application-basique-ws 
+### Dépendances adapters java Keycloak (JEE et Spring Security)
+- Ces adapters étaient plus facile à configurer dans notre environnement Keycloak (prévus pour !)
+- C'est toujours un plus de ne pas dépendre d'une implémentation mais d'un standard (OIDC/OAuth)
+- Le projet keycloak abandonne le support des adapters Keycloak

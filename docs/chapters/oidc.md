@@ -431,13 +431,9 @@ Cas plus évolué de configuration avec keycloak.json
   "resource" : "customer-portal",
   "realm-public-key" : "MIGfMA0GCSqGSIb3D...31LwIDAQAB",
   "auth-server-url" : "https://localhost:8443/auth",
-  "ssl-required" : "external",
   "use-resource-role-mappings" : false,
   "public-client" : true,  
   "bearer-only" : false,
-  "enable-cors" : true,"cors-max-age" : 1000,"cors-allowed-methods" : "POST, PUT, DELETE, GET",
-  "enable-basic-auth" : false,
-  "expose-token" : true,
    "credentials" : {"secret" : "234234-234234-234234"},
   "always-refresh-token": false,
   "token-minimum-time-to-live" : 10,
@@ -458,8 +454,6 @@ Cas plus évolué de configuration avec keycloak.json
 - realm-public-key : spécifier "en dur" la clé publique du serveur
 - public-client : true en l'absence de credentials (déconseillé pour les appmis web)
 - bearer-only : true si web service 
-- enable-cors, cors-max-age, cors-allowed-methods : validation des requetes CORS selon configuration keycloak. Les origines autorisées spécifiées dans l'administartion de keycloak sont renseignées dans le token.
-- expose-token : définition d'une url pour afficher le jeton de la session (debug)
 - always-refresh-token : pour forcer le jeton à se rafraichir systématiquement à chaque passage sur le filtre
 - token-minimum-time-to-live : temps minimum d'activité du jeton avant rafraichissement par le filtre
 - public-key-cache-ttl : durée de rafraichissement de la clé publique du serveur

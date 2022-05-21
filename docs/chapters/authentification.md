@@ -258,33 +258,9 @@ Authentifications centralisées nécessitant l'utilisation d'un autre mode :
 ### Kerberos
 *WWW-Authenticate: Negociate*
 
-*Dans les grandes lignes*
-- Serveur central KDC (Key Distribution Center)
-- Identifiants publics transmis en clair
-- Système de clé symétrique, chaque utilisateur et serveur proposant authentification en partage une avec un serveur KDC (AD dans le cas Windows)
-- Clé déduite d'un hash du mot de passe de l'utilisateur
-- L'utilisateur envoie son identifiant plus un message variable (timestamp) chiffré par sa clé
-- Le KDC génère et envoie un {jeton chiffré par sa clé + une clé de session}, chiffré à nouveau par la clé de l'utilisateur. Ce jeton est à usage long (durée de la session Windows)
+- Système d'échange de jeton basé sur des clés symétriques (déduites des mots de passes)
 
-
-
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Kerberos
-
-*Dans les grandes lignes*
-- Pour accéder à un service, le client retransmet le jeton au serveur KDC en demandant l'accès à un service
-- Le KDC répond un nouveau jeton dédié au service, chiffré avec la clé du service, et chiffré à nouveau avec la clé de session
-- L'utilisateur récupère le jeton avec la clé de session et le transmet au service
-- Le service envoie un challenge à l'utilisateur basé sur la clé de session contenue dans le jeton
-
-*Plus complet* : https://blog.devensys.com/kerberos-principe-de-fonctionnement/
+https://blog.devensys.com/kerberos-principe-de-fonctionnement/
 
 
 
@@ -325,17 +301,6 @@ network.automatic-ntlm-auth.trusted-uris :
 *Plus d'informations* : https://developer.mozilla.org/en-US/docs/Mozilla/Integrated_authentication
 
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Challenge ?
-- Principe de demander à l'utilisateur de répondre à une information par la même information chiffrée
-- Challenge avec clé symétrique : Le serveur et le client connaissent la même clé, le client chiffre l'information que le serveur pourra déchiffrer avec la même clé
-- Challenge avec clé asymétrique : Le client est le seul à connaître une clé privée, la clé publique est a priori connu de tous (en pratique non diffusée mais potentiellement transmise en clair). Le serveur vérifie s'il retrouve l'information en déchiffrant avec la clé publique.
 
 
 
