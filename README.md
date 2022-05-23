@@ -13,13 +13,13 @@ git clone https://github.com/clement-dufaure/securite-applicative.git
 
 ### 0.2. Présentation du contenu
 
-Les exercices s'effectuent sur application-basique-todo, application-basique-js-todo et application-basique-react-todo.
+Les exercices s'effectuent sur java/application-basique-todo, puis js/application-basique-js-todo.
 
-Le module "application-basique-todo" est une application spring mvc très basique.
+Le module "java/application-basique-todo" est une application spring mvc très basique.
 
-Le module "application-basique-js-todo" contient un modèle basique de page html pour insérer de code javascript.
+Le module "js/application-basique-js-todo" contient un modèle basique de page html pour insérer de code javascript.
 
-Le module "application-basique-react-todo" contient une base React/Redux à compléter.
+Le module "application-basique-react" contient une démo React/Recoil.
 
 Les autres projets sont des démo de chaque type d'authentification selon plusieurs implémentations. (correction des exercices)
 
@@ -50,8 +50,9 @@ Pour l'intégrer dans l'application, on pourra ici simplement le déclarer dans 
 ## 2. Monter localement un serveur Keycloak
 
 - Télécharger la dernière version de keycloak
-- Keycloak démarre simplement via `/bin/standalone.bat` ou `/bin/standalone.sh`
-- Par défaut il démarre sur le port 8080, ce qui peut être génant selon vos habitudes de développement, pour le changer et le faire démarre par exemple sur 8180 : `bin/standalone.bat -Djboss.socket.binding.port-offset=100`
+- Keycloak démarre simplement via `bin/kc.sh start-dev` ou `bin/kc.bat start-dev`
+- Par défaut il démarre sur le port 8080, ce qui peut être génant selon vos habitudes de développement, pour le changer et le faire démarre par exemple sur 8180 : `bin/kc.sh start-dev --http-port=8180`
+- préparer un realm, un client, et un utilisateur de test
 
 ## 3. Savoir gérer une authentification avec un fournisseur d'identité
 
@@ -80,12 +81,7 @@ Vérifier l'authentification pour accéder au composant Token, afficher certaine
 
 ## 4 Compléments
 
-### 4.1 Gérer son realm sur Keycloak 
-Se connecter à l'interface d'administration du realm formation-secu-applicative.
-
-### 4.2 Développer un thème pour son realm
-Lancer un server keycloak standalone (à récupérer sur https://www.keycloak.org/downloads.html)
-
-Récuperer le projet de theme et l'appliquer sur le serveur standalone
+### 4.1 Développer un thème pour son realm
+Rajouter un thème personnalisé sur le serveur keycloak local
 
 
