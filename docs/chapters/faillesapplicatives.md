@@ -206,7 +206,7 @@ Sécurité :
     width="1500"
     height="1000"
     style="opacity: 0; position: relative;top: -5em; left: -10em;"
-    src="http://localhost:8180/auth/admin/master/console/#/realms/test/clients">
+    src="http://localhost:8180/admin/master/console/#/realms/test/clients">
 </iframe>
 
 -----
@@ -218,7 +218,7 @@ Sécurité :
     width="1500"
     height="1000"
     style="opacity: 0.3; position: relative;top: -5em; left: -10em;"
-    src="http://localhost:8180/auth/admin/master/console/#/realms/test/clients">
+    src="http://localhost:8180/admin/master/console/#/realms/test/clients">
 </iframe>
 
 -----
