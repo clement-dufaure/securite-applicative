@@ -205,7 +205,7 @@ Sécurité :
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0; position: relative;top: -5em; left: -10em;"
+    style="opacity: 0.00000000001; position: relative;top: -5em; left: -10em;"
     src="http://localhost:8180/admin/master/console/#/realms/test/clients">
 </iframe>
 
@@ -360,6 +360,14 @@ document.getElementsByTagName("body")[0].innerHTML("
 ## Sécurité :
 - Vérifier les entrées utilisateurs !
 - Echapper caractères spéciaux HTML (utiliser au maximum les sécurités internes des framework, sinon des fonctions existent déjà dans les principaux langages, par exemple `${fn:escapeXml(string)}` dans une EL en JSP)
+
+-----
+
+<!-- .slide: class="slide" -->
+## Sécurité déclarative :
+- [Résumé des headers](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html)
+- Content Security Policy (CSP) [Prez](https://developer.mozilla.org/fr/docs/Web/HTTP/CSP)  [Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
+- (deprecated) [X-XSS-Protection](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 -----
 
