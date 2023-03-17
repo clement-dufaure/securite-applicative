@@ -28,7 +28,7 @@ public class MySecurityConfiguration {
   public static String OIDC_CLAIM_ROLE = "realm_access.roles";
 
   @Bean
-  protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     // Cas d'un webservice :
     // - ne pas gerer les sessions
     // - pas de csrf
@@ -66,7 +66,7 @@ public class MySecurityConfiguration {
   // -> Customization du nom
   // -> Customization pour récupérer les rôles Keycloak
 
-  JwtAuthenticationConverter jwtAuthenticationConverter() {
+  private JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter());
     jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
@@ -74,7 +74,7 @@ public class MySecurityConfiguration {
   }
 
   @SuppressWarnings("unchecked")
-  Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
+  private Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
     return source -> {
       String[] claimPath = OIDC_CLAIM_ROLE.split("\\.");
       Map<String, Object> claims = source.getClaims();
