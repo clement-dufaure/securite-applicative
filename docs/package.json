@@ -1,100 +1,67 @@
 {
-  "name": "reveal.js",
-  "version": "4.2.1",
-  "description": "The HTML Presentation Framework",
-  "homepage": "https://revealjs.com",
-  "subdomain": "revealjs",
-  "main": "dist/reveal.js",
-  "module": "dist/reveal.esm.js",
-  "license": "MIT",
-  "scripts": {
-    "test": "gulp test",
-    "start": "gulp serve",
-    "build": "gulp build"
-  },
-  "author": {
-    "name": "Hakim El Hattab",
-    "email": "hakim.elhattab@gmail.com",
-    "web": "https://hakim.se"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/hakimel/reveal.js.git"
-  },
-  "engines": {
-    "node": ">=10.0.0"
-  },
-  "keywords": [
-    "reveal",
-    "slides",
-    "presentation"
+  "name": "@hyas/doks",
+  "description": "Doks theme",
+  "version": "0.4.2",
+  "browserslist": [
+    "defaults"
   ],
-  "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/eslint-parser": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
-    "babel-plugin-transform-html-import-to-string": "0.0.1",
-    "colors": "^1.4.0",
-    "core-js": "^3.12.1",
-    "fitty": "^2.3.0",
-    "glob": "^7.1.7",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-clean-css": "^4.2.0",
-    "gulp-connect": "^5.7.0",
-    "gulp-eslint": "^6.0.0",
-    "gulp-header": "^2.0.9",
-    "gulp-tap": "^2.0.0",
-    "gulp-zip": "^4.2.0",
-    "highlight.js": "^10.0.3",
-    "marked": "^2.0.3",
-    "node-qunit-puppeteer": "^2.1.0",
-    "qunit": "^2.17.2",
-    "rollup": "^2.48.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.39.2",
-    "yargs": "^15.1.0"
+  "repository": "https://github.com/h-enk/doks",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
   },
-  "browserslist": "> 0.5%, IE 11, not dead",
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es6": true
-    },
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-      "sourceType": "module",
-      "allowImportExportEverywhere": true,
-      "requireConfigFile": false
-    },
-    "globals": {
-      "module": false,
-      "console": false,
-      "unescape": false,
-      "define": false,
-      "exports": false
-    },
-    "rules": {
-      "curly": 0,
-      "eqeqeq": 2,
-      "wrap-iife": [
-        2,
-        "any"
-      ],
-      "no-use-before-define": [
-        2,
-        {
-          "functions": false
-        }
-      ],
-      "new-cap": 2,
-      "no-caller": 2,
-      "dot-notation": 0,
-      "no-eq-null": 2,
-      "no-unused-expressions": 0
-    }
+  "scripts": {
+    "init": "shx rm -rf .git && git init -b main",
+    "create": "exec-bin node_modules/.bin/hugo/hugo new",
+    "prestart": "npm run clean",
+    "start": "exec-bin node_modules/.bin/hugo/hugo server --bind=0.0.0.0 --disableFastRender",
+    "prebuild": "npm run clean",
+    "build": "exec-bin node_modules/.bin/hugo/hugo --gc --minify",
+    "build:preview": "npm run build -D -F",
+    "clean": "shx rm -rf public resources",
+    "clean:install": "shx rm -rf package-lock.json node_modules ",
+    "lint": "npm run -s lint:scripts && npm run -s lint:styles && npm run -s lint:markdown",
+    "lint:scripts": "eslint assets/js config functions",
+    "lint:styles": "stylelint \"assets/scss/**/*.{css,sass,scss,sss,less}\"",
+    "lint:markdown": "markdownlint-cli2 \"*.md\" \"content/**/*.md\"",
+    "lint:markdown-fix": "markdownlint-cli2-fix \"*.md\" \"content/**/*.md\"",
+    "server": "exec-bin node_modules/.bin/hugo/hugo server",
+    "test": "npm run -s lint",
+    "env": "env",
+    "precheck": "npm version",
+    "check": "exec-bin node_modules/.bin/hugo/hugo version",
+    "copy:katex-fonts": "shx cp ./node_modules/katex/dist/fonts/* ./static/fonts/",
+    "postinstall": "hugo-installer --version otherDependencies.hugo --extended --destination node_modules/.bin/hugo",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17",
+    "@babel/core": "^7.17",
+    "@babel/preset-env": "^7.16",
+    "@fullhuman/postcss-purgecss": "^4.1",
+    "auto-changelog": "^2.4",
+    "autoprefixer": "^10.4",
+    "bootstrap": "^5.1",
+    "clipboard": "^2.0",
+    "eslint": "^8.12",
+    "exec-bin": "^1.0.0",
+    "flexsearch": "^0.7.21",
+    "highlight.js": "^11.5",
+    "hugo-installer": "^3.1",
+    "instant.page": "^5.1",
+    "katex": "^0.15",
+    "lazysizes": "^5.3",
+    "markdownlint-cli2": "^0.4.0",
+    "netlify-plugin-submit-sitemap": "^0.3.0",
+    "node-fetch": "^3.2",
+    "postcss": "^8.4",
+    "postcss-cli": "^9.1",
+    "purgecss-whitelister": "^2.4",
+    "shx": "^0.3.4",
+    "stylelint": "^14.6",
+    "stylelint-config-standard-scss": "^3.0"
+  },
+  "otherDependencies": {
+    "hugo": "0.96.0"
   }
 }
