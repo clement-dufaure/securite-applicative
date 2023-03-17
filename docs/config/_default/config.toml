@@ -1,4 +1,4 @@
-baseurl = "https://formation.dufau.re/"
+baseurl = "https://securite-applicative.dufau.re/"
 canonifyURLs = false
 disableAliases = true
 disableHugoGeneratorInject = true
