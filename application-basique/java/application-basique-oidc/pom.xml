@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.7</version>
+		<version>3.0.5</version>
 		<relativePath />
 	</parent>
 	<groupId>fr.insee</groupId>
@@ -60,16 +60,23 @@
 			<version>2.7.0</version>
 		</dependency> -->
 
-		<dependency>
+		<!-- Selon le besoin de compatibilité JavaEE/JakartaEE -->
+        <!--	<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>jee-pac4j</artifactId>
-			<version>6.1.0</version>
+			<version>7.1.0</version>
+		</dependency>-->
+
+		<dependency>
+			<groupId>org.pac4j</groupId>
+			<artifactId>jakartaee-pac4j</artifactId>
+			<version>7.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-oidc</artifactId>
-			<version>5.4.3</version>
+			<version>5.7.0</version>
 		</dependency>
 
 	</dependencies>

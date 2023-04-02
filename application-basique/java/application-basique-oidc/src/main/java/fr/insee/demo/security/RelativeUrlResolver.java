@@ -1,10 +1,10 @@
 package fr.insee.demo.security;
 
-import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.WebContextHelper;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.http.url.UrlResolver;
+import org.pac4j.jee.context.JEEContext;
 
 /**
  * Default URL resolver: use the provided URL as is or append the server and port for relative URLs.

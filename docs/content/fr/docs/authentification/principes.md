@@ -4,7 +4,7 @@ description: ""
 lead: ""
 draft: false
 images: []
-weight: 6
+weight: 600
 ---
 
 <!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->

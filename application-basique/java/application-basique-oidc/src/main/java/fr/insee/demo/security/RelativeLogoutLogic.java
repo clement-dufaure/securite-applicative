@@ -2,7 +2,6 @@ package fr.insee.demo.security;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.HttpConstants;
-import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.WebContextHelper;
 import org.pac4j.core.engine.AbstractExceptionAwareLogic;
 import org.pac4j.core.engine.LogoutLogic;
@@ -12,6 +11,7 @@ import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.exception.http.*;
 import org.pac4j.core.http.adapter.HttpActionAdapter;
 import org.pac4j.core.util.HttpActionHelper;
+import org.pac4j.jee.context.JEEContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

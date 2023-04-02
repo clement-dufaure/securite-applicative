@@ -11,6 +11,10 @@ weight: 302
 toc: true
 ---
 
+Comment faire en local
+- Il n'est pas nécessaire d'avoir un certificat signé par une autorité de confiance
+- Un certificat autosigné suffit : c'est un certificat "localhost" signé par "localhost"
+
 ## Générer un certificat
 
 Les étapes :
@@ -67,11 +71,25 @@ Configuration des ports d'écoute : dans le server.xml :
 
 ### Ajout d'un connecteur SSL
 
+- tomcat <=9
 ```xml
 <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
 			maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
 			clientAuth="false" sslProtocol="TLS" keystoreFile="${catalina.home}/conf/ssl/server.p12" keystoreType="pkcs12"
 			keystorePass="changeit" />
+```
+
+- tomcat >=10
+```xml
+	<Connector port="8443" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
+               maxThreads="20" SSLEnabled="true" scheme="https" secure="true" defaultSSLHostConfigName="test">
+        <SSLHostConfig hostName="test" protocols="TLSv1.2" >
+            <Certificate
+                certificateFile="${catalina.home}/conf/ssl/server.crt"
+                certificateKeyFile="${catalina.home}/conf/ssl/server.key"
+            />
+        </SSLHostConfig>
+    </Connector>
 ```
 
 ### Configuration de la redirection du connecteur par défaut
@@ -113,66 +131,25 @@ public class MySecurityConfiguration  {
 ```
 
 
-## TP
+### TP
 - Générer un keystore pour une configuration https de localhost
 - Mettre en place https sur un serveur local
 - Forcer le https sur l'application
 
 
+## Le truststore en java
 
------
-
-<!-- .slide: class="slide" -->
-### Vraiment forcer le HTTPS
-- Niveau applicatif pour controle éventuellement
-- Niveau Frontal (Load Balancer) : écouter en http sur le port 80 mais uniquement pour rediriger vers https
-- **Déclaratif** Indiquer au navigateur de ne plsu utiliser que HTTPS : en-tête HSTS
-```
-Strict-Transport-Security "max-age=31536000"
-```
-
------
-<!-- .slide: class="slide" -->
-### Le truststore
-- Mon application doit se connecter à une autre application (web-service)
-- Je souhaite que cet appel soit en https (au fond justifié que si la connexion entre les deux serveurs passent par Internet)
-- Lors d'une connexion HTTPS, Java vérifie si le certificat distant est valide
-- C'est ce que fait le navigateur quand on se connecte à un site
-- Si le certificat n'est pas valide (expiré, non associé au domaine, non signé par une autorité de confiance), le navigateur me le signale et je choisit de prendre le risque ou non de me connecter au site.
-- Dans l'appli, Java refusera systématiquement la connexion
-
------
-
-<!-- .slide: class="slide" -->
-### Le truststore
-- Date d'expiration, mauvais nom : je ne peux rien faire, il faut que le certificat soit cohérent
-- Autosigné ? Je peux dire à Java que le signataire du certificat est valide, en d'autres termes, je lui définis une autorité de confiance
-- (Il existe la possibilité de créer une classe faisant que Java ne fait plus aucun contrôle sur le certificat mais c'est mal)
-- Il faut créer un truststore contenant l'ensemble des certificats à valider (= ce que l'on considère AC)
-
------
-
-<!-- .slide: class="slide" -->
-### Le truststore
 - Par défaut le trustore chargé est celui de la jvm éxécutant l'application (....\\mon-jdk\\lib\\security\\cacerts)
 - Le mot de passe par défaut est changeit
 - On peut vouloir un "Insee flavored cacert" : le cacerts disponible dans la distribution java plus la chaine de certification Insee (AC Racine + AC Subordonnée)
 - Au cas où : [certificats AC Insee](http://crl.insee.fr/)
 
------
-
-<!-- .slide: class="slide" -->
-### Le truststore
 - Pour le changer on utilise des paramètres de la JVM :
   - javax.net.ssl.trustStrore
   - javax.net.ssl.trustStorePassword
   - javax.net.ssl.trustStoreType (par défaut jks)
 - On crée un nouveau truststore, en pratique on ajoute nos certificats au truststore par défaut
 
------
-
-<!-- .slide: class="slide" -->
-### Le truststore
 - Créer le truststore
 
 ```
@@ -187,10 +164,6 @@ Si keytool inconnu : (à ajouter au path pour plus de simplicité)
 
 Crée le truststore si cacertsperso n'existe pas encore, ajoute le certificat aux existants s'il existe déjà
 
------
-
-<!-- .slide: class="slide" -->
-### Le truststore
 - Le déclarer au démarrage :
   - Paramètres de démarrage
 
@@ -206,53 +179,8 @@ System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 System.setProperty("javax.net.ssl.trustStoreType", "JKS");
 ```
 
------
 
-<!-- .slide: class="slide" -->
 ### TP
 - Créer un truststore incluant le cacert Insee et le certificat généré précédemment
 - Le faire prendre en compte dans l'application
 
------
-
-<!-- .slide: class="slide" -->
-### Https sur les application javascript
-- Fonctionnement proche : réalisé par le F5 en prod, par l'apache en dv/qf (mais il n'y a pas de tomcat)
-- L'application s'éxécute chez le client, pour forcer le https, il faut donc raisonner côté client
-- Si l'application JS veut s'assurer de passer en HTTPS, elle doit vérifier le window.location du client et éventuellement le rediriger.
-
------
-
-<!-- .slide: class="slide" -->
-### Https sur les application javascript
-```js
-if (
-   typeof window !== 'undefined' &&
-   window.location &&
-   window.location.protocol === 'http:'
- ) {
-   window.location.href = window.location.href.replace(
-     /^http(?!s)/,
-     'https'
-   );
- }
-```
-
------
-
-<!-- .slide: class="slide" -->
-### Https sur les application javascript : développement
-[Pour lancer une application "create-react-app" en https en local (par defaut http)](https://facebook.github.io/create-react-app/docs/using-https-in-development) : 
-- Au lieu de `npm start`
-- Lancer `set HTTPS=true&&npm start`
-
------
-
-<!-- .slide: class="slide" -->
-### Https sur les application javascript : cas du back-end mal signé
-Un front-end JavaScript effectue des appels à son backend.
-
-Dans la pratique, c'est le navigateur qui effectue ces requetes, et si le certificat du backend ne convient pas au navigateur, la requete va être rejetée.
-
-- Solution 1 : Faire en sort que le backend ait un certificat signé par l'Insee
-- Solution 2 : se connecter manuellement une fois au backend, accepter l'alerte de sécurité du navigateur

@@ -13,7 +13,7 @@ export const getUserInfo = async (authentication: Keycloak) => {
 };
 
 const getAxiosAuthenticated = (authentication: Keycloak) => {
-  axios.interceptors.request.use(async (config) => {
+  axios.interceptors.request.use(async (config: any) => {
     await new Promise<void>((resolve, reject) => {
       authentication
         .updateToken(30)
