@@ -9,6 +9,7 @@ menu:
     parent: "https"
 weight: 301
 toc: true
+mermaid: true
 ---
 
 
@@ -32,19 +33,26 @@ sequenceDiagram
     participant C as TLS Client
     participant S as TLS Serveur
     C->>S: Client Hello
-    note over C,S: Bonjour, je supporte les versions de TLS et les algorithmes suivants :
+    note over C,S: Bonjour, <br/> je supporte les versions de TLS <br/> et les algorithmes suivants : <br/> ..........
     S->>C: Server Hello
-    note over C,S: Bonjour, parmis les versions et algorithme que je supporte, nous allons utiliser TLS 1.2 et cet algorithme : TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-    note over C,S: Voici mon certificat :
-    note over C,S: J'aurai besoin d'un certificat à ton nom
+    note over C,S: Bonjour, <br/> parmi les versions et algorithme que je supporte, <br/> nous allons utiliser TLS 1.2 et cet algorithme : <br/> TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+    note over C,S: Voici mon certificat : .......
+    opt
+      note over C,S: J'aurai besoin d'un certificat à ton nom <br/> pour t'authentifier
+    end
     C->>C: Controle du certificat
-    note over C: Nom valide ? Date valide ? AC reconnue ?
+    note over C: Nom valide ? <br/> Date valide ? <br/> AC reconnue ?
     C->>S: Préparation clé (Diffie-Hellman)
     note over C,S: chiffrée avec clé publique serveur
     S->>S: Déchiffrement avec clé privée
-    S->>S: Controle Certif client le cas échéant
+    note over S: Fait office de challenge response
+    opt
+      S->>S: Controle Certif client le cas échéant
+      S->>C: Challenge
+      C->>S: Challenge response   
+    end
     S->>C: Finalisation Diffie-Hellman
-    note over C,S: Le client et le serveur partage une clé symétrique à usage unique à cette communication
+    note over C,S: Le client et le serveur <br/> se sont partagé une clé symétrique <br/> à usage unique à cette communication
     C->>S: OK, next encrypted
     S->>C: OK, next encrypted
     loop
