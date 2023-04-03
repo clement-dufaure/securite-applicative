@@ -1,11 +1,10 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { useOidc, useOidcAccessToken } from "@axa-fr/react-oidc";
-import { useRecoilValue } from "recoil";
 import { Login } from "./login";
 
 export const ButtonAppBar = () => {
-  const { login, logout, renewTokens, isAuthenticated } = useOidc();
-  const { accessToken, accessTokenPayload } = useOidcAccessToken();
+  const { isAuthenticated } = useOidc();
+  const { accessTokenPayload } = useOidcAccessToken();
   var messageConnecte = "";
   if (isAuthenticated) {
     var admin ="pas admin";
@@ -23,7 +22,7 @@ export const ButtonAppBar = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" color="inherit">
-          Démonstration oidc axa avec React
+          Démonstration oidc-react (lib axa) 
         </Typography>
         <Typography variant="h6" color="inherit">
           {messageConnecte}

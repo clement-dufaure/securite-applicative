@@ -9,7 +9,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useRecoilValue } from "recoil";
 
 const returnAllValuesLigne = (object: any) => {
   return Object.keys(object).map((key) => {
@@ -64,8 +63,8 @@ const returnAllValues = (object: any) => {
 };
 
 export const ContenuJeton = () => {
-  const { login, logout, renewTokens, isAuthenticated } = useOidc();
-  const { accessToken, accessTokenPayload } = useOidcAccessToken();
+  const { isAuthenticated } = useOidc();
+  const { accessTokenPayload } = useOidcAccessToken();
   if (isAuthenticated) {
     return (
       <>

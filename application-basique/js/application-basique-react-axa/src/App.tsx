@@ -10,7 +10,7 @@ const configuration = {
   silent_redirect_uri:
     window.location.origin + "/authentication/silent-callback",
   scope: "openid profile email offline_access", // offline_access scope allow your client to retrieve the refresh_token
-  authority: "http://localhost/8081/auth/realms/test",
+  authority: "http://localhost:8180/realms/test",
 };
 
 const App = () => {

@@ -1,10 +1,9 @@
 import { Button } from "@mui/material";
-import { useRecoilState } from "recoil";
 import { useOidc, useOidcAccessToken } from "@axa-fr/react-oidc";
 
 export const Login = () => {
-  const { login, logout, renewTokens, isAuthenticated } = useOidc();
-  const { accessToken, accessTokenPayload } = useOidcAccessToken();
+  const { login, logout, isAuthenticated } = useOidc();
+  const { accessTokenPayload } = useOidcAccessToken();
 
   if (isAuthenticated) {
     console.log(accessTokenPayload);
