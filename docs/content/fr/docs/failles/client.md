@@ -1,15 +1,14 @@
 ---
-title : "Injections de code (client)"
-description: "Les attaques basées sur des croisements de domaines"
+title : "Les attaques basées sur des croisements de domaines"
+description: ""
 lead: ""
 draft: false
 images: []
 weight: 202
+mermaid: true
 ---
 
-## Les attaques basées sur des croisements de domaines
-
-Objectifs :
+Objectifs de l'attaquant :
 - Un utilisateur connecté sur un site légitime envoie des données à un site attaquant
 - Un site attaquant force un utilisateur à faire une opération non souhaité sur le site légitime
 
@@ -21,8 +20,8 @@ Vous avez Gagné<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.00000000001; position: relative;top: -5em; left: -10em;"
-    src="http://localhost:8180/admin/master/console/#/realms/test/clients">
+    style="opacity: 0.00000000001; position: relative;top: -17em; left: -34em;"
+    src="http://localhost:8180/admin/master/console/#/master/clients">
 </iframe>
 
 Vous avez Gagné, regardez mieux<br/>
@@ -31,8 +30,8 @@ Vous avez Gagné, regardez mieux<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.3; position: relative;top: -5em; left: -10em;"
-    src="http://localhost:8180/admin/master/console/#/realms/test/clients">
+    style="opacity: 0.3; position: relative;top: -17em; left: -34em;"
+    src="http://localhost:8180/admin/master/console/#/master/clients">
 </iframe>
 
 
@@ -150,6 +149,9 @@ On parle de **XSS (Cross-Site Scripting)**
 
 
 ## Les attaques CSRF 
+
+
+
 
 CSRF = Cross-Site Request Forgery
 

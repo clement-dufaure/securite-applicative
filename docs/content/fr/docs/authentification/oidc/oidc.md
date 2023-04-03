@@ -5,6 +5,9 @@ lead: ""
 draft: false
 images: []
 weight: 610
+menu:
+  docs:
+    parent: "oidc"
 mermaid: true
 ---
 
@@ -275,6 +278,48 @@ En l'occurence il s'agit d'une application de type javascript éxécutée sur na
 
 
 ## Les requêtes à la loupe
+
+### Les mécanismes de sécurité
+
+{{< mermaid class="bg-white text-center" >}}
+sequenceDiagram
+    actor U as Alphonse
+    participant A as AppGestion
+    participant S as AppStock 
+    participant E as Authentication Server <br/> (/auth et /token)
+    U->>A: Hello !
+    note over A: Génération d'un state et d'un nonce aléatoire
+    A->>U: 302 avec redirect_uri + state + nonce
+    U->>E: authentifie moi et retour vers redirect_uri 
+    note over E: sauvegarde du nonce en session
+    note over E: genération aléatoire d'un session_state
+    E->>U: 302 code + state (passe plat) + session_state + aud
+    U->>A: code + state (passe plat) + session_state + aud
+    note over A: contrôle du state
+    A->>E: code
+    E->>A: {accessToken, refreshToken, session_state}
+    note over A: controle du session_state
+    A->>A: check {accessToken}
+    note over A: lecture et contrôle du claim nonce de l'accessToken <br/> (en plus de la signature)
+    note over A: controle du claim aud
+    A->>S: get /resource/stocks muni de {accessToken}
+    note over S: controle du claim aud
+{{< /mermaid >}}
+
+
+Le state ?
+- Éviter les attaque CSRF par un controle du déroulé du processus
+> Il s'agissait d'une protection essentielle dans le cadre du flow implicit
+
+session_state et nonce ?
+- Éviter le rejeu, il permet d'éviter de renvoyer un jeton intercepté encore valable vers d'autre service. On parle de contrôle de corrélation entre requêtes et réponse d'authentification 
+
+Les éléments nonce, session_state sont maintenu dans la session de l'utilisateur côté fournisseur d'identité. La session de l'utilisateur coté fournisseur d'identité (idle et max) doit donc être cohérente avec la durée de rafraichissement possible du jeton (penser aux cas de formulaire long à remplir).
+
+aud ? ou Audience
+- paramétré par le fournisseur d'identité par client, il permet de préciser la portée d'usage du jeton. L'audience peut être vérifié sur un web service transitif.
+Ce claim permet de distinguer des zones d'usage des tokens.
+
 
 ### Flow Authorization Code
 
