@@ -367,7 +367,9 @@ http.sessionManagement()
 http.csrf().disable();
 // gestion des accès
 http.authorizeRequests(
-			authz -> /* Fonction des droits */)
+			authz -> // Fonction des droits 
+			...
+			)
 				  .oauth2ResourceServer();
 ```
 
