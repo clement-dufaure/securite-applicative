@@ -97,9 +97,9 @@ Découvrons une série challenge disponible sur internet
 
 ### L'injection de code : le retour de la revanche
 Quelques niveaux plus tard :
-- [Natas 12](http://natas12.natas.labs.overthewire.org) (mot de passe de natas12 : `EDXp0pS26wLKHZy1rDBPUZk0RKfLGIR3`)
+- [Natas 12](http://natas12.natas.labs.overthewire.org) (mot de passe de natas12 : `YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG`)
 - Le but est de découvrir le mot de passe de natas13 situé dans /etc/natas_webpass/natas13
-- Hint : passthru est une fonction php permettant d'éxécuter sur le sytème du code arbitraire <!-- .element: class="fragment"-->
+- Hint : passthru est une fonction php permettant d'éxécuter sur le sytème du code arbitraire
 
 Exécution de code sur le serveur
 
