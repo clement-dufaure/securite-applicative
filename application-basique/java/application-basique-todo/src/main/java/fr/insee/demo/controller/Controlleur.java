@@ -1,5 +1,7 @@
 package fr.insee.demo.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
@@ -34,7 +34,7 @@ public class Controlleur {
 	
 	@RequestMapping(value = {"/private", "/admin"})
 	public String espacePrivate(HttpServletRequest request,
-										 HttpServletResponse response, Model model)
+								HttpServletResponse response, Model model)
 			  throws IOException {
 		
 		

@@ -11,19 +11,6 @@ menu:
 mermaid: true
 ---
 
-
-<!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
-## 4.2
-### OpenID Connect et JavaScript
-
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Keycloak et javascript
 Fonctionnement (adapter js Keycloak)
 - Keycloak s'initialise (préparation des méthodes) et attend un login
@@ -34,22 +21,12 @@ Fonctionnement (adapter js Keycloak)
 
 
 
+<!-- ### Keycloak et javascript
+<img src="./images/Keycloak JS.png" width="60%" /> -->
 
 
 
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
-<img src="./images/Keycloak JS.png" width="60%" />
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript : Sécurité ?
+**Sécurité ?**
 - Rappel problématique : personne en dehors de l'appli et de l'utilisateur ne doit avoir d'info sur le jeton
 - Appli Web : aucun problème, l'utilisateur n'a jamais connaissance du jeton, il ne connait qu'un code à usage unique, l'échange de jeton se fait entre le serveur et Keycloak via un secret.
 - Appli Javascript : appli "locale", l'utilisateur manipule directement son jeton en local. Pas de possibilité de secret, car le code est local. Un pirate peut donc créer son appli javascript ressemblant à la notre, en incluant une brique keycloak et l'utilisateur fournirait ainsi son jeton au pirate. Le jeton permet ensuite de se connecter à d'autres services.
@@ -57,14 +34,6 @@ Fonctionnement (adapter js Keycloak)
 
 
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript : Sécurité ?
 Deux fonctionnements
 - Par redirection : on peut spécifier les urls de redirection autorisées par Keycloak
 - Par CORS : on spécifie les domaines sources qui peuvent demander une authentification
@@ -72,13 +41,6 @@ Deux fonctionnements
 
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Une possibilité simple : utiliser l'adapter keycloak directement disponible sur le serveur Keycloak en https://mon.serveur.keycloak/auth/js/keycloak.js
 - Met à disposition un objet Keycloak, documentation sur https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter
 
@@ -91,13 +53,6 @@ keycloak.logout();
 
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Configuration via keycloak.json, par défaut détecter dans le même dossier que la page
 
 ```json
@@ -118,14 +73,6 @@ var keycloak = Keycloak({
 });
 ```
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Pour rendre le login automatique sur une page
 
 ```javascript
@@ -143,14 +90,6 @@ keycloak.init({
 ```
 
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Effectuer des opération après authentification
 
 ```javascript
@@ -172,10 +111,6 @@ Code d'un bouton "Se connecter"
 
 
 
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Rafraichir le jeton
 
 ```javascript
@@ -189,10 +124,6 @@ keycloak.updateToken(X);
 
 
 
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Appel au backend/ à un web service
 - On rafraichit le jeton s'il expire "bientôt" pour ne pas avoir de surprises si le traitement dure un peu
 
@@ -220,13 +151,6 @@ req.send();
 
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Keycloak et javascript
 - Logout avec la fonction keycloak.logout()
 - Peut prendre en argument le lien de redirection après logout côté keycloak
 
@@ -242,11 +166,6 @@ keycloak.logout({
 
 
 
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Et avec React ?
 Les scripts keycloak peuvent être récupérés comme dépendance :
 ```
@@ -254,12 +173,6 @@ npm install keycloak-js
 ```
 
 
-
-
-
-
-<!-- .slide: class="slide" -->
-### Et avec React ?
 ```js
 import Keycloak from 'keycloak-js';
 
@@ -274,9 +187,6 @@ Avec this.props.init une action qui ajoute l'objet keycloak dans le store
 
 
 
-
-
-<!-- .slide: class="slide" -->
 ### Interacton entre composant React et Keycloak
 NE PAS UTILISER LE LOCALSTORAGE POUR GERER LE TOKEN
 - [Avis de Auth0](https://auth0.com/docs/security/store-tokens#if-a-backend-is-present)
@@ -291,10 +201,6 @@ En pratique :
 
 
 
-
-
-<!-- .slide: class="slide" -->
-### Et avec React ?
 ```js
   componentDidMount() {
     if (!this.state.keycloakInitiated) {
@@ -314,11 +220,6 @@ Avec this.props.init une action qui ajoute l'objet keycloak dans le store
 
 
 
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Interaction entre composant React et Keycloak
 Gestion de l'expiration du token
 - Ajout d'un interceptor dans axios
@@ -339,12 +240,11 @@ axios.interceptors.request.use(
 ```
 
 
+## Réduire la dépendance à Keycloak : Librairie Axa
 
-
-
-
-<!-- .slide: class="slide" -->
-### Réduire la dépendance à Keycloak
-- En utilisant des librairies plus standard oidc
+Librairie proposant une implémentation plus générique de oAuth
 https://github.com/AxaGuilDEv/react-oidc
+
+Elle possède également une mailleure intégration à React avec la mise à disposition de hook
+
 

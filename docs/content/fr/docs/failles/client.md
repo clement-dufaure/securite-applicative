@@ -196,7 +196,6 @@ Si on combine les failles précédentes :
     var node = document.createElement("LI");
 		node.innerHTML = window.localStorage.getItem('message_csrf');
 		myUl.appendChild(node);
-    document.body.appendChild(node);
 </script>
 
 Si on envoie le message suivant ?

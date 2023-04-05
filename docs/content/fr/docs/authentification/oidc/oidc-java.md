@@ -11,15 +11,8 @@ menu:
 mermaid: true
 ---
 
-<!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
-## 4.1
-### OpenID Connect et Java
 
------
-
-<!-- .slide: class="slide" -->
-### Adapter Keycloak
-- Les adapters Java
+## Les adapters Java
 
 Une sélection : https://oauth.net/code/java/
 
@@ -28,42 +21,33 @@ https://www.keycloak.org/docs/latest/securing_apps/#java-adapters
 
 - Adapters liés à une plateforme fortement déconseillés, car ils créent des dépendances "Hors Maven"
 
------
 
-<!-- .slide: class="slide" -->
-### Mise en place de OpenIDConnect dans une application Java
+**Mise en place de OpenIDConnect dans une application Java**
 - Avec pac4j https://www.pac4j.org/ 
 	- Situation application quelconque JavaEE, application de type ihm en java
 - Avec Spring security
 	- Situation application Spring Boot, application de type Web Service
 
------
 
-<!-- .slide: class="slide" -->
-### OIDC et Pac4j
+## OIDC et Pac4j
 
------
-
-<!-- .slide: class="slide" -->
 ### Pac4j
 Dépendances modules jee + oidc:
 ```xml
 		<dependency>
 			<groupId>org.pac4j</groupId>
-			<artifactId>jee-pac4j</artifactId>
-			<version>6.1.0</version>
+			<artifactId>jakartaee-pac4j</artifactId>
+			<version>7.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-oidc</artifactId>
-			<version>5.4.3</version>
+			<version>5.7.0</version>
 		</dependency>
 ```
------
 
-<!-- .slide: class="slide" -->
-### Pac4j
+
 - Une classe de configuration
 
 ```java
@@ -77,9 +61,6 @@ public class DemoConfigFactory implements ConfigFactory {
 }
 ```
 
------
-
-<!-- .slide: class="slide" -->
 - Définition des protocoles d'authentification
 ```java
   OidcConfiguration oidcConfig = new OidcConfiguration();
@@ -89,17 +70,12 @@ public class DemoConfigFactory implements ConfigFactory {
         OidcClient oidcClient = new OidcClient(oidcConfig);
 ```
 
------
 
-<!-- .slide: class="slide" -->
 - Définition de l'url de callback (= ou est ce que l'on revient après authentification sur le serveur central)
 ```java
 oidcClient.setCallbackUrl("/callback");
 ```
 
------
-
-<!-- .slide: class="slide" -->
 - Ce endpoint doit être intercepté
 ```xml
 	<filter>
@@ -114,19 +90,12 @@ oidcClient.setCallbackUrl("/callback");
 ```
 
 
------
-
-<!-- .slide: class="slide" -->
-### Pac4j
-Définition de la liste de client (plusieurs mode d'authentification possible potentiellement : oidc + basic par exemple)
+- Définition de la liste de client (plusieurs mode d'authentification possible potentiellement : oidc + basic par exemple)
 ```java
 Config config = new Config(oidcClient);
 ```
 
 
------
-
-<!-- .slide: class="slide" -->
 - Définition de règles et conditions
 
 ```java
@@ -137,9 +106,6 @@ config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^\\/(accueil)?
 ```
 
 
------
-
-<!-- .slide: class="slide" -->
 - Activables selon les endpoints
 ```xml
 	<filter>
@@ -164,11 +130,8 @@ config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^\\/(accueil)?
 	</filter-mapping>
 ```
 
------
 
-<!-- .slide: class="slide" -->
-### Adapter Keycloak : filter Keycloak
-Obtenir le jeton
+### Obtenir le jeton
 
 ```java
 WebContext context = new JEEContext(request, response);
@@ -183,9 +146,9 @@ Map h = oidcProfile.getAttributes();
 h.get("email")
 ```
 
------
-<!-- .slide: class="slide" -->
+
 ### Gestion des droits
+
 Pour mapper des roles, il faut implémenter selon le besoin un générateur de roles à partir du profile (accessToken notemment)
 ```java
 oidcClient.addAuthorizationGenerator(new AuthorizationGenerator() {
@@ -197,10 +160,7 @@ oidcClient.addAuthorizationGenerator(new AuthorizationGenerator() {
 	}
 });
 ```
------
 
-<!-- .slide: class="slide" -->
-### Gestion des droits
 
 Peut s'utiliser dans le code directement
 ```java
@@ -212,11 +172,6 @@ ou géré par règles dans la config
 config.addAuthorizer("admin", new RequireAnyRoleAuthorizer("admin"));
 ```
 
------
-
-
-<!-- .slide: class="slide" -->
-### Gestion des droits
 Possiblité de l'implémentation keycloak incluse
 ```java
 var profileCreator = new OidcProfileCreator(oidcConfig, oidcClient);
@@ -227,10 +182,6 @@ oidcClient.addAuthorizationGenerator(
 		new KeycloakRolesAuthorizationGenerator());
 ```
 
-
------
-
-<!-- .slide: class="slide" -->
 ### Connexion à un web service, authentifié par un jeton
 Obtenir le jeton pour se connecter à un Web Service
 ```java
@@ -242,17 +193,14 @@ oidcProfile.getAccessToken().toAuthorizationHeader()
 ```
 - Un test peut être fait sur le WS embarqué de keycloak : https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/userinfo
 
------
 
-<!-- .slide: class="slide" -->
 ### Logout
 Concrètement, il s'agit d'une :
 - Déconnexion locale : `request.getSession().invalidate();`
 - Déconnexion Keycloak : un appel sur https://mon.serveur.keycloak/auth/realms/formation/protocol/openid-connect/logout?redirect_uri=https://localhost:8443/ logout l'utilisateur sur Keycloak et redirige vers "redirect_uri"
 
------
 
-<!-- .slide: class="slide" -->
+
 ```xml
 	<!-- Logout configuration -->
 	<filter>
@@ -277,10 +225,8 @@ Concrètement, il s'agit d'une :
 	</filter-mapping>
 ```
 
------
 
-<!-- .slide: class="slide" -->
-## Bonus : CSRF
+### Bonus : CSRF
 Config :
 ```java
 config.addAuthorizer("csrfToken", new CsrfAuthorizer());
@@ -293,9 +239,7 @@ model.addAttribute("_csrf_token_name", Pac4jConstants.CSRF_TOKEN);
 model.addAttribute("_csrf_token", csrfToken);
 ```
 
------
 
-<!-- .slide: class="slide" -->
 Ecran :
 ```html
 <form th:action="@{/private}" method="POST">
@@ -304,17 +248,15 @@ Ecran :
 </form>
 ```
 
------
-<!-- .slide: class="slide" -->
+
 ### Environnement de production
 - Il faut être capable d'adapter facilement l'application au différents environnements : local, dv/qf, prod
 - Il y a une conf commune localhost par realm (une confidential, une public)
 - Une demande doit être faite pour les environnement de dv/qf : une seule configuration pour tous les environnements dv/qf
 - Une demande doit être faite pour la prod : en cas de confidential, seule la prod aura accès au secret
 
------
-<!-- .slide: class="slide" -->
-### Environnement de production -- Cas du filtre Keycloak
+
+**Cas du filtre Keycloak**
 - Le json peut être paramétré pour s'adapter à des propriétés systèmes (avec valeurs par défaut sur localhost par exemple)
 
 ```json
@@ -331,16 +273,10 @@ Ecran :
 }
 ```
 
-- Il faut demander au CEI de rajouter ces variables au démarrage de la jvm
+- Il faut rajouter ces variables au démarrage de la jvm (-Dfr.insee.keycloak.realm=monRealm)
 
------
+## OIDC et Spring security
 
-<!-- .slide: class="slide" -->
-### OIDC et Spring security
-
------
-
-<!-- .slide: class="slide" -->
 ### Adapter Spring security module oAuth2
 Dépendances :
 ```xml
@@ -354,24 +290,50 @@ Dépendances :
 </dependency>
 ```
 
------
-
-<!-- .slide: class="slide" -->
 ### Adapter Spring security module oAuth2
 Configuration particulière de spring security
 ```java
-public class MySecurityConfigurationAdapter
-		  extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableWebSecurity
+public class MySecurityConfigurationAdapter {
 		
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-	}
+	@Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    // Cas d'un webservice :
+    // - ne pas gerer les sessions
+    // - pas de csrf
+    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.csrf().disable();
+    // Descriptions des regles d'accès par path
+    http.authorizeHttpRequests(
+        requests ->
+            requests
+                // Ignorer le path du swagger
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/", "/healthcheck")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/private")
+                .authenticated()
+                .requestMatchers(HttpMethod.GET, "/admin")
+                .hasRole("admin")
+                .requestMatchers(HttpMethod.OPTIONS)
+                .permitAll()
+                .anyRequest()
+                .denyAll());
+    // Moyens d'authentification : oAuth2 bearer
+    http.oauth2ResourceServer(
+		// pour personnaliser l'authenticator
+        oauth2 ->
+            oauth2.jwt(
+                jwtConfigurer -> {
+                  jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter());
+                }));
+    return http.build();
+  }
   }
 ```
 
------
-<!-- .slide: class="slide" -->
-### Adapter Spring security module oAuth2
 ```java
 // web service = pas de gestion de session
 http.sessionManagement()
@@ -380,13 +342,11 @@ http.sessionManagement()
 http.csrf().disable();
 // gestion des accès
 http.authorizeRequests(
-			authz -> // Fonction des droits 
+			requests -> // Fonction des droits 
 			)
 				  .oauth2ResourceServer();
 ```
 
------
-<!-- .slide: class="slide" -->
 Fonction de droits
 
 ```java
@@ -403,9 +363,6 @@ authz ->
 ```
 
 
------
-<!-- .slide: class="slide" -->
-### Adapter Keycloak Spring security
 Configuration via SpringBoot
 - Seul l'emplacement des certificat est nécessaire.
 La conf se retrouve ici : http://localhost:8180/auth/realms/test/.well-known/openid-configuration
@@ -415,11 +372,6 @@ La conf se retrouve ici : http://localhost:8180/auth/realms/test/.well-known/ope
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8180/auth/realms/test/protocol/openid-connect/certs
 ```
 
-
------
-
-
-<!-- .slide: class="slide" -->
 ### Recherche des roles
 - Comme souvent, se réimplémente !
 
@@ -430,49 +382,53 @@ http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> {
 				  }));
 ```
 
------
-<!-- .slide: class="slide" -->
+
 ```java
-JwtAuthenticationConverter jwtAuthenticationConverter() {
-	JwtAuthenticationConverter jwtAuthenticationConverter =
-			  new JwtAuthenticationConverter();
-	jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
-			  jwtGrantedAuthoritiesConverter());
-	jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
-	return jwtAuthenticationConverter;
-}
+  private JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter());
+    jwtAuthenticationConverter.setPrincipalClaimName("preferred_username");
+    return jwtAuthenticationConverter;
+  }
 ```
 
------
-<!-- .slide: class="slide" -->
 ```java
-Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
-	return new Converter<Jwt, Collection<GrantedAuthority>>() {
-		@Override
-		@SuppressWarnings({"unchecked", "serial"})
-		public Collection<GrantedAuthority> convert(Jwt source) {
-			return ((Map<String, List<String>>) source.getClaim(
-					  "realm_access")).get("roles").stream()
-					  .map(s -> new GrantedAuthority() {
-						  @Override
-						  public String getAuthority() {
-							  return "ROLE_" + s;
-						  }
-						  
-						  @Override
-						  public String toString() {
-							  return getAuthority();
-						  }
-					  }).collect(Collectors.toList());
-		}
-	};
-}
+@SuppressWarnings("unchecked")
+  private Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
+    return source -> {
+      String[] claimPath = OIDC_CLAIM_ROLE.split("\\.");
+      Map<String, Object> claims = source.getClaims();
+      try {
+
+        for (int i = 0; i < claimPath.length - 1; i++) {
+          claims = (Map<String, Object>) claims.get(claimPath[i]);
+        }
+
+        List<String> roles =
+            (List<String>) claims.getOrDefault(claimPath[claimPath.length - 1], new ArrayList<>());
+        return roles.stream()
+            .map(
+                s ->
+                    new GrantedAuthority() {
+                      @Override
+                      public String getAuthority() {
+                        return "ROLE_" + s;
+                      }
+
+                      @Override
+                      public String toString() {
+                        return getAuthority();
+                      }
+                    })
+            .collect(Collectors.toList());
+      } catch (ClassCastException e) {
+        // role path not correctly found, assume that no role for this user
+        return new ArrayList<>();
+      }
+    };
+  }
 ```
 
-
------
-<!-- .slide: class="slide" -->
-### Adapter Keycloak spring security
 Obtenir le jeton (appel à web service)
 ```java
 JwtAuthenticationToken token =
@@ -482,9 +438,8 @@ maRequete.header("Authorization",
 ```
 
 
------
-<!-- .slide: class="slide" -->
-### Dépendances adapters java Keycloak (JEE et Spring Security)
+
+## Dépendances adapters java Keycloak (JEE et Spring Security)
 - Ces adapters étaient plus facile à configurer dans notre environnement Keycloak (prévus pour !)
 - C'est toujours un plus de ne pas dépendre d'une implémentation mais d'un standard (OIDC/OAuth)
 - Le projet keycloak abandonne le support des adapters Keycloak
