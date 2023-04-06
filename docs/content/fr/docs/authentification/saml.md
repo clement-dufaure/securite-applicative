@@ -8,15 +8,8 @@ weight: 620
 mermaid: true
 ---
 
-<!-- .slide: data-background-image="images/securite-informatique.png" data-background-size="1200px" class="chapter" -->
-## 6
-### Saml
 
 
-
-
-
-<!-- .slide: class="slide" -->
 ### Les grands principes
 Security Assertion Markup Language ou *langage de balisage d'assertion de sécurité*
 - Dédié aux applis Web
@@ -24,13 +17,6 @@ Security Assertion Markup Language ou *langage de balisage d'assertion de sécur
 - Jeton échangé via XML
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Les grands principes
 - L'application cliente (Service Provider ou SP) demande une authentification
 - Elle redirige l'utilisateur vers un IDP ou Identity Provider, en transmettant une requête d'authentification donnant notemment des informations sur le SP. Ce n'est pas obligatoire dans le protocole mais la requête doit être signée (clé privée du SP) et chiffrée (clé publique de l'IDP)
 - L'IDP recherche le SP appelant, vérifie la signature et cherche à authentifier l'utilisateur
@@ -39,53 +25,22 @@ Security Assertion Markup Language ou *langage de balisage d'assertion de sécur
 
 
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
-### Les grands principes
 <img src="./images/saml.png" width="70%" />
 <a title="Creative Commons Attribution-ShareAlike 3.0" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>, <a href="https://en.wikipedia.org/w/index.php?curid=32521419">Link</a>
 
 
 
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ###  Du SAML à l'ère d'OpenIdConnect  ?
 - Nécessaire si l'application cliente et le serveur d'authentification ne sont pas connectés directement (Un en interne, un en DMZ)
 - Applications atypiques ne supportant que SAML (progiciel,...)
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Contenu d'une configuration SAML
 - Les fichiers metadatas du SP et des IDP : éléments centraux des configuration SAML
 - Un keystore contenant la clé privé et le certificat du Service provider : permet de signer les requêtes et de déchiffrer les réponses
 - Selon les implémentations, il faut extraire des informations des fichiers metadatas et les présenter comme des paramètres. 
 
 
-
-
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Le metadata SAML
 - Une application cliente connait un ou plusieurs IDP
 - Un IDP connait une liste d'application
@@ -93,13 +48,6 @@ Security Assertion Markup Language ou *langage de balisage d'assertion de sécur
 Un moyen simple de s'échanger les informations sur un client ou un IDP est le metadata
 
 
-
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Metadata d'un SP
 ```xml
 <md:EntityDescriptor ...  entityID="https://localhost:8443">
@@ -126,24 +74,14 @@ Un moyen simple de s'échanger les informations sur un client ou un IDP est le m
 
 
 
-
-
-
-<!-- .slide: class="slide" -->
-### Metadata d'un SP
 - Attention les Endpoints doivent être identique sur la conf du SP et tel que déclarés sur l'IDP.
 - C'est une vérification pour ne pas envoyer l'utilisateur n'importe où (Le SP redonne l'url de redirection lors d'une requête d'authentification)
 
 
 
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Metadata d'un idp
 
-Récupérable sur chaque fédération sur /idp/shibboleth
+Récupérable sur un endpoint spécifique du fournisseur
 
 ```XML
 <EntityDescriptor ... entityID="https://idp.test/idp/shibboleth">
@@ -162,12 +100,6 @@ Récupérable sur chaque fédération sur /idp/shibboleth
 
 
 
-
-
-
-
-
-<!-- .slide: class="slide" -->
 ### Une assertion SAML
 Les points importants :
 ```xml

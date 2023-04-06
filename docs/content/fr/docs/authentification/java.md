@@ -1,5 +1,5 @@
 ---
-title : "l'authentification en java"
+title : "L'authentification en java"
 description: ""
 lead: ""
 draft: false
@@ -186,11 +186,10 @@ Srping Security test utilise uniquement l'interface Principal de JakartaEE, on n
 
 // Prepare la conf MVC de la classe en paramètre
 @WebMvcTest(Controlleur.class)
-
-// Specifie tous les beans a charger
-@ContextConfiguration(classes = { Controlleur.class, KeycloakConfigurationAdapter.class,
-		KeycloakBaseSpringBootConfiguration.class, KeycloakSpringBootProperties.class })
 public class AuthenticationTest {
+
+	@Autowired
+	public MockMvc mvc;
 ```
 
 
