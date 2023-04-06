@@ -42,15 +42,17 @@ public class Controlleur {
       throws IOException {
     PrintWriter responseWriter = response.getWriter();
 
-    responseWriter.write("requete en https : " + request.isSecure() + "\n");
-
     if (request.getUserPrincipal() == null) {
+      response.setStatus(401);
       responseWriter.println("Authentifié par ... pas d'authentification en fait");
     } else {
       // Quelquesoit le mode d'authentification
+      response.setStatus(200);
       responseWriter.println("Vous etes : " + request.getUserPrincipal().getName());
       responseWriter.println("Vous êtes admin : " + request.isUserInRole("admin"));
     }
+
+    responseWriter.write("requete en https : " + request.isSecure() + "\n");
 
     // Comportements selon le mode d'authentification
     if (request.getUserPrincipal() instanceof UsernamePasswordAuthenticationToken) {
