@@ -19,13 +19,13 @@ Le module "java/application-basique-todo" est une application spring mvc très b
 
 Le module "js/application-basique-js-todo" contient un modèle basique de page html pour insérer de code javascript.
 
-Le module "application-basique-react" contient une démo React/Recoil.
+Le module "application-basique-react" et "application-basique-react-axa" contiennent des démos React/Recoil avec respectivement les adapter Keycloak et Axa.
 
 Les autres projets sont des démo de chaque type d'authentification selon plusieurs implémentations. (correction des exercices)
 
 ### 0.3. Autres prérequis
 
-Une distribution tomcat : https://tomcat.apache.org/download-90.cgi
+Une distribution tomcat : https://tomcat.apache.org/download-10.cgi
 
 > Pour Windows, télécharger la version zip et non le msi
 
@@ -49,7 +49,7 @@ Pour l'intégrer dans l'application, on pourra ici simplement le déclarer dans 
 
 ## 2. Monter localement un serveur Keycloak
 
-- Télécharger la dernière version de keycloak
+- Télécharger la dernière version de keycloak sur https://www.keycloak.org/downloads , version Quarkus en zip
 - Keycloak démarre simplement via `bin/kc.sh start-dev` ou `bin/kc.bat start-dev`
 - Par défaut il démarre sur le port 8080, ce qui peut être génant selon vos habitudes de développement, pour le changer et le faire démarre par exemple sur 8180 : `bin/kc.sh start-dev --http-port=8180`
 - préparer un realm, un client, et un utilisateur de test
