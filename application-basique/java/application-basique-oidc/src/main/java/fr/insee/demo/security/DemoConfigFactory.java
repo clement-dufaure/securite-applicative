@@ -1,5 +1,6 @@
 package fr.insee.demo.security;
 
+import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod;
 import org.pac4j.core.authorization.authorizer.CsrfAuthorizer;
 import org.pac4j.core.authorization.authorizer.IsAuthenticatedAuthorizer;
 import org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer;
@@ -16,10 +17,10 @@ import org.pac4j.oidc.profile.keycloak.KeycloakOidcProfile;
 public class DemoConfigFactory implements ConfigFactory {
 	
 	
-	public String clientId = "localhost-java";
-	public String clientSecret = "0756132b-0e7a-425c-a0e3-7d5946fd372c";
+	public String clientId = "localhost";
+	public String clientSecret = "eoafTLtzyJaa4ClqIdUK9Gnxd9OPDixv";
 	private String configurationEndpoint =
-			  "http://localhost:8180/auth/realms/test/" +
+			  "http://localhost:8180/realms/test/" +
 						 ".well-known/openid-configuration";
 	
 	@Override
@@ -29,6 +30,7 @@ public class DemoConfigFactory implements ConfigFactory {
 		oidcConfig.setClientId(clientId);
 		oidcConfig.setSecret(clientSecret);
 		oidcConfig.setDiscoveryURI(configurationEndpoint);
+		oidcConfig.setClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
 		OidcClient oidcClient = new OidcClient(oidcConfig);
 		
 		// accept relative urls in callback definition
