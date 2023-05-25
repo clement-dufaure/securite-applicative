@@ -40,6 +40,7 @@ https://www.keycloak.org/docs/latest/securing_apps/#java-adapters</p><ul><li>Ada
         oidcConfig.setClientId(clientId);
         oidcConfig.setSecret(clientSecret);
         oidcConfig.setDiscoveryURI(configurationEndpoint);
+		oidcConfig.setClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
         OidcClient oidcClient = new OidcClient(oidcConfig);
 </code></pre><ul><li>Définition de l&rsquo;url de callback (= ou est ce que l&rsquo;on revient après authentification sur le serveur central)</li></ul><pre><code class=language-java>oidcClient.setCallbackUrl(&quot;/callback&quot;);
 </code></pre><ul><li>Ce endpoint doit être intercepté</li></ul><pre><code class=language-xml>	&lt;filter&gt;
@@ -265,4 +266,4 @@ maRequete.header(&quot;Authorization&quot;,
 <script src=/js/vendor/katex/dist/contrib/auto-render.min.b688a23169501c711300d4bdb5ae40c52ee8976f722fbf3871eb709a51db2ea5d7bf51eaef0e82af7542d973d2f681d9c46b70b72d902601642a15af9b9ce80d.js integrity="sha512-toiiMWlQHHETANS9ta5AxS7ol29yL784cetwmlHbLqXXv1Hq7w6Cr3VC2XPS9oHZxGtwty2QJgFkKhWvm5zoDQ==" crossorigin=anonymous defer></script>
 <script src=/main.min.b8e7e565bd2186f67f57d2c5d9680f67abbb2a977ff20ad27eb51f5a7b9071fdec7b71a5e964a41a38fb59cb12d43b76e0b3ac8247cb7063bb73efc06a9ac529.js integrity="sha512-uOflZb0hhvZ/V9LF2WgPZ6u7Kpd/8grSfrUfWnuQcf3se3Gl6WSkGjj7WcsS1Dt24LOsgkfLcGO7c+/AaprFKQ==" crossorigin=anonymous defer></script>
 <script src=/js/mermaid.min.83b8594750563833e1c00aeeca8f704e65d284daca1c66a503f2496362f4b45477d8cc7a064d9ec4521e5e737513884abea18acc41236f47f88a05c8eba8d239.js integrity="sha512-g7hZR1BWODPhwAruyo9wTmXShNrKHGalA/JJY2L0tFR32Mx6Bk2exFIeXnN1E4hKvqGKzEEjb0f4igXI66jSOQ==" crossorigin=anonymous defer></script>
-<script src=https://securite-applicative.dufau.re/index.min.d67c088c9097ecec5ba9471310fc419f1694f97a383d71c44862a23324c2e428806f3fa1b63a0e14242affa715e72f53105c8be80bce75e3215c4b8b6024344d.js integrity="sha512-1nwIjJCX7OxbqUcTEPxBnxaU+Xo4PXHESGKiMyTC5CiAbz+htjoOFCQq/6cV5y9TEFyL6AvOdeMhXEuLYCQ0TQ==" crossorigin=anonymous defer></script></body></html>
+<script src=https://securite-applicative.dufau.re/index.min.6b6885f5101a45aafaaa6898145ebfa89bc5938292f4a43f55e3d74f0e4885669c92b95084022b16dd6911bc14c67ced98e875a91ad378e046908521d62bcba6.js integrity="sha512-a2iF9RAaRar6qmiYFF6/qJvFk4KS9KQ/VePXTw5IhWackrlQhAIrFt1pEbwUxnztmOh1qRrTeOBGkIUh1ivLpg==" crossorigin=anonymous defer></script></body></html>
