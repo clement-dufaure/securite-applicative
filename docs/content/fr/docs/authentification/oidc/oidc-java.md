@@ -67,6 +67,7 @@ public class DemoConfigFactory implements ConfigFactory {
         oidcConfig.setClientId(clientId);
         oidcConfig.setSecret(clientSecret);
         oidcConfig.setDiscoveryURI(configurationEndpoint);
+		oidcConfig.setClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
         OidcClient oidcClient = new OidcClient(oidcConfig);
 ```
 
