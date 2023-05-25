@@ -74,7 +74,7 @@ public class DemoConfigFactory implements ConfigFactory {
 
 - Définition de l'url de callback (= ou est ce que l'on revient après authentification sur le serveur central)
 ```java
-oidcClient.setCallbackUrl("/callback");
+oidcClient.setCallbackUrl("http://localhost:8080/demo/callback");
 ```
 
 - Ce endpoint doit être intercepté
