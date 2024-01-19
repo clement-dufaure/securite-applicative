@@ -166,9 +166,13 @@ Deux grands types de protection
   - WebGoat (découverte de failles sous forme de cours)
   - Juice Store (challenges)
 - [Natas](https://overthewire.org/wargames/natas/)
-- [Root Me](https://www.root-me.org/)
 
 Par ailleurs le [CERT-FR](https://www.cert.ssi.gouv.fr/) est un sytème de notification des failles applicatives. Il publie aussi régulièrement des articles de cybersécurité.
+
+#### Un peu de pratique avec natas
+Découvrons une série challenge disponible sur internet
+- [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
+- Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
 
 ### Surveiller les dépendances obsolètes
 - Dependabot (vérification existance d'une nouvelle version)

@@ -1,0 +1,38 @@
+<!-- files.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+<header>
+    <h1>Security Nightmare</h1>
+</header>
+
+<section class="file-section">
+    <h2>Gestion des fichiers</h2>
+
+    <!-- Formulaire pour déposer des fichiers -->
+    <form th:action="@{/files}" method="post" enctype="multipart/form-data">
+        <label for="file">Sélectionnez un fichier:</label>
+        <input type="file" id="file" name="file" required>
+
+        <button type="submit">Téléverser</button>
+    </form>
+
+    <!-- Liste des fichiers déposés -->
+    <ul class="file-list">
+        <li th:each="file : ${files}" class="file-item">
+            <a  th:href="@{'uploads/' + ${file}}" th:text="${file}"></a>
+<!--            <a th:href="@{'/files/' + ${file.name}}" class="file-link" th:text="${file.name}"></a>-->
+        </li>
+    </ul>
+</section>
+</body>
+
+</html>

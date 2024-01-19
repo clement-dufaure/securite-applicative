@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Users</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+<header>
+    <h1>Security Nightmare Demo</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/forum}">Forum</a></li>
+        <li><a th:href="@{/files}">Gestion des fichiers</a></li>
+    </ul>
+</nav>
+
+<section>
+    <h2>Liste des utilisateurs</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="username : ${users}">
+            <td th:text="${username}"></td>
+            <td>
+                <form th:action="@{'/admin/promote/' + ${username}}" method="post">
+                    <button type="submit">Activer l'utilisateur</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <!-- Formulaire pour écrire un nouveau message -->
+    <form th:action="@{/admin}" method="post">
+        <label for="content">Message:</label>
+        <textarea id="content" name="content" required></textarea>
+        <label for="classified">Message confidentiel :</label>
+        <input type="checkbox" id="classified" name="classified"/>
+        <button type="submit">Envoyer</button>
+    </form>
+</section>
+
+
+</body>
+
+</html>

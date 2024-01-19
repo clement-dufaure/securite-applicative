@@ -19,7 +19,7 @@ mermaid: true
 - Pur Java EE (Jakarta EE) : le filtre
   - Projet [Pac4j](https://www.pac4j.org/)
 - Basé sur le container (valve Tomcat)
-- Spring security
+- Spring security : https://docs.spring.io/spring-security/reference/servlet/oauth2/index.html
 
 
 ## Filter

@@ -20,8 +20,8 @@ Vous avez Gagné<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.00000000001; position: relative;top: -17em; left: -34em;"
-    src="http://localhost:8180/admin/master/console/#/master/clients">
+    style="opacity: 0.00000000001; position: relative;top: -25em; left: -34em;"
+    src="http://localhost:8080/admin">
 </iframe>
 
 Vous avez Gagné, regardez mieux<br/>
@@ -30,8 +30,8 @@ Vous avez Gagné, regardez mieux<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.3; position: relative;top: -17em; left: -34em;"
-    src="http://localhost:8180/admin/master/console/#/master/clients">
+    style="opacity: 0.3; position: relative;top: -25em; left: -34em;"
+    src="http://localhost:8080/admin">
 </iframe>
 
 
@@ -137,11 +137,12 @@ On parle de **XSS (Cross-Site Scripting)**
 **Sécurité active :**
 - Vérifier les entrées utilisateurs !
 - Echapper caractères spéciaux HTML (utiliser au maximum les sécurités internes des framework, sinon des fonctions existent déjà dans les principaux langages, par exemple `${fn:escapeXml(string)}` dans une EL en JSP)
+- Certains framework récent échappe par défaut, par exemple les template thymeleaf avec l'injection de variable `th:text` échappent les caracteres spéciaux html, il faut expliciter si vraiment on ne veut pas echapper...  ~~`th:utext`~~
 
 **Sécurité passive :**
 - [Résumé des headers](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html)
 - Content Security Policy (CSP) [Prez](https://developer.mozilla.org/fr/docs/Web/HTTP/CSP)  [Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
-- (deprecated) [X-XSS-Protection](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
+- (deprecated) [X-XSS-Protection](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection) -> Ne plus utiliser
 
 **Compléments pour la protection des cookies**
 - Forcer les cookies à être "secure" (utilisable en https uniquement), "httpOnly" (non utilisable dans les scripts)
@@ -217,6 +218,30 @@ request.send("-----------------------------395028195436618018493550684239\n"+
 </script>
 ```
 
+
+
+>
+> Security Nightmare
+>
+> Et si on postait sur le forum ?
+> 
+```
+<script>
+var request = new XMLHttpRequest();
+request.open('POST', 'http://localhost:8080/admin/promote/evil', false);
+request.send();
+</script>
+```
+>
+>
+>
+>
+
+
+
+
+
+
 Le script va simuler un clic dans le formulaire avec les options que j'ai choisi. L'admin étant connecté préalablement, le clic va bien être éxécuté en tant que lui-même (le navigateur va légitimement envoyer le cookie de session, on est sur le bon domaine, en https, etc)
 
 On parle d'une attaque de type **CSRF** ou Cross-Site Request Forgery
@@ -247,15 +272,46 @@ On parle d'une attaque de type **CSRF** ou Cross-Site Request Forgery
 </form>
 ```
 
-- Principe tout POST ne contenant pas ce paramètre se soldera par une 403
+- Dans les version récentes de Spring, avec la configuration par défaut, l'input hidden est rajouté automatiquement sur chaque champ hidden (fonctionne au moins avec le langage de templating thymeleaf)
+- Principe : tout POST ne contenant pas ce paramètre se soldera par une 403
 - Potentiellement pas nécessaire sur tout le site
-- Pour lever la protection en spring security:
+- Pour lever la protection en spring security (en Spring 6):
 ```java
-http.csrf().ignoringAntMatchers("/saml/**"); // l'ignorer sur certaines url
-http.csrf().disable(); // l'ignorer complètement
+http.csrf(csrf -> csrf.ignoringRequestMatchers(...)); // l'ignorer sur certaines url
+http.csrf(csrf -> csrf.disable()); // l'ignorer complètement -> Web Service
 ```
 
 ## CSRF et application stateless
+
+<script>
+var evil_cors_1 = function(){
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://localhost:8080/api/messages/admin', false);
+    request.send();
+    console.log(request.response);
+}
+var evil_cors_2 = function(){
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://localhost:8080/admin/promote/evil', false);
+    request.send();
+}
+var evil_cors_3 = function(){
+    var request = new XMLHttpRequest();
+    request.open('PUT', 'http://localhost:8080/admin/promote/evil', false);
+    request.send();
+}
+</script>
+
+>
+> Security Nightmare
+>
+> <button onClick="evil_cors_1();">Cliquez ici, ça ne risque rien !!!</button>
+> <button onClick="evil_cors_2();">La c'est moins glop !!!</button>
+> <button onClick="evil_cors_3();">La ça va mieux !!!</button>
+>
+>
+
+
 
 La protection précédente fonctionne dans un mode STATEFUL, c'est à dire que l'algorithmique impose le maintien d'une session, dans laquelle on peut stocker des élements d'état permettant de suivre le déroulé logiques des actions de l'utilisateur.
 
@@ -530,4 +586,61 @@ Test :
 - Il faut garder à l'esprit que CORS est une sécurité *côté client* pour l'empécher de faire n'importe quoi malgré lui : fournir à un script une information que le serveur n'a pas prévu d'être utilisée par un script.
 
 
+
+
+
+# Synthèse des header déclaratifs :
+
+Il est **nécessaire** de rajouter :
+
+- Le blocage des iframe sauf si on sait ce que l'on fait, par exemple pour un besoin fonctionnel ou pour un site totalement public
+```
+X-Frame-Options: DENY
+```
+
+- L'obligation de passer en HTTPS sans possiblité de dérrogation pour les futurs accès au site :
+```
+Strict-Transport-Security: max-age=63072000
+```
+
+En complément la CSP
+```
+Content-Security-Policy: upgrade-insecure-requests;
+```
+permet de forcer le Https en cas d'accès http
+
+Il **ne faut pas** ajouter :
+
+- De façon systématique
+```
+Access-Control-Allow-Origin: *
+```
+Sauf si le site est public sans données confidentielles même "internes", c'est à dire que l'on part du principe que le site peut etre pleinement requêté de n'importe où sans restrictions
+
+- Ce header qui n'est plus supporté et potentiellement sujet à des attaques :
+```
+X-XSS-Protection
+```
+
+Il est **recommandé** de rajouter
+
+- L'en-tête CSP avec une configuration à définir, par exmple :
+```
+Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'none'; form-action 'self';
+```
+    - n'accepte que les scripts, images et styles ayant le même hôte que la page appelée, ainsi que les pages appelées via XmlHttpRequest, fetch ou assimilé
+    - désactive les fonctions javascript de type "eval"
+    - désactive les scripts inline (peut etre réactivé unitairement via )
+    - n'autorise pas l'inclusion de la page dans un iframe (redondant avec X-Frame-Options, mais l'entete CSP a vocation à remplacer les autres déclarations)
+    - n'autorise que les actions de formulaire à destination du même hôte que la page appelée
+
+
+
+**WARNING** 
+
+Sous réserve de savoir ce que l'on fait, on peut enrichir sa conf HSTS des éléments suivants :
+```
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+```
+Ce qui aura pour effet de forcer le HTTPS sur l'ensemble des sous domaines, et de l'enregistrer dans les sites "preload" c'est à dire préalablement à la première connexion pour les navigateur qui supportent cette liste "preload" (Géré par google, incluse a minima dans Chrome)
 

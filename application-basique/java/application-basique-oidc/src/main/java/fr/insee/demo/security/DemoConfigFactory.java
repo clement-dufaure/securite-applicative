@@ -18,7 +18,7 @@ public class DemoConfigFactory implements ConfigFactory {
 	
 	
 	public String clientId = "localhost";
-	public String clientSecret = "eoafTLtzyJaa4ClqIdUK9Gnxd9OPDixv";
+	public String clientSecret = "C64wPb5OerolzOs2yCGNHxrFBIRzUDqg";
 	private String configurationEndpoint =
 			  "http://localhost:8180/realms/test/" +
 						 ".well-known/openid-configuration";

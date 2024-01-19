@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+<header>
+    <h1>Demo Authent</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/forum}">Forum</a></li>
+    </ul>
+</nav>
+
+<section>
+    <!-- Formulaire pour écrire un nouveau message -->
+    <form th:action="@{/admin}" method="post">
+        <label for="content">Message:</label>
+        <textarea id="content" name="content" required></textarea>
+        <label for="classified">Message confidentiel :</label>
+        <input type="checkbox" id="classified" name="classified"/>
+        <button type="submit">Envoyer</button>
+    </form>
+</section>
+
+
+</body>
+
+</html>

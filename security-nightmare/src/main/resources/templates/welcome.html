@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Nightmare Demo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+<header>
+    <h1>Security Nightmare</h1>
+</header>
+
+<section>
+    <p>Bienvenue dans la démo de failles applicatives. Explorez notre application pour découvrir et comprendre les risques de sécurité.</p>
+    <p>N'oubliez pas que cette démo est à des fins éducatives et doit être utilisée de manière responsable.</p>
+</section>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/forum}">Forum</a></li>
+        <li><a th:href="@{/files}">Gestion des fichiers</a></li>
+        <li><a th:href="@{/admin}">Gestion des comptes</a></li>
+        <li><a th:href="@{/register}">S'inscrire</a></li>
+        <li><a th:href="@{/logout}">Se déconnecter</a></li>
+    </ul>
+</nav>
+
+<footer>
+    <p>&copy; 2024 Security Nightmare</p>
+</footer>
+</body>
+
+</html>

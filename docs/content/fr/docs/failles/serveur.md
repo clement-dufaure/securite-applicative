@@ -58,6 +58,16 @@ La requète envoyée au serveur devient :
 INSERT INTO Students VALUES ('Robert'); DROP TABLE Students;--')
 ```
 
+>
+> **Application Security Nightmare**
+>
+> Consulter tous les messages du forum en forgeant les requêtes
+>
+> `localhost:8080/api/messages/admin' and classified --`
+>
+>
+
+
 **Injection SQL**
 
 Pourquoi ?
@@ -89,17 +99,28 @@ Toujours dans le cas de sql :
 - **Des bibliothèques que l'on garde à jour bien entendu**
 
 
-
-### Un peu de pratique...
-Découvrons une série challenge disponible sur internet
-- [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
-- Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
-
 ### L'injection de code : le retour de la revanche
-Quelques niveaux plus tard :
-- [Natas 12](http://natas12.natas.labs.overthewire.org) (mot de passe de natas12 : `YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG`)
-- Le but est de découvrir le mot de passe de natas13 situé dans /etc/natas_webpass/natas13
-- Hint : passthru est une fonction php permettant d'éxécuter sur le sytème du code arbitraire
+
+>
+> Security Nightmare
+>
+> Nous allons maintenant déposer le fichier suivant sur le site
+>
+```
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+    <body>
+         <h1>test</h1>
+    </body>
+    <%
+     Runtime.getRuntime().exec("notepad");
+     %>
+</html>
+```
+>
+>
+> Que se passe-t-il en essayant d'ouvrir le fichier ?
+
 
 Exécution de code sur le serveur
 
@@ -120,6 +141,16 @@ Exécution de code sur le serveur
 <%Runtime.getRuntime().exec("less /confidentiel/data");%>
 ```
 - Un langage de programmation lance indirectement des commandes système
+
+>
+> Autre exemple avec natas
+>
+> Quelques niveaux plus tard :
+> - [Natas 12](http://natas12.natas.labs.overthewire.org) (mot de passe de natas12 : `YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG`)
+> - Le but est de découvrir le mot de passe de natas13 situé dans /etc/natas_webpass/natas13
+> - Hint : passthru est une fonction php permettant d'éxécuter sur le sytème du code arbitraire
+>
+
 
 ## Sécurité :
 - Contrôler les entrées utilisateurs et en particulier  pour les **fichiers** : 
@@ -155,7 +186,7 @@ Un développeur web peut se contenter de surveiller ces entrées mais en réalit
 
 - Log4Shell *Decembre 2021*
 - https://fr.wikipedia.org/wiki/Log4Shell
-- Voir projet exploit
+- Démo sur projet dédié exploit/log4shell
 - Exploiter avec https://canarytokens.org/generate
 
 

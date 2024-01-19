@@ -30,11 +30,11 @@ public class Controlleur {
 	Logger log = LoggerFactory.getLogger(Controlleur.class);
 	
 	private String webServiceUrl =
-			  "http://localhost:8180/auth/realms/test/protocol" +
+			  "http://localhost:8180/realms/test/protocol" +
 						 "/openid-connect/userinfo";
 	
 	private String urlAccount =
-			  "http://localhost:8180/auth/realms/formation/account?referrer" +
+			  "http://localhost:8180/realms/formation/account?referrer" +
 						 "=client-test-web&referrer_uri=https://localhost:8443" +
 						 "/private";
 	
