@@ -14,6 +14,12 @@
     <h1>Security Nightmare</h1>
 </header>
 
+<nav>
+    <ul>
+        <li><a th:href="@{/}">Accueil</a></li>
+    </ul>
+</nav>
+
 <section class="file-section">
     <h2>Gestion des fichiers</h2>
 
@@ -28,8 +34,7 @@
     <!-- Liste des fichiers déposés -->
     <ul class="file-list">
         <li th:each="file : ${files}" class="file-item">
-            <a  th:href="@{'uploads/' + ${file}}" th:text="${file}"></a>
-<!--            <a th:href="@{'/files/' + ${file.name}}" class="file-link" th:text="${file.name}"></a>-->
+            <a class="file-link" th:href="@{'uploads/' + ${file}}" th:text="${file}"></a>
         </li>
     </ul>
 </section>

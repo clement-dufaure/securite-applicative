@@ -36,8 +36,9 @@ public class DefaultController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username,
-                               @RequestParam("password") String password) {
-        userService.saveNewUser(username, password);
+                               @RequestParam("password") String password,
+                               @RequestParam("message") String message) {
+        userService.saveNewUser(username, password, message);
         return "redirect:/";
     }
 

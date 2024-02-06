@@ -11,13 +11,12 @@
 
 <body>
 <header>
-    <h1>Security Nightmare Demo</h1>
+    <h1>Security Nightmare</h1>
 </header>
 
 <nav>
     <ul>
-        <li><a th:href="@{/forum}">Forum</a></li>
-        <li><a th:href="@{/files}">Gestion des fichiers</a></li>
+        <li><a th:href="@{/}">Accueil</a></li>
     </ul>
 </nav>
 
@@ -30,6 +29,9 @@
 
         <label for="password">Mot de passe:</label>
         <input type="password" id="password" name="password" required>
+
+        <label for="message">Commentaire pour l'administrateur :</label>
+        <input type="text" id="message" name="message" required>
 
         <button type="submit">S'inscrire</button>
     </form>

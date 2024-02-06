@@ -10,13 +10,12 @@
 
 <body>
 <header>
-    <h1>Security Nightmare Demo</h1>
+    <h1>Security Nightmare</h1>
 </header>
 
 <nav>
     <ul>
-        <li><a th:href="@{/forum}">Forum</a></li>
-        <li><a th:href="@{/files}">Gestion des fichiers</a></li>
+        <li><a th:href="@{/}">Accueil</a></li>
     </ul>
 </nav>
 
@@ -27,12 +26,14 @@
         <thead>
         <tr>
             <th>Username</th>
+            <th>Message</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="username : ${users}">
-            <td th:text="${username}"></td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.key}"></td>
+            <td th:utext="${user.value}"></td>
             <td>
                 <form th:action="@{'/admin/promote/' + ${username}}" method="post">
                     <button type="submit">Activer l'utilisateur</button>

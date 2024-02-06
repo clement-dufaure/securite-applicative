@@ -14,6 +14,7 @@ import re.dufau.securiteapplicative.securitynightmare.service.UserService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,7 +29,7 @@ public class AdminController {
 
     @GetMapping
     public String listUsers(Model model) {
-        List<String> users = userService.getUsersToEnable();
+        Map<String,String> users = userService.getUsersToEnable();
         model.addAttribute("users", users);
         return "admin";
     }

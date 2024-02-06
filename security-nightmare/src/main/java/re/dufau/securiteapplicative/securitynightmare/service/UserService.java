@@ -9,7 +9,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -20,14 +22,14 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final List<String> usersToEnable = new ArrayList<>();
+    private final Map<String, String> usersToEnable = new HashMap<>();
 
 
-    public void saveNewUser(String username, String password) {
+    public void saveNewUser(String username, String password, String message) {
         UserDetails user = User.builder().username(username)
                 .password(bCryptPasswordEncoder.encode(password)).build();
         ((InMemoryUserDetailsManager) userDetailsService).createUser(user);
-        usersToEnable.add(username);
+        usersToEnable.put(username, message);
     }
 
     public void enableNewUser(String username) {
@@ -42,7 +44,7 @@ public class UserService {
         return userDetailsService.loadUserByUsername(username);
     }
 
-    public List<String> getUsersToEnable() {
+    public Map<String, String> getUsersToEnable() {
         return usersToEnable;
     }
 }
