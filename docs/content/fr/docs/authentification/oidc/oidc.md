@@ -288,15 +288,16 @@ sequenceDiagram
     participant S as AppStock 
     participant E as Authentication Server <br/> (/auth et /token)
     U->>A: Hello !
-    note over A: Génération d'un state et d'un nonce aléatoire
-    A->>U: 302 avec redirect_uri + state + nonce
+    note over A: Génération d'un state, d'un nonce et d'un (code_verifier,code_challenge) aléatoire
+    A->>U: 302 avec redirect_uri + state + nonce + code_challenge
     U->>E: authentifie moi et retour vers redirect_uri 
-    note over E: sauvegarde du nonce en session
+    note over E: sauvegarde du nonce et code_challenge en session
     note over E: genération aléatoire d'un session_state
     E->>U: 302 code + state (passe plat) + session_state + aud
     U->>A: code + state (passe plat) + session_state + aud
     note over A: contrôle du state
-    A->>E: code
+    A->>E: code + code_verifier
+    note over E: vérification adéquation (code_verifier,code_challenge)
     E->>A: {accessToken, refreshToken, session_state}
     note over A: controle du session_state
     A->>A: check {accessToken}
@@ -309,12 +310,14 @@ sequenceDiagram
 
 Le state ?
 - Éviter les attaque CSRF par un controle du déroulé du processus
-> Il s'agissait d'une protection essentielle dans le cadre du flow implicit
 
 session_state et nonce ?
 - Éviter le rejeu, il permet d'éviter de renvoyer un jeton intercepté encore valable vers d'autre service. On parle de contrôle de corrélation entre requêtes et réponse d'authentification 
 
 Les éléments nonce, session_state sont maintenu dans la session de l'utilisateur côté fournisseur d'identité. La session de l'utilisateur coté fournisseur d'identité (idle et max) doit donc être cohérente avec la durée de rafraichissement possible du jeton (penser aux cas de formulaire long à remplir).
+
+(code_verifier,code_challenge) ?
+- Mécanisme PKCE (Proof Key for Code Exchange) : protection CSRF
 
 aud ? ou Audience
 - paramétré par le fournisseur d'identité par client, il permet de préciser la portée d'usage du jeton. L'audience peut être vérifié sur un web service transitif.

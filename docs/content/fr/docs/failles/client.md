@@ -20,7 +20,7 @@ Vous avez Gagné<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.00000000001; position: relative;top: -25em; left: -34em;"
+    style="opacity: 0.00000000001; position: relative;top: -25em; left: -46em;"
     src="http://localhost:8080/admin">
 </iframe>
 
@@ -30,7 +30,7 @@ Vous avez Gagné, regardez mieux<br/>
     title="t"
     width="1500"
     height="1000"
-    style="opacity: 0.3; position: relative;top: -25em; left: -34em;"
+    style="opacity: 0.3; position: relative;top: -25em; left: -46em;"
     src="http://localhost:8080/admin">
 </iframe>
 
