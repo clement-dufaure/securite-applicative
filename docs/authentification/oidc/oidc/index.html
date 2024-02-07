@@ -113,22 +113,23 @@ participant A as AppGestion
 participant S as AppStock
 participant E as Authentication Server &lt;br/> (/auth et /token)
 U->>A: Hello !
-note over A: Génération d'un state et d'un nonce aléatoire
-A->>U: 302 avec redirect_uri + state + nonce
+note over A: Génération d'un state, d'un nonce et d'un (code_verifier,code_challenge) aléatoire
+A->>U: 302 avec redirect_uri + state + nonce + code_challenge
 U->>E: authentifie moi et retour vers redirect_uri
-note over E: sauvegarde du nonce en session
+note over E: sauvegarde du nonce et code_challenge en session
 note over E: genération aléatoire d'un session_state
 E->>U: 302 code + state (passe plat) + session_state + aud
 U->>A: code + state (passe plat) + session_state + aud
 note over A: contrôle du state
-A->>E: code
+A->>E: code + code_verifier
+note over E: vérification adéquation (code_verifier,code_challenge)
 E->>A: {accessToken, refreshToken, session_state}
 note over A: controle du session_state
 A->>A: check {accessToken}
 note over A: lecture et contrôle du claim nonce de l'accessToken &lt;br/> (en plus de la signature)
 note over A: controle du claim aud
 A->>S: get /resource/stocks muni de {accessToken}
-note over S: controle du claim aud</div><p>Le state ?</p><ul><li>Éviter les attaque CSRF par un controle du déroulé du processus</li></ul><blockquote><p>Il s&rsquo;agissait d&rsquo;une protection essentielle dans le cadre du flow implicit</p></blockquote><p>session_state et nonce ?</p><ul><li>Éviter le rejeu, il permet d&rsquo;éviter de renvoyer un jeton intercepté encore valable vers d&rsquo;autre service. On parle de contrôle de corrélation entre requêtes et réponse d&rsquo;authentification</li></ul><p>Les éléments nonce, session_state sont maintenu dans la session de l&rsquo;utilisateur côté fournisseur d&rsquo;identité. La session de l&rsquo;utilisateur coté fournisseur d&rsquo;identité (idle et max) doit donc être cohérente avec la durée de rafraichissement possible du jeton (penser aux cas de formulaire long à remplir).</p><p>aud ? ou Audience</p><ul><li>paramétré par le fournisseur d&rsquo;identité par client, il permet de préciser la portée d&rsquo;usage du jeton. L&rsquo;audience peut être vérifié sur un web service transitif.
+note over S: controle du claim aud</div><p>Le state ?</p><ul><li>Éviter les attaque CSRF par un controle du déroulé du processus</li></ul><p>session_state et nonce ?</p><ul><li>Éviter le rejeu, il permet d&rsquo;éviter de renvoyer un jeton intercepté encore valable vers d&rsquo;autre service. On parle de contrôle de corrélation entre requêtes et réponse d&rsquo;authentification</li></ul><p>Les éléments nonce, session_state sont maintenu dans la session de l&rsquo;utilisateur côté fournisseur d&rsquo;identité. La session de l&rsquo;utilisateur coté fournisseur d&rsquo;identité (idle et max) doit donc être cohérente avec la durée de rafraichissement possible du jeton (penser aux cas de formulaire long à remplir).</p><p>(code_verifier,code_challenge) ?</p><ul><li>Mécanisme PKCE (Proof Key for Code Exchange) : protection CSRF</li></ul><p>aud ? ou Audience</p><ul><li>paramétré par le fournisseur d&rsquo;identité par client, il permet de préciser la portée d&rsquo;usage du jeton. L&rsquo;audience peut être vérifié sur un web service transitif.
 Ce claim permet de distinguer des zones d&rsquo;usage des tokens.</li></ul><h3 id=flow-authorization-code>Flow Authorization Code <a href=#flow-authorization-code class=anchor aria-hidden=true>#</a></h3><p>Connexion à Appgestion, redirection vers l&rsquo;<em>authorization server</em>.</p><pre><code class=language-http>GET https://mon.fournisseur.identite/auth
 ?redirect_uri=https://mon.appli.gestion/sso/callback
 &amp;state=9115c618-b01c-4966-a26e-8171caf30dcf
@@ -198,4 +199,4 @@ grant_type=client_credentials&amp;client_id=YOUR_CLIENT_ID&amp;client_secret=YOU
 <script src=/js/vendor/katex/dist/contrib/auto-render.min.b688a23169501c711300d4bdb5ae40c52ee8976f722fbf3871eb709a51db2ea5d7bf51eaef0e82af7542d973d2f681d9c46b70b72d902601642a15af9b9ce80d.js integrity="sha512-toiiMWlQHHETANS9ta5AxS7ol29yL784cetwmlHbLqXXv1Hq7w6Cr3VC2XPS9oHZxGtwty2QJgFkKhWvm5zoDQ==" crossorigin=anonymous defer></script>
 <script src=/main.min.b8e7e565bd2186f67f57d2c5d9680f67abbb2a977ff20ad27eb51f5a7b9071fdec7b71a5e964a41a38fb59cb12d43b76e0b3ac8247cb7063bb73efc06a9ac529.js integrity="sha512-uOflZb0hhvZ/V9LF2WgPZ6u7Kpd/8grSfrUfWnuQcf3se3Gl6WSkGjj7WcsS1Dt24LOsgkfLcGO7c+/AaprFKQ==" crossorigin=anonymous defer></script>
 <script src=/js/mermaid.min.83b8594750563833e1c00aeeca8f704e65d284daca1c66a503f2496362f4b45477d8cc7a064d9ec4521e5e737513884abea18acc41236f47f88a05c8eba8d239.js integrity="sha512-g7hZR1BWODPhwAruyo9wTmXShNrKHGalA/JJY2L0tFR32Mx6Bk2exFIeXnN1E4hKvqGKzEEjb0f4igXI66jSOQ==" crossorigin=anonymous defer></script>
-<script src=https://securite-applicative.dufau.re/index.min.257590a1e534fba38441037473dfb99ebac21ca1ff2225eda7b44f490672b5bfd2d2c5c98b6f80077fdc131b075190c7b83c99f8d635e1a60f33578bf40a8846.js integrity="sha512-JXWQoeU0+6OEQQN0c9+5nrrCHKH/IiXtp7RPSQZytb/S0sXJi2+AB3/cExsHUZDHuDyZ+NY14aYPM1eL9AqIRg==" crossorigin=anonymous defer></script></body></html>
+<script src=https://securite-applicative.dufau.re/index.min.060c564d3e98010f7801b12760b470e1d4c4513f826957a3c9f38329406cd5cfa5acd0378c12d9f2ee9b9f029242461b640066226e673cfdba674489e7aaf68d.js integrity="sha512-BgxWTT6YAQ94AbEnYLRw4dTEUT+CaVejyfODKUBs1c+lrNA3jBLZ8u6bnwKSQkYbZABmIm5nPP26Z0SJ56r2jQ==" crossorigin=anonymous defer></script></body></html>
