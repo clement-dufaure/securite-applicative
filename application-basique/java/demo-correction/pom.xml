@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>re.dufau.securite-applicative</groupId>
-    <artifactId>security-nightmare</artifactId>
+    <artifactId>demo-auth-oauth-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>security-nightmare</name>
-    <description>Application cherchant à cumuler le max de failles applicatives</description>
+    <name>demo-auth-oauth-client</name>
+    <description>Demo authentification par Spring Security OAuth Client</description>
     <properties>
         <java.version>17</java.version>
     </properties>

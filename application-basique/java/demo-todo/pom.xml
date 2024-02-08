@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>re.dufau.securite-applicative</groupId>
-	<artifactId>security-nightmare</artifactId>
+	<artifactId>auth-me</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>security-nightmare</name>
-	<description>Application cherchant à cumuler le max de failles applicatives</description>
+	<name>auth-me</name>
+	<description>Authentifiez moi !</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
