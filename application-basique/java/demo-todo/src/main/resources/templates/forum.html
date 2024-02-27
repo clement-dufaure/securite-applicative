@@ -26,7 +26,7 @@
 
     <!-- Formulaire pour écrire un nouveau message -->
     <form th:action="@{/forum}" method="post">
-        <label for="content">Message (posté en tant que <span th:text="${username}"></span> }}) :</label>
+        <label for="content">Message (posté en tant que <span th:text="${username}"></span>) :</label>
         <textarea id="content" name="content" required></textarea>
         <button type="submit">Envoyer</button>
     </form>

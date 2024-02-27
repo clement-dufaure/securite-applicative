@@ -1,6 +1,5 @@
 package re.dufau.securiteapplicative.securitynightmare.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,11 @@ public class ForumController {
         if (principal == null) {
             model.addAttribute("username", "PAS AUTHENTIFIE !");
         } else {
-            model.addAttribute("username", "AUTHENTIFIE !");
+            if (request.isUserInRole("ADMIN")) {
+                model.addAttribute("username", principal.getName() + " (est un admin)");
+            } else {
+                model.addAttribute("username", principal.getName());
+            }
         }
         return "forum";
     }

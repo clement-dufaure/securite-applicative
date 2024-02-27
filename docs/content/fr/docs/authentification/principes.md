@@ -17,6 +17,11 @@ weight: 600
 - Un utilisateur doit indiquer qui il est (identifiant, certificat client) et le prouver (mot de passe, certifcat client, carte à puce, code à usage unique, empreinte digitale)
 - Au moins un facteur, mais plusieurs facteurs simultanés améliorent la preuve (mot de passe + carte à puce)
 
+On parle de facteurs d'authentification pour chaque preuve que l'on peut fournir
+- Ce que je sais : mot de passe
+- Ce que je possède : certificat, carte à puce, badge
+- Ce que je suis : empreinte digitale, rétinienne
+
 ## Le SSO - Single Sign On
 - S'identifier une seule fois pour accéder à plusieurs services
 - Système d'authentification centralisé

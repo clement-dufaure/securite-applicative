@@ -62,11 +62,6 @@ Des grands principes (nombre et portée variant selon les sources)
 - Une opération n'est accessible qu'à ceux qui sont censé réaliser l'opération
 - Prouver qu'on est celui qu'on déclare être
 
-On parle de facteurs d'authentification pour chaque preuve que l'on peut aborder
-- Ce que je sais : mot de passe
-- Ce que je possède : certificat, carte à puce, badge
-- Ce que je suis : empreinte digitale, rétinienne
-
 > Une grande partie de cette formation se focalise sur les enjeux et les moyens concret de mettre en place une authentification sur son application
 
 
