@@ -78,13 +78,18 @@ Quelques exemples :
 
 - A1 : Acceder à une ressource non prévue :
   - Mauvaise gestion des droits
-  - En forcant un utilisateur privilégié à cliquer sur l'action souhaitée = XSS y compris injection de code "côté client"
-  - Vol de session : conséquence de XSS et d'injection de code "côté client"
+  - Forcer un utilisateur privilégié à cliquer sur l'action souhaitée 
+    - lié aux failles XSS (injection de code "côté client"), vol de session
+    - CORS trop permissif
+  - Manque de tracabilité
 - A2 : Ne pas ou mal utiliser un canal chiffré
   - Protocoles obsolètes, contrôles non effectués
   - HTTPS non obligatoire
-- A3 : Injection de code "côté serveur"
-  - Faire éxécuter du code non prévu en particulier directement sur la base de données
+- A3 : Injection de code 
+  - "côté serveur"
+    - Faire éxécuter du code non prévu par exemple directement sur la base de données
+  - "coté client"
+    - XSS
 - A4 : Erreur de conception
   - La meilleure des implémentations ne corrigera pas
 - A5 : Erreur de configuration
@@ -94,8 +99,7 @@ Quelques exemples :
   - Possibilité de brute force
   - Mots de passe faibles ou trop standards
   - Déconnexions et invalidation de session mal gérés
-- A8 : Non controles d'intégrité
-  - Données entrantes (au run)
+- A8 : Non controles d'intégrité du build
   - Bibliothèques vérolées (au build)
 - A9 : Défaut de tracabilité
   - Logs inexploitables
@@ -153,31 +157,14 @@ Ma protection ne marche que si j'ai confiance dans le respect du processus par m
 
 
 
-## Synthèse
-Deux grands types de protection
-- Vérifier les entrées utilisateurs ! (Sécurité active)
-- Vérifier que l'utilisateur est bien conscient de ses actions :
-  - Vérification d'état (Sécurité active)
-  - Dire au navigateur quelles opérations sont légitimes ou non (Sécurité déclarative)
-
 ### S'initier aux failles applicatives
 - [OWASP](https://www.owasp.org)
   - Documentation et notamment le OWASP top 10
   - WebGoat (découverte de failles sous forme de cours)
   - Juice Store (challenges)
 - [Natas](https://overthewire.org/wargames/natas/)
-
-Par ailleurs le [CERT-FR](https://www.cert.ssi.gouv.fr/) est un sytème de notification des failles applicatives. Il publie aussi régulièrement des articles de cybersécurité.
-
-#### Un peu de pratique avec natas
-Découvrons une série challenge disponible sur internet
-- [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
-- Sur les premiers niveaux, on voit qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
-
-### Surveiller les dépendances obsolètes
-- Dependabot (vérification existance d'une nouvelle version)
-- Pour vérifier vulnérabilités connues : https://owasp.org/www-project-dependency-check/
-
+  - [Natas 0](http://natas0.natas.labs.overthewire.org) (mot de passe de natas0 : `natas0`)
+  - Sur les premiers niveaux, on voit par exemple qu'une resource cachée n'est jamais cachée (<a href="/securite-applicative/digressions.html#/le-fichier-robots-txt" target="_blank">Digression : robots.txt</a>) et que quelques éléments pouvent être très facilement manipulés dans la requête
 
 
 
