@@ -75,14 +75,13 @@ box LightGrey Authorization Server
 participant F as Token Endpoint
 end
 A->>F: Je suis appGestion, puis avoir un jeton en tant que appGestion ?
-F->>A: {accessToken, refreshToken}
+F->>A: {accessToken}
 A->>A: check {accessToken}
 loop
 A->>S: get /resource/stocks muni de {accessToken}
 S->>S: check {accessToken}
 S->>A: /ressource/stocks
-end
-A->>F: Je suis appGestion, puis avoir un nouveau jeton contre ce {refreshToken} ?</div><p>Le jeton d&rsquo;accès propre au client et non à un utilisateur</p><p><strong>Usage ?</strong></p><p>Soit dans les cas où l&rsquo;on a pas d&rsquo;utilisateur du tout comme un batch. Soit dans les cas où on considère que l&rsquo;accès au web service &ldquo;backend&rdquo; n&rsquo;a pas de sens à être identifié en tant qu&rsquo;utilisateur.</p><h2 id=le-jeton-jwt>Le jeton JWT <a href=#le-jeton-jwt class=anchor aria-hidden=true>#</a></h2><p>Les jetons échangés seront sous un format dit JWT, JSON Web Token.</p><p>Les données au format JSON, en trois parties : header, payload et signature</p><h3 id=header>Header <a href=#header class=anchor aria-hidden=true>#</a></h3><pre><code class=language-json>{
+end</div><p>Le jeton d&rsquo;accès propre au client et non à un utilisateur</p><p><strong>Usage ?</strong></p><p>Soit dans les cas où l&rsquo;on a pas d&rsquo;utilisateur du tout comme un batch. Soit dans les cas où on considère que l&rsquo;accès au web service &ldquo;backend&rdquo; n&rsquo;a pas de sens à être identifié en tant qu&rsquo;utilisateur.</p><h2 id=le-jeton-jwt>Le jeton JWT <a href=#le-jeton-jwt class=anchor aria-hidden=true>#</a></h2><p>Les jetons échangés seront sous un format dit JWT, JSON Web Token.</p><p>Les données au format JSON, en trois parties : header, payload et signature</p><h3 id=header>Header <a href=#header class=anchor aria-hidden=true>#</a></h3><pre><code class=language-json>{
   &quot;alg&quot;: &quot;RS256&quot;,
   &quot;typ&quot;: &quot;JWT&quot;,
   &quot;kid&quot;: &quot;eYjLrajOiGhn_R3Yfmok2c3v3PrUZZ9ibXob0MowXvw&quot;
@@ -199,4 +198,4 @@ grant_type=client_credentials&amp;client_id=YOUR_CLIENT_ID&amp;client_secret=YOU
 <script src=/js/vendor/katex/dist/contrib/auto-render.min.b688a23169501c711300d4bdb5ae40c52ee8976f722fbf3871eb709a51db2ea5d7bf51eaef0e82af7542d973d2f681d9c46b70b72d902601642a15af9b9ce80d.js integrity="sha512-toiiMWlQHHETANS9ta5AxS7ol29yL784cetwmlHbLqXXv1Hq7w6Cr3VC2XPS9oHZxGtwty2QJgFkKhWvm5zoDQ==" crossorigin=anonymous defer></script>
 <script src=/main.min.b8e7e565bd2186f67f57d2c5d9680f67abbb2a977ff20ad27eb51f5a7b9071fdec7b71a5e964a41a38fb59cb12d43b76e0b3ac8247cb7063bb73efc06a9ac529.js integrity="sha512-uOflZb0hhvZ/V9LF2WgPZ6u7Kpd/8grSfrUfWnuQcf3se3Gl6WSkGjj7WcsS1Dt24LOsgkfLcGO7c+/AaprFKQ==" crossorigin=anonymous defer></script>
 <script src=/js/mermaid.min.83b8594750563833e1c00aeeca8f704e65d284daca1c66a503f2496362f4b45477d8cc7a064d9ec4521e5e737513884abea18acc41236f47f88a05c8eba8d239.js integrity="sha512-g7hZR1BWODPhwAruyo9wTmXShNrKHGalA/JJY2L0tFR32Mx6Bk2exFIeXnN1E4hKvqGKzEEjb0f4igXI66jSOQ==" crossorigin=anonymous defer></script>
-<script src=https://securite-applicative.dufau.re/index.min.4b549462d43557915774df058d2726c1a6273eff9e75aacbc04b24d1371408ccaf51bdddf8844af47f9655d6bea9305184321935eb0072a8f23ea74cb0784c99.js integrity="sha512-S1SUYtQ1V5FXdN8FjScmwaYnPv+edarLwEsk0TcUCMyvUb3d+IRK9H+WVda+qTBRhDIZNesAcqjyPqdMsHhMmQ==" crossorigin=anonymous defer></script></body></html>
+<script src=https://securite-applicative.dufau.re/index.min.856cc88a65fb6b8e3e0408628ae789d40d1fbf71c6d640b3f0d46b2ddfde22d359935aba3bc644afff54b5f9cbbef9ed1f4481c42bc236461ee0982896c7efe3.js integrity="sha512-hWzIimX7a44+BAhiiueJ1A0fv3HG1kCz8NRrLd/eItNZk1q6O8ZEr/9UtfnLvvntH0SBxCvCNkYe4Jgolsfv4w==" crossorigin=anonymous defer></script></body></html>
