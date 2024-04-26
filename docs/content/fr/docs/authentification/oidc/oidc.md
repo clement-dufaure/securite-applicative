@@ -154,14 +154,13 @@ sequenceDiagram
     participant F as Token Endpoint
     end
     A->>F: Je suis appGestion, puis avoir un jeton en tant que appGestion ?
-    F->>A: {accessToken, refreshToken}
+    F->>A: {accessToken}
     A->>A: check {accessToken}
     loop
         A->>S: get /resource/stocks muni de {accessToken}
         S->>S: check {accessToken}
         S->>A: /ressource/stocks
     end
-    A->>F: Je suis appGestion, puis avoir un nouveau jeton contre ce {refreshToken} ?
 {{< /mermaid >}}
 
 Le jeton d'accès propre au client et non à un utilisateur
