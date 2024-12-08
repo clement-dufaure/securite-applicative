@@ -116,7 +116,7 @@ document.getElementsByTagName("body")[0].innerHTML("
 On parle de **XSS (Cross-Site Scripting)**
 
 **Pourquoi ?**
-- Vol de données, en particulier des cookies de session ([explications](/securite-applicative/digressions.html#/la-session-http))
+- Vol de données, en particulier des cookies de session ([explications](/docs/failles/cookies/))
 - Redirection malveillante
 
 **Comment ?**
