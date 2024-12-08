@@ -35,7 +35,7 @@
             <td th:text="${user.key}"></td>
             <td th:utext="${user.value}"></td>
             <td>
-                <form th:action="@{'/admin/promote/' + ${username}}" method="post">
+                <form th:action="@{'/admin/promote/' + ${user.key}}" method="post">
                     <button type="submit">Activer l'utilisateur</button>
                 </form>
             </td>
