@@ -25,7 +25,7 @@ https://www.keycloak.org/docs/latest/securing_apps/#java-adapters
 **Mise en place de OpenIDConnect dans une application Java**
 - Avec pac4j https://www.pac4j.org/ 
 	- Situation application quelconque JavaEE, application de type ihm en java
-- Avec Spring security
+- Avec Spring security https://docs.spring.io/spring-security/reference/servlet/oauth2/index.html
 	- Situation application Spring Boot, application de type Web Service
 
 
