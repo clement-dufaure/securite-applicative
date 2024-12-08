@@ -23,6 +23,6 @@ La formation sécurité applicative propose :
   - Mécanismes de jeton, tranfert d'identité et autorisation
   - Mise en pratique en java (jee pur et spring boot), js (pur et react), authentifié sur un keycloak installé localement pour lever toute mystification
 
-[Diaporama](https://securite-applicative.dufau.re/diaporama)
+<!--[Diaporama](https://securite-applicative.dufau.re/diaporama)-->
 
 [Tps](https://github.com/clement-dufaure/securite-applicative)
